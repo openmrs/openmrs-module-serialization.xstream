@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <patient_identifier patient_identifier_id="2" patient_id="2" identifier="101-6" identifier_type="1" preferred="1" location_id="1" creator="1" date_created="2005-09-22 00:00:00.0" voided="false" void_reason="" uuid="8a9aac6e-3f9f-4ed2-8fb5-25215f8bb614"/>
+    <patient_identifier_type patient_identifier_type_id="1" name="OpenMRS Identification Number" description="Unique number used in OpenMRS" check_digit="true" creator="1" date_created="2005-09-22 00:00:00.0" required="false" validator="org.openmrs.patient.impl.LuhnIdentifierValidator" retired="false" uuid="1a339fe9-38bc-4ab3-b180-320988c0b968"/>
+    <patient patient_id="2" creator="1" date_created="2005-09-22 00:00:00.0" changed_by="1" date_changed="2008-08-18 12:29:59.0" voided="false" void_reason=""/>
+    <person person_id="2" gender="M" birthdate="1975-04-08 00:00:00.0" dead="false" creator="1" date_created="2005-09-22 00:00:00.0" voided="false" uuid="da7f524f-27ce-4bb2-86d6-6d1d05312bd5"/>
+    <location location_id="1" name="Unknown Location" description="The default location used when limited information is known" creator="1" date_created="2005-09-22 00:00:00.0" retired="false" uuid="dc5c1fcc-0459-4201-bf70-0b90535ba362"/>
+</dataset>

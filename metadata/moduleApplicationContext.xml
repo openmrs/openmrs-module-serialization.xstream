@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd">
+
+	<!-- Beans to add to the current Application context definition -->
+
+<beans>
+	<!-- Config Serialization Service to be supported by XStream library -->
+	<bean parent="serializationServiceTarget">
+		<property name="serializers">
+			<list>
+				<ref bean="xstreamSerializer"/>
+				<ref bean="xstreamShortSerializer"/>
+			</list>
+		</property>
+	</bean>
+	<bean id="xstreamSerializer" class="org.openmrs.module.serialization.xstream.XStreamSerializer"/>
+	<bean id="xstreamShortSerializer" class="org.openmrs.module.serialization.xstream.XStreamShortSerializer"/>
+</beans>

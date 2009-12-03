@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+  	<field field_id="1" name="Some concept" description="This is a test field" field_type="1" concept_id="3" table_name="" default_value="" select_multiple="false" creator="1" date_created="2006-07-18 11:03:31.0" retired="false" uuid="db016b7d-39a5-4911-89da-0eefbfef7cb2"/>
+ 	<field_type field_type_id="1" name="some field type" is_set="false" creator="1" date_created="2005-01-01 00:00:00.0" uuid="abf16b7d-39a5-4911-89da-0eefbfef7cb4"/>
+	<concept concept_id="3" retired="false" datatype_id="4" class_id="3" is_set="false" creator="1" date_created="2008-08-15 15:27:51.0" uuid="0cbe2ed3-cd5f-4f46-9459-26127c9265ab"/>
+ 	<concept_datatype concept_datatype_id="4" name="N/A" hl7_abbreviation="ZZ" description="Not associated with a datatype (e.g., term answers, sets)" creator="1" date_created="2004-02-02 00:00:00.0" retired="false" uuid="bf51481d-9b76-4a88-8ca4-88dd082ddf90"/>
+  	<concept_class concept_class_id="3" name="Drug" description="Drug" creator="1" date_created="2004-02-02 00:00:00.0" retired="false" uuid="3d065ed4-b0b9-4710-9a17-6d8c4fd259b7"/>
+</dataset>

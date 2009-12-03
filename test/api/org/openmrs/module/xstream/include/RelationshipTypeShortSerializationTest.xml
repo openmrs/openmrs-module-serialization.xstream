@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<dataset>
+    <relationship relationship_id="1" person_a="502" relationship="1" person_b="2" creator="1" date_created="2008-08-18 11:50:15.0" voided="false" uuid="c18717dd-5d78-4a0e-84fc-ee62c5f0676a"/>
+    <relationship_type relationship_type_id="1" a_is_to_b="Doctor" b_is_to_a="Patient" preferred="0" weight="0" description="Relationship from a primary care provider to the patient" creator="1" date_created="2007-05-04 09:59:22.0" uuid="6d9002ea-a96b-4889-af78-82d48c57a110"/>
+    <person person_id="2" gender="M" birthdate="1975-04-08 00:00:00.0" dead="false" creator="1" date_created="2005-09-22 00:00:00.0" voided="false" uuid="da7f524f-27ce-4bb2-86d6-6d1d05312bd5"/>
+    <person person_id="502" gender="M" dead="false" creator="1" date_created="2008-08-15 15:57:09.0" voided="false" uuid="341b4e41-790c-484f-b6ed-71dc8da222de"/>
+</dataset>
