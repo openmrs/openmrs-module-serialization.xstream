@@ -21,6 +21,7 @@ import java.text.SimpleDateFormat;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.hibernate.proxy.HibernateProxy;
 import org.junit.Test;
+import org.openmrs.ConceptSource;
 import org.openmrs.PersonName;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
@@ -101,4 +102,19 @@ public class XStreamSerializerTest extends BaseModuleContextSensitiveTest {
 		 */
 		XMLAssert.assertXpathNotExists("//log", xmlOutput);
 	}
+	
+	
+	/**
+	 * Regression test #1945 (http://dev.openmrs.org/ticket/1945)
+	 * @throws Exception
+	 */
+	@Test
+	public void shouldNotThrowIllegalStateException() throws Exception { 	
+		
+		ConceptSource conceptSource = new ConceptSource();
+		conceptSource.getRetired();
+				
+		new XStreamSerializer();
+	}
+	
 }

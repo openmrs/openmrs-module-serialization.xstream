@@ -57,8 +57,8 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  * It is recommended that you use the {@link SerializationService} to get the current serializer.
  * 
  * <pre>
- *   Person person = Context.getPersonService().getPerson(123);
- *   String xml = Context.getSerializationService().serialize(person, XStreamSerializer.class);
+ * Person person = Context.getPersonService().getPerson(123);
+ * String xml = Context.getSerializationService().serialize(person, XStreamSerializer.class);
  * </pre>
  */
 public class XStreamSerializer implements OpenmrsSerializer {
@@ -88,34 +88,32 @@ public class XStreamSerializer implements OpenmrsSerializer {
 			}
 		};
 		
-		//config the basic attributes
+		// config the basic attributes
 		
-		//BaseOpenmrsObject
+		// BaseOpenmrsObject
 		xstream.useAttributeFor(BaseOpenmrsObject.class, "uuid");
 		
-		//BaseOpenmrsData
+		// BaseOpenmrsData
 		xstream.useAttributeFor(BaseOpenmrsData.class, "voided");
 		
-		//BaseOpenmrsMetadata
+		// BaseOpenmrsMetadata
 		xstream.useAttributeFor(BaseOpenmrsMetadata.class, "retired");
 		
-		//Other classes has voided or retired property
-		xstream.useAttributeFor(Concept.class, "retired");
-		
+		// Other classes has voided or retired property
+		xstream.useAttributeFor(Concept.class, "retired");		
 		xstream.useAttributeFor(ConceptName.class, "voided");
 		xstream.useAttributeFor(ConceptNameTag.class, "voided");
-		xstream.useAttributeFor(ConceptSource.class, "voided");
-		
+		xstream.useAttributeFor(ConceptSource.class, "retired");
+
 		/*
-		 *  alias className for all classses current need to serialize
+		 * alias className for all classses current need to serialize
 		 */
 		this.commonConfig();
 		
-		
-		//CustomReflectionConverter to avoid the exception thrown when xstream deserialize a unknown elment
+		// CustomReflectionConverter to avoid the exception thrown when xstream deserialize a unknown elment
 		xstream.registerConverter(new CustomReflectionConverter(xstream.getMapper(), xstream.getReflectionProvider()), xstream.PRIORITY_LOW);
 		
-		//register this converter, so that we can let xstream serialize User.user only as its uuid
+		// register this converter, so that we can let xstream serialize User.user only as its uuid
 		xstream.registerConverter(new UserConverter(xstream));
 		
 		/*
@@ -128,7 +126,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		xstream.registerConverter(new DateConverter("yyyy-MM-dd HH:mm:ss z", new String[] { "yyyy-MM-dd HH:mm:ss.S z",
 		        "yyyy-MM-dd HH:mm:ssz", "yyyy-MM-dd HH:mm:ss.S a", "yyyy-MM-dd HH:mm:ssa" }));
 		
-		//set our own defined marshalling strategy so that we can build references for cglib
+		// set our own defined marshalling strategy so that we can build references for cglib
 		xstream.setMarshallingStrategy(new CustomReferenceByIdMarshallingStrategy());
 	}
 	
@@ -140,8 +138,8 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	 */
 	private List<String> getAllSerializedPackages() {
 		List<String> packageNames = new ArrayList<String>();
-		packageNames.add("org.openmrs");//do serialization/deserialization for all classes in package "org.openmrs"
-		//here can add new packages which in a specified package need to be serialized 
+		packageNames.add("org.openmrs");// do serialization/deserialization for all classes in package "org.openmrs"
+		// here can add new packages which in a specified package need to be serialized
 		return packageNames;
 	}
 	
@@ -183,7 +181,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 						JarEntry entry = e.nextElement();
 						m = p.matcher(entry.getName());
 						if (m.matches() == true) {
-							//load the matching class
+							// load the matching class
 							String tempName = entry.getName().replace('/', '.');
 							String className = tempName.substring(0, tempName.indexOf(".class"));
 							loadedClass = OpenmrsClassLoader.getInstance().loadClass(className);
@@ -196,7 +194,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 					if (dir.exists() && dir.isDirectory()) {
 						File[] fileList = dir.listFiles();
 						for (File f : fileList) {
-							//get all class files excluding the inner class
+							// get all class files excluding the inner class
 							if (f.isFile() && f.getName().endsWith(".class") && !f.getName().contains("$")) {
 								String className = packageName + "."
 								        + f.getName().substring(0, f.getName().indexOf(".class"));
