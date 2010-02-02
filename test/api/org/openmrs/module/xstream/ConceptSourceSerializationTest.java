@@ -133,7 +133,7 @@ public class ConceptSourceSerializationTest extends BaseModuleContextSensitiveTe
 		assertEquals("SNOMED", cs.getName());
 		assertEquals("Systematized Nomenclature of Medicine -- Clinical Terms", cs.getDescription());
 		assertEquals("test", cs.getHl7Code());
-		assertEquals(1, cs.getCreator().getPersonId().intValue());
+		assertEquals(1, cs.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2006-01-20 00:00:00 CST"), cs.getDateCreated());
 		assertFalse("The voided shouldn't be " + cs.isVoided(), cs.isVoided());
 	}

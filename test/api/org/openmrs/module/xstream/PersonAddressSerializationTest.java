@@ -142,7 +142,7 @@ public class PersonAddressSerializationTest extends BaseModuleContextSensitiveTe
 		assertEquals("921c0e23-d941-4bac-8ce4-ab0d0f7d8123", pa.getUuid());
 		assertFalse("The voided shouldn't be " + pa.getVoided(), pa.getVoided());
 		assertFalse("The preferred shouldn't be " + pa.getPreferred(), pa.getPreferred());
-		assertEquals(1, pa.getCreator().getPersonId().intValue());
+		assertEquals(1, pa.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2006-01-18 00:00:00 CST"), pa.getDateCreated());
 		assertEquals(1, pa.getPerson().getPersonId().intValue());
 		assertEquals("1050 Wishard Blvd.", pa.getAddress1());

@@ -266,7 +266,7 @@ public class ConceptSerializationTest extends BaseModuleContextSensitiveTest {
 		assertFalse("The retired shouldn't be " + concept.isRetired(), concept.isRetired());
 		assertEquals(4, concept.getDatatype().getConceptDatatypeId().intValue());
 		assertEquals(3, concept.getConceptClass().getConceptClassId().intValue());
-		assertEquals(1, concept.getCreator().getPersonId().intValue());
+		assertEquals(1, concept.getCreator().getUserId().intValue());
 		assertFalse("The set shouldn't be " + concept.getSet(), concept.getSet());
 		assertEquals(sdf.parse("2008-08-15 15:27:51 CST"), concept.getDateCreated());
 		assertEquals(1, concept.getNames().size());

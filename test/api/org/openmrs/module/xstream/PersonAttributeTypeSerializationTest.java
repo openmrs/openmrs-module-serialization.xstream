@@ -152,10 +152,10 @@ public class PersonAttributeTypeSerializationTest extends BaseModuleContextSensi
 		assertEquals("b3b6d540-a32e-44c7-91b3-292d97667518", personAttributeType.getUuid());
 		assertEquals("Race", personAttributeType.getName());
 		assertEquals("Group of persons related by common descent or heredity", personAttributeType.getDescription());
-		assertEquals(1, personAttributeType.getCreator().getPersonId().intValue());
+		assertEquals(1, personAttributeType.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2007-05-04 09:59:23 CST"), personAttributeType.getDateCreated());
 		assertEquals(sdf.parse("2008-08-15 00:00:00 CST"), personAttributeType.getDateRetired());
-		assertEquals(1, personAttributeType.getRetiredBy().getPersonId().intValue());
+		assertEquals(1, personAttributeType.getRetiredBy().getUserId().intValue());
 		assertEquals("test", personAttributeType.getRetireReason());
 		assertEquals("java.lang.String", personAttributeType.getFormat());
 		assertEquals("Delete Cohorts", personAttributeType.getEditPrivilege().getPrivilege());

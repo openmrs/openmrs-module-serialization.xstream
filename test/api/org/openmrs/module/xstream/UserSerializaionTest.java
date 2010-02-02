@@ -58,7 +58,7 @@ public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 		XMLAssert.assertXpathExists("/user/changedBy/@reference", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateChanged()), "/user/dateChanged", xmlOutput);
 		XMLAssert.assertXpathExists("/user/voidedBy/@reference", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateVoided()), "/user/dateVoided", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateRetired()), "/user/dateVoided", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("Test purposes", "/user/voidReason", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("501", "/user/personId", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("F", "/user/gender", xmlOutput);
@@ -190,18 +190,17 @@ public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 		User user = Context.getSerializationService()
 		        .deserialize(xmlBuilder.toString(), User.class, XStreamSerializer.class);
 		assertEquals("df8ae447-6745-45be-b859-403241d9913c", user.getUuid());
-		assertTrue("The voided shouldn't be " + user.getVoided(), user.getVoided());
-		assertEquals(1, user.getCreator().getPersonId().intValue());
+		assertTrue("The voided shouldn't be " + user.getRetired(), user.getRetired());
+		assertEquals(1, user.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2008-08-15 15:46:47 CST"), user.getDateCreated());
-		assertEquals(1, user.getChangedBy().getPersonId().intValue());
+		assertEquals(1, user.getChangedBy().getUserId().intValue());
 		assertEquals(sdf.parse("2008-08-15 15:47:07 CST"), user.getDateChanged());
-		assertEquals(1, user.getVoidedBy().getPersonId().intValue());
-		assertEquals(sdf.parse("2008-08-30 15:47:07 CST"), user.getDateVoided());
-		assertEquals("Test purposes", user.getVoidReason());
-		assertEquals(501, user.getPersonId().intValue());
-		assertEquals("F", user.getGender());
-		assertFalse("The dead shouldn't be " + user.getDead(), user.getDead());
-		assertTrue("The isUser shouldn't be " + user.isUser(), user.isUser());
+		assertEquals(1, user.getRetiredBy().getUserId().intValue());
+		assertEquals(sdf.parse("2008-08-30 15:47:07 CST"), user.getDateRetired());
+		assertEquals("Test purposes", user.getRetireReason());
+		assertEquals(501, user.getPerson().getPersonId().intValue());
+		assertEquals("F", user.getPerson().getGender());
+		assertFalse("The dead shouldn't be " + user.getPerson().getDead(), user.getPerson().getDead());
 		assertEquals(501, user.getUserId().intValue());
 		assertEquals("2-6", user.getSystemId());
 		assertEquals("bruno", user.getUsername());

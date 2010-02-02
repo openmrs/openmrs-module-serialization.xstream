@@ -159,7 +159,7 @@ public class ConceptDescriptionSerializationTest extends BaseModuleContextSensit
 		assertEquals(3, cd.getConcept().getConceptId().intValue());
 		assertEquals("This is used for coughs", cd.getDescription());
 		assertEquals("en", cd.getLocale().toString());
-		assertEquals(1, cd.getCreator().getPersonId().intValue());
+		assertEquals(1, cd.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2008-08-15 15:27:51 CST"), cd.getDateCreated());
 	}
 }

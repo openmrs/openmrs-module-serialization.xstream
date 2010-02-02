@@ -170,7 +170,7 @@ public class ConceptMapSerializationTest extends BaseModuleContextSensitiveTest 
 		assertEquals(1, cm.getSource().getConceptSourceId().intValue());
 		assertEquals("test", cm.getSourceCode());
 		assertEquals("test", cm.getComment());
-		assertEquals(1, cm.getCreator().getPersonId().intValue());
+		assertEquals(1, cm.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2006-02-20 00:00:00 CST"), cm.getDateCreated());
 	}
 }

@@ -5,12 +5,12 @@
 	<!-- Base Module Properties -->
 	<id>serialization.xstream</id>
 	<name>Serialization Xstream</name>
-	<version>0.2.0</version>
+	<version>0.2.1</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>luzhuangwei</author>
 	<description>Core (de)serialize API and services supported by xstream library</description>
 	<activator>@MODULE_PACKAGE@.ModuleActivator</activator>
-	<require_version>1.5.0.9120</require_version>
+	<require_version>1.6.0</require_version>
 
 	<!-- Extensions -->
 	

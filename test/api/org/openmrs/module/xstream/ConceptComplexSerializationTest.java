@@ -269,7 +269,7 @@ public class ConceptComplexSerializationTest extends BaseModuleContextSensitiveT
 		assertFalse("The retired shouldn't be " + cc.isRetired(), cc.isRetired());
 		assertEquals(4, cc.getDatatype().getConceptDatatypeId().intValue());
 		assertEquals(3, cc.getConceptClass().getConceptClassId().intValue());
-		assertEquals(1, cc.getCreator().getPersonId().intValue());
+		assertEquals(1, cc.getCreator().getUserId().intValue());
 		assertFalse("The set shouldn't be " + cc.getSet(), cc.getSet());
 		assertEquals(sdf.parse("2008-08-15 15:27:51 CST"), cc.getDateCreated());
 		assertEquals(1, cc.getNames().size());

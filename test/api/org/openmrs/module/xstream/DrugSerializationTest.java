@@ -206,7 +206,7 @@ public class DrugSerializationTest extends BaseModuleContextSensitiveTest {
 		assertEquals(2, drug.getDrugId().intValue());
 		assertFalse("The retired shouldn't be " + drug.getRetired(), drug.getRetired());
 		assertEquals("Triomune-30", drug.getName());
-		assertEquals(1, drug.getCreator().getPersonId().intValue());
+		assertEquals(1, drug.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2005-02-24 00:00:00 CST"), drug.getDateCreated());
 		assertTrue("The combination shouldn't be " + drug.getCombination(), drug.getCombination());
 		assertEquals(3, drug.getDosageForm().getConceptId().intValue());

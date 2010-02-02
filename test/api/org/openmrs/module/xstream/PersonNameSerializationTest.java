@@ -167,7 +167,7 @@ public class PersonNameSerializationTest extends BaseModuleContextSensitiveTest 
 		
 		assertEquals(2, pn.getPersonNameId().intValue());
 		assertEquals("399e3a7b-6482-487d-94ce-c07bb3ca3cc7", pn.getUuid());
-		assertEquals(1, pn.getCreator().getPersonId().intValue());
+		assertEquals(1, pn.getCreator().getUserId().intValue());
 		assertEquals(2, pn.getPerson().getPersonId().intValue());
 		assertEquals(sdf.parse("2005-09-22 00:00:00 CST"), pn.getDateCreated());
 		assertFalse("The voided shouldn't be " + pn.getVoided(), pn.getVoided());

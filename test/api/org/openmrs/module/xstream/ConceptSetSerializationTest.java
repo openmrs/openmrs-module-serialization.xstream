@@ -186,7 +186,7 @@ public class ConceptSetSerializationTest extends BaseModuleContextSensitiveTest 
 		assertEquals(18, cs.getConcept().getConceptId().intValue());
 		assertEquals(23, cs.getConceptSet().getConceptId().intValue());
 		assertEquals("0.0", cs.getSortWeight().toString());
-		assertEquals(1, cs.getCreator().getPersonId().intValue());
+		assertEquals(1, cs.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2008-08-18 12:38:58 CST"), cs.getDateCreated());
 	}
 }

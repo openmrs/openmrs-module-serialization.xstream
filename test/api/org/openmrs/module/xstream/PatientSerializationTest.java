@@ -197,9 +197,9 @@ public class PatientSerializationTest extends BaseModuleContextSensitiveTest {
 		
 		assertEquals("86526ed6-3c11-11de-a0ba-001e378eb67e", patient.getUuid());
 		assertTrue("The voided shouldn't be " + patient.getVoided(), patient.getVoided());
-		assertEquals(1, patient.getCreator().getPersonId().intValue());
+		assertEquals(1, patient.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2006-01-18 00:00:00 CST"), patient.getDateCreated());
-		assertEquals(1, patient.getChangedBy().getPersonId().intValue());
+		assertEquals(1, patient.getChangedBy().getUserId().intValue());
 		assertEquals(sdf.parse("2008-08-18 12:24:34 CST"), patient.getDateChanged());
 		assertEquals("For test purposes", patient.getVoidReason());
 		assertEquals(999, patient.getPersonId().intValue());

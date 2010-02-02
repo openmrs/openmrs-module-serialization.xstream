@@ -143,7 +143,7 @@ public class CohortSerializationTest extends BaseModuleContextSensitiveTest {
 		assertEquals(1, cohort.getCohortId().intValue());
 		assertFalse("The voided shouldn't be " + cohort.getVoided(), cohort.getVoided());
 		assertEquals("57b9e333-751c-4291-80d1-449412ac2cd3", cohort.getUuid());
-		assertEquals(1, cohort.getCreator().getPersonId().intValue());
+		assertEquals(1, cohort.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2006-10-20 00:00:00 CST"), cohort.getDateCreated());
 		assertEquals("old cohorts", cohort.getName());
 		assertEquals("This is a cohort in which every one's age is above 60", cohort.getDescription());

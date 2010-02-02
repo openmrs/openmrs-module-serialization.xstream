@@ -174,7 +174,7 @@ public class PersonAttributeSerializationTest extends BaseModuleContextSensitive
 		    XStreamSerializer.class);
 		assertEquals(1, pa.getPersonAttributeId().intValue());
 		assertEquals("0768f3da-b692-44b7-a33f-abf2c450474e", pa.getUuid());
-		assertEquals(1, pa.getCreator().getPersonId().intValue());
+		assertEquals(1, pa.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2008-08-15 15:46:47 CST"), pa.getDateCreated());
 		assertEquals(501, pa.getPerson().getPersonId().intValue());
 		assertEquals(1, pa.getAttributeType().getPersonAttributeTypeId().intValue());

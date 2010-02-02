@@ -136,11 +136,11 @@ public class ConceptClassSerializationTest extends BaseModuleContextSensitiveTes
 		assertEquals(4, cc.getConceptClassId().intValue());
 		assertEquals("Diagnosis", cc.getName());
 		assertEquals("Conclusion drawn through findings", cc.getDescription());
-		assertEquals(1, cc.getCreator().getPersonId().intValue());
+		assertEquals(1, cc.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2004-02-02 00:00:00 CST"), cc.getDateCreated());
 		assertTrue("The retired shouldn't be " + cc.getRetired(), cc.getRetired());
 		assertEquals(sdf.parse("2006-02-02 00:00:00 CST"), cc.getDateRetired());
-		assertEquals(1, cc.getRetiredBy().getPersonId().intValue());
+		assertEquals(1, cc.getRetiredBy().getUserId().intValue());
 		assertEquals("we don't want to use it", cc.getRetireReason());
 	}
 }

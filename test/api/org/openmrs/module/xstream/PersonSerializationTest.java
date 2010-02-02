@@ -246,10 +246,10 @@ public class PersonSerializationTest extends BaseModuleContextSensitiveTest {
 		assertTrue("The dead shouldn't be " + person.getDead(), person.getDead());
 		assertEquals(sdf.parse("2005-02-10 15:30:00 CST"), person.getDeathDate());
 		assertEquals(1088, person.getCauseOfDeath().getConceptId().intValue());
-		assertEquals(1, person.getPersonCreator().getPersonId().intValue());
+		assertEquals(1, person.getPersonCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2006-01-18 00:00:00 CST"), person.getPersonDateCreated());
 		assertTrue("The personVoided shouldn't be " + person.getPersonVoided(), person.getPersonVoided());
-		assertEquals(1, person.getPersonVoidedBy().getPersonId().intValue());
+		assertEquals(1, person.getPersonVoidedBy().getUserId().intValue());
 		assertEquals(sdf.parse("2006-09-18 00:00:00 CST"), person.getPersonDateVoided());
 		assertEquals("test purpose", person.getPersonVoidReason());
 		assertFalse("The isPatient shouldn't be " + person.isPatient(), person.isPatient());
