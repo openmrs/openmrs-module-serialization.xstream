@@ -103,7 +103,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		xstream.useAttributeFor(Concept.class, "retired");		
 		xstream.useAttributeFor(ConceptName.class, "voided");
 		xstream.useAttributeFor(ConceptNameTag.class, "voided");
-		xstream.useAttributeFor(ConceptSource.class, "retired");
+		//xstream.useAttributeFor(ConceptSource.class, "retired");
 
 		/*
 		 * alias className for all classses current need to serialize

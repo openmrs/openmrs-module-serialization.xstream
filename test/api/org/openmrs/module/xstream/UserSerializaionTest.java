@@ -190,7 +190,7 @@ public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 		User user = Context.getSerializationService()
 		        .deserialize(xmlBuilder.toString(), User.class, XStreamSerializer.class);
 		assertEquals("df8ae447-6745-45be-b859-403241d9913c", user.getUuid());
-		assertTrue("The voided shouldn't be " + user.getRetired(), user.getRetired());
+		assertTrue("The retired shouldn't be " + user.getRetired(), user.getRetired());
 		assertEquals(1, user.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2008-08-15 15:46:47 CST"), user.getDateCreated());
 		assertEquals(1, user.getChangedBy().getUserId().intValue());

@@ -135,6 +135,6 @@ public class ConceptSourceSerializationTest extends BaseModuleContextSensitiveTe
 		assertEquals("test", cs.getHl7Code());
 		assertEquals(1, cs.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2006-01-20 00:00:00 CST"), cs.getDateCreated());
-		assertFalse("The voided shouldn't be " + cs.isVoided(), cs.isVoided());
+		assertFalse("The retired shouldn't be " + cs.isRetired(), cs.isRetired());
 	}
 }

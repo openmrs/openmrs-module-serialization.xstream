@@ -76,7 +76,7 @@ public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 		assertEquals("current patient should contain a creator whoes userId == 1", 1, patient.getCreator().getUserId().intValue());
 		String xmlOutput = Context.getSerializationService().serialize(patient, XStreamShortSerializer.class);
 		//test the node named as "creator" in "xmlOutput" should only contain a uuid attribute.
-		XMLAssert.assertXpathEvaluatesTo("ba1b19c2-3ed6-4f63-b8c0-f762dc8d7562", "/patient/creator/@uuid", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("1010d442-e134-11de-babe-001e378eb67e", "/patient/creator/@uuid", xmlOutput);
 		XMLAssert.assertXpathNotExists("/patient/creator/*", xmlOutput);
 	}
 	
