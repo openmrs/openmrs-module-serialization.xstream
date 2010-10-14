@@ -95,11 +95,14 @@ public abstract class BaseShortConverter implements Converter {
 	 * @see PersonShortConverter#unmarshal(HierarchicalStreamReader, UnmarshallingContext)
 	 */
 	protected boolean needsFullDeserialization(HierarchicalStreamReader reader) {
-		String id = reader.getAttribute("id");
-		if (id != null && "1".equals(id))
+		String uuid = reader.getAttribute("uuid");
+		if (uuid == null) {
 			return true;
-		else
-			return false;
+		}
+		else {
+			String id = reader.getAttribute("id");
+			return (id != null && "1".equals(id));
+		}
 	}
 	
 	protected Mapper getMapper() {
