@@ -31,7 +31,6 @@ import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
-import org.openmrs.ConceptSource;
 import org.openmrs.api.SerializationService;
 import org.openmrs.module.serialization.xstream.converter.CustomCGLIBEnhancedConverter;
 import org.openmrs.module.serialization.xstream.converter.CustomReflectionConverter;
@@ -40,7 +39,6 @@ import org.openmrs.module.serialization.xstream.converter.HibernateCollectionCon
 import org.openmrs.module.serialization.xstream.converter.UserConverter;
 import org.openmrs.module.serialization.xstream.mapper.CGLibMapper;
 import org.openmrs.module.serialization.xstream.mapper.HibernateCollectionMapper;
-import org.openmrs.module.serialization.xstream.mapper.IgnoreUnknownElementMapper;
 import org.openmrs.module.serialization.xstream.strategy.CustomReferenceByIdMarshallingStrategy;
 import org.openmrs.serialization.OpenmrsSerializer;
 import org.openmrs.serialization.SerializationException;
@@ -83,7 +81,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 			protected MapperWrapper wrapMapper(MapperWrapper next) {
 				MapperWrapper mapper = new CGLibMapper(next);
 				mapper = new HibernateCollectionMapper(mapper);
-				mapper = new IgnoreUnknownElementMapper(mapper);
+				//mapper = new IgnoreUnknownElementMapper(mapper);
 				return mapper;
 			}
 		};
