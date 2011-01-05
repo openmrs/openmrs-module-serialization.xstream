@@ -152,7 +152,12 @@ public abstract class BaseShortConverter implements Converter {
 			return defaultConverter.unmarshal(reader, context);
 		} else {
 			String uuid = reader.getAttribute("uuid");
-			return getByUUID(uuid);
+			Object ret = context.get(uuid);
+			if (ret == null) {
+				ret = getByUUID(uuid);
+				context.put(uuid, ret);
+			}
+			return ret;
 		}
 	}
 	
