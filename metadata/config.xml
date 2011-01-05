@@ -5,7 +5,7 @@
 	<!-- Base Module Properties -->
 	<id>serialization.xstream</id>
 	<name>Serialization Xstream</name>
-	<version>0.1.8.2</version>
+	<version>0.1.8.3</version>
 	<package>org.openmrs.module.@MODULE_ID@</package>
 	<author>luzhuangwei</author>
 	<description>Core (de)serialize API and services supported by xstream library</description>

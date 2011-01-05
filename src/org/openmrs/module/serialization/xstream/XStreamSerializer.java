@@ -71,22 +71,34 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	 * @throws SerializationException
 	 */
 	public XStreamSerializer() throws SerializationException {
-		/*
-		 * use own-defined mapper to wrap xstream's default mapper, 
-		 * The purpose:
-		 * (1) we can use the reasonable name for cglib and Hibernate's Collection
-		 * (2) ignore unknow element while deserializing
-		 */
-		xstream = new XStream(
-		                      new DomDriver()) {
-			
-			protected MapperWrapper wrapMapper(MapperWrapper next) {
-				MapperWrapper mapper = new CGLibMapper(next);
-				mapper = new HibernateCollectionMapper(mapper);
-				mapper = new IgnoreUnknownElementMapper(mapper);
-				return mapper;
-			}
-		};
+		this(null);
+	}
+	
+	/**
+	 * Constructor that takes a custom XStream object
+	 * @param xstream
+	 * @throws SerializationException
+	 */
+	public XStreamSerializer(XStream customXstream) throws SerializationException {
+		if (customXstream == null) {
+			/*
+			 * use own-defined mapper to wrap xstream's default mapper, 
+			 * The purpose:
+			 * (1) we can use the reasonable name for cglib and Hibernate's Collection
+			 * (2) ignore unknow element while deserializing
+			 */
+			xstream = new XStream(
+			                      new DomDriver()) {
+				protected MapperWrapper wrapMapper(MapperWrapper next) {
+					MapperWrapper mapper = new CGLibMapper(next);
+					mapper = new HibernateCollectionMapper(mapper);
+					mapper = new IgnoreUnknownElementMapper(mapper);
+					return mapper;
+				}
+			};
+		} else {
+			this.xstream = customXstream;
+		}
 		
 		//config the basic attributes
 		

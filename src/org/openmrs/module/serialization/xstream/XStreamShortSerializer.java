@@ -30,6 +30,7 @@ import org.openmrs.module.serialization.xstream.converter.RelationshipTypeShortC
 import org.openmrs.module.serialization.xstream.converter.UserShortConverter;
 import org.openmrs.serialization.SerializationException;
 
+import com.thoughtworks.xstream.XStream;
 import com.thoughtworks.xstream.converters.ConverterLookup;
 import com.thoughtworks.xstream.mapper.Mapper;
 
@@ -66,6 +67,12 @@ public class XStreamShortSerializer extends XStreamSerializer {
 	 * @throws SerializationException
 	 */
 	public XStreamShortSerializer() throws SerializationException {
+		this(null);
+	}
+	
+	public XStreamShortSerializer(XStream customXstream) throws SerializationException {
+		super(customXstream);
+
 		//all base config information for serialization inherited from XStreamSerializer
 		Mapper mapper = xstream.getMapper();
 		ConverterLookup conerterLookup = xstream.getConverterLookup();
