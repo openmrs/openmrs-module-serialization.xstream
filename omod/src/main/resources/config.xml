@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE module PUBLIC "-//OpenMRS//DTD OpenMRS Config 1.2//EN" "http://resources.openmrs.org/doctype/config-1.2.dtd">
+<module configVersion="1.2">
+
+	<!-- Base Module Properties -->
+	<id>@MODULE_ID@</id>
+	<name>@MODULE_NAME@</name>
+	<version>@MODULE_VERSION@</version>
+	<package>@MODULE_PACKAGE@</package>
+	<author>luzhuangwei</author>
+	<description>Core (de)serialize API and services supported by xstream library</description>
+	<activator>@MODULE_PACKAGE@.ModuleActivator</activator>
+	<require_version>1.6.0</require_version>
+
+	<!-- Extensions -->
+	
+	<!--  Message Properties -->
+	<messages>
+		<lang>en</lang>
+		<file>messages.properties</file>
+	</messages>
+
+</module>
