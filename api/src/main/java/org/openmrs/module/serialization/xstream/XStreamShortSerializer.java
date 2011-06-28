@@ -18,6 +18,7 @@ import org.openmrs.module.serialization.xstream.converter.ConceptShortConverter;
 import org.openmrs.module.serialization.xstream.converter.EncounterTypeShortConverter;
 import org.openmrs.module.serialization.xstream.converter.FieldTypeShortConverter;
 import org.openmrs.module.serialization.xstream.converter.FormShortConverter;
+import org.openmrs.module.serialization.xstream.converter.LocationShortConverter;
 import org.openmrs.module.serialization.xstream.converter.OrderTypeShortConverter;
 import org.openmrs.module.serialization.xstream.converter.PatientIdentifierTypeShortConverter;
 import org.openmrs.module.serialization.xstream.converter.PatientShortConverter;
@@ -85,6 +86,7 @@ public class XStreamShortSerializer extends XStreamSerializer {
 		xstream.registerConverter(new EncounterTypeShortConverter(mapper, conerterLookup));
 		xstream.registerConverter(new FieldTypeShortConverter(mapper, conerterLookup));
 		xstream.registerConverter(new FormShortConverter(mapper, conerterLookup));
+		xstream.registerConverter(new LocationShortConverter(mapper, conerterLookup));
 		xstream.registerConverter(new OrderTypeShortConverter(mapper, conerterLookup));
 		xstream.registerConverter(new PatientIdentifierTypeShortConverter(mapper, conerterLookup));
 		xstream.registerConverter(new PersonAttributeTypeShortConverter(mapper, conerterLookup));
