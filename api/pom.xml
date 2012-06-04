@@ -4,7 +4,7 @@
 	<parent>
 		<groupId>org.openmrs.module</groupId>
 		<artifactId>serialization.xstream</artifactId>
-		<version>0.2.6-SNAPSHOT</version>
+		<version>0.2.6</version>
 	</parent>
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>serialization.xstream-api</artifactId>
@@ -13,14 +13,7 @@
 	<description>API project for Serialization Xstream</description>
 
 	<dependencies>
-		<!-- 
-		Add other dependencies from lib:
-		<dependency>
-			<groupId>org.other.library</groupId>
-			<artifactId>library-name</artifactId>
-		</dependency>
-		-->
-		
+
 		<dependency>
 			<groupId>org.openmrs.api</groupId>
 			<artifactId>openmrs-api</artifactId>
