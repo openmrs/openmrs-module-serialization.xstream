@@ -17,6 +17,8 @@ import net.sf.cglib.proxy.Enhancer;
 
 import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
+import org.openmrs.module.serialization.xstream.mapper.CGLibMapper;
+import org.openmrs.module.serialization.xstream.mapper.JavassistMapper;
 import org.openmrs.module.serialization.xstream.strategy.CustomReferenceByIdMarshaller;
 
 import com.thoughtworks.xstream.converters.Converter;
@@ -36,8 +38,6 @@ public abstract class BaseShortConverter implements Converter {
 	private Mapper mapper;
 	
 	private ConverterLookup converterLookup;
-	
-	private static String DEFAULT_NAMING_MARKER = "$$EnhancerByCGLIB$$";
 	
 	/**
 	 * Constructor
@@ -78,8 +78,18 @@ public abstract class BaseShortConverter implements Converter {
 	 * @return whether type is a type of CGLib proxy
 	 */
 	protected boolean isCGLibProxy(Class type) {
-		return (Enhancer.isEnhanced(type) && type.getName().indexOf(DEFAULT_NAMING_MARKER) > 0)
+		return (Enhancer.isEnhanced(type) && type.getName().indexOf(CGLibMapper.marker) > 0)
 		        || type == CGLIBMapper.Marker.class;
+	}
+	
+	/**
+	 * judge whether current type is a type of Javassist proxy
+	 * 
+	 * @param type - the type to be judged
+	 * @return whether type is a type of Javassist proxy
+	 */
+	protected boolean isJavassistProxy(Class type) {
+		return (type.getName().indexOf(JavassistMapper.marker) > 0);
 	}
 	
 	/**
@@ -126,7 +136,12 @@ public abstract class BaseShortConverter implements Converter {
 			if (isCGLibProxy(obj.getClass())) {
 				CustomCGLIBEnhancedConverter converter = new CustomCGLIBEnhancedConverter(getMapper(), getConverterLookup());
 				converter.marshal(obj, writer, context);
-			} else {
+			}
+			else if (isJavassistProxy(obj.getClass())) {
+				CustomJavassistEnhancedConverter converter = new CustomJavassistEnhancedConverter(getMapper(), getConverterLookup());
+				converter.marshal(obj, writer, context);
+			}
+			else {
 				Converter defaultConverter = getConverterLookup().lookupConverterForType(Object.class);
 				defaultConverter.marshal(obj, writer, context);
 			}

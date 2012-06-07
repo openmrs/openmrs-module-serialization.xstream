@@ -5,6 +5,8 @@ import java.util.List;
 import net.sf.cglib.proxy.Enhancer;
 
 import org.openmrs.User;
+import org.openmrs.module.serialization.xstream.mapper.CGLibMapper;
+import org.openmrs.module.serialization.xstream.mapper.JavassistMapper;
 import org.openmrs.module.serialization.xstream.strategy.CustomReferenceByIdMarshaller;
 
 import com.thoughtworks.xstream.XStream;
@@ -26,8 +28,6 @@ public class UserConverter implements Converter {
 	private Converter defaultConverter;
 	
 	private XStream xstream;
-	
-	private static String DEFAULT_NAMING_MARKER = "$$EnhancerByCGLIB$$";
 	
 	/**
 	 * @param converterLookup
@@ -62,6 +62,10 @@ public class UserConverter implements Converter {
 				CustomCGLIBEnhancedConverter converter = new CustomCGLIBEnhancedConverter(xstream.getMapper(), xstream.getConverterLookup());
 				converter.marshal(obj, writer, context);
 			}
+			else if (isJavassistProxy(obj.getClass())) {
+				CustomJavassistEnhancedConverter converter = new CustomJavassistEnhancedConverter(xstream.getMapper(), xstream.getConverterLookup());
+				converter.marshal(obj, writer, context);
+			}
 			else
 				defaultConverter.marshal(obj, writer, context);
 		}
@@ -89,7 +93,17 @@ public class UserConverter implements Converter {
 	 * @return whether type is a type of CGLib proxy
 	 */
 	protected boolean isCGLibProxy(Class type) {
-		return (Enhancer.isEnhanced(type) && type.getName().indexOf(DEFAULT_NAMING_MARKER) > 0)
+		return (Enhancer.isEnhanced(type) && type.getName().indexOf(CGLibMapper.marker) > 0)
 		        || type == CGLIBMapper.Marker.class;
+	}
+	
+	/**
+	 * judge whether current type is a type of Javassist proxy
+	 * 
+	 * @param type - the type to be judged
+	 * @return whether type is a type of Javassist proxy
+	 */
+	protected boolean isJavassistProxy(Class type) {
+		return (type.getName().indexOf(JavassistMapper.marker) > 0);
 	}
 }

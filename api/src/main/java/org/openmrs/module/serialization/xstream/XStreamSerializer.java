@@ -33,12 +33,15 @@ import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
 import org.openmrs.api.SerializationService;
 import org.openmrs.module.serialization.xstream.converter.CustomCGLIBEnhancedConverter;
+import org.openmrs.module.serialization.xstream.converter.CustomJavassistEnhancedConverter;
 import org.openmrs.module.serialization.xstream.converter.CustomReflectionConverter;
 import org.openmrs.module.serialization.xstream.converter.CustomSQLTimestampConverter;
 import org.openmrs.module.serialization.xstream.converter.HibernateCollectionConverter;
 import org.openmrs.module.serialization.xstream.converter.UserConverter;
 import org.openmrs.module.serialization.xstream.mapper.CGLibMapper;
 import org.openmrs.module.serialization.xstream.mapper.HibernateCollectionMapper;
+import org.openmrs.module.serialization.xstream.mapper.JavassistMapper;
+import org.openmrs.module.serialization.xstream.mapper.NullValueMapper;
 import org.openmrs.module.serialization.xstream.strategy.CustomReferenceByIdMarshallingStrategy;
 import org.openmrs.serialization.OpenmrsSerializer;
 import org.openmrs.serialization.SerializationException;
@@ -88,7 +91,9 @@ public class XStreamSerializer implements OpenmrsSerializer {
 			xstream = new XStream(new DomDriver()) {
 				protected MapperWrapper wrapMapper(MapperWrapper next) {
 					MapperWrapper mapper = new CGLibMapper(next);
+					mapper = new JavassistMapper(mapper);
 					mapper = new HibernateCollectionMapper(mapper);
+					mapper = new NullValueMapper(mapper);
 					//mapper = new IgnoreUnknownElementMapper(mapper);
 					return mapper;
 				}
@@ -131,6 +136,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		 */
 		xstream.registerConverter(new HibernateCollectionConverter(xstream.getConverterLookup()));
 		xstream.registerConverter(new CustomCGLIBEnhancedConverter(xstream.getMapper(), xstream.getConverterLookup()));
+		xstream.registerConverter(new CustomJavassistEnhancedConverter(xstream.getMapper(), xstream.getConverterLookup()));
 		xstream.registerConverter(new CustomSQLTimestampConverter());
 		xstream.registerConverter(new DateConverter("yyyy-MM-dd HH:mm:ss z", new String[] { "yyyy-MM-dd HH:mm:ss.S z",
 		        "yyyy-MM-dd HH:mm:ssz", "yyyy-MM-dd HH:mm:ss.S a", "yyyy-MM-dd HH:mm:ssa" }));

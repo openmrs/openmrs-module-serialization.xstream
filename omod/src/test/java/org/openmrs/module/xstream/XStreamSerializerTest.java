@@ -17,15 +17,25 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import junit.framework.Assert;
 
 import org.custommonkey.xmlunit.XMLAssert;
 import org.hibernate.proxy.HibernateProxy;
 import org.junit.Test;
+import org.openmrs.Cohort;
 import org.openmrs.ConceptSource;
+import org.openmrs.Encounter;
 import org.openmrs.PersonName;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
+import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 /**
@@ -118,4 +128,37 @@ public class XStreamSerializerTest extends BaseModuleContextSensitiveTest {
 		new XStreamSerializer();
 	}
 	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldNotBombOnNullListValues() throws Exception {
+		List<Object> testList = new ArrayList<Object>();
+		testList.add("value1");
+		Context.getSerializationService().serialize(testList, XStreamSerializer.class);
+		testList.add(null);
+		String xml = Context.getSerializationService().serialize(testList, XStreamSerializer.class);
+		List<Object> hydratedList = Context.getSerializationService().deserialize(xml, List.class, XStreamSerializer.class);
+		Assert.assertEquals(2, hydratedList.size());
+		Assert.assertEquals("value1", hydratedList.get(0));
+		Assert.assertNull(hydratedList.get(1));
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Test
+	public void shouldNotBombOnNullMapValues() throws Exception {
+		Map<String, Object> testMap = new LinkedHashMap<String, Object>();
+		testMap.put("key1", "value1");
+		Context.getSerializationService().serialize(testMap, XStreamSerializer.class);
+		testMap.put("key2", null);
+		String xml = Context.getSerializationService().serialize(testMap, XStreamSerializer.class);
+		Map<String, Object> hydratedMap = Context.getSerializationService().deserialize(xml, Map.class, XStreamSerializer.class);
+		Assert.assertEquals(2, hydratedMap.size());
+		Iterator<Map.Entry<String, Object>> entries = hydratedMap.entrySet().iterator();
+		Map.Entry<String, Object> entry1 = entries.next();
+		Assert.assertEquals("key1", entry1.getKey());
+		Assert.assertEquals("value1", entry1.getValue());
+		Map.Entry<String, Object> entry2 = entries.next();
+		Assert.assertEquals("key2", entry2.getKey());
+		Assert.assertNull(entry2.getValue());
+	}
+
 }
