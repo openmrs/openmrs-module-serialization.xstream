@@ -15,7 +15,7 @@ package org.openmrs.module.serialization.xstream.converter;
 
 import net.sf.cglib.proxy.Enhancer;
 
-import org.openmrs.BaseOpenmrsObject;
+import org.openmrs.OpenmrsObject;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
 import org.openmrs.module.serialization.xstream.mapper.CGLibMapper;
 import org.openmrs.module.serialization.xstream.mapper.JavassistMapper;
@@ -77,7 +77,7 @@ public abstract class BaseShortConverter implements Converter {
 	 * @param type - the type to be judged
 	 * @return whether type is a type of CGLib proxy
 	 */
-	protected boolean isCGLibProxy(Class type) {
+	protected boolean isCGLibProxy(Class<?> type) {
 		return (Enhancer.isEnhanced(type) && type.getName().indexOf(CGLibMapper.marker) > 0)
 		        || type == CGLIBMapper.Marker.class;
 	}
@@ -88,7 +88,7 @@ public abstract class BaseShortConverter implements Converter {
 	 * @param type - the type to be judged
 	 * @return whether type is a type of Javassist proxy
 	 */
-	protected boolean isJavassistProxy(Class type) {
+	protected boolean isJavassistProxy(Class<?> type) {
 		return (type.getName().indexOf(JavassistMapper.marker) > 0);
 	}
 	
@@ -132,25 +132,36 @@ public abstract class BaseShortConverter implements Converter {
 	 *      com.thoughtworks.xstream.converters.MarshallingContext)
 	 */
 	public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext context) {
-		if (needsFullSeralization(context)) {
+		
+		String uuid = null;
+		try {
+			OpenmrsObject omrsObj = (OpenmrsObject) obj;
+			if (omrsObj.getId() != null || needsFullSeralization(context)) {
+				uuid = omrsObj.getUuid();	
+			}
+			else {
+				omrsObj.setUuid(null);
+			}
+		} 
+		catch (Exception ex) {
+		}
+
+		if (needsFullSeralization(context) || uuid == null) {
 			if (isCGLibProxy(obj.getClass())) {
 				CustomCGLIBEnhancedConverter converter = new CustomCGLIBEnhancedConverter(getMapper(), getConverterLookup());
 				converter.marshal(obj, writer, context);
-			}
+			} 
 			else if (isJavassistProxy(obj.getClass())) {
 				CustomJavassistEnhancedConverter converter = new CustomJavassistEnhancedConverter(getMapper(), getConverterLookup());
 				converter.marshal(obj, writer, context);
-			}
+			} 
 			else {
 				Converter defaultConverter = getConverterLookup().lookupConverterForType(Object.class);
 				defaultConverter.marshal(obj, writer, context);
 			}
-		} else {
-			/*
-			 * Here cast "obj" to "BaseOpenmrsObject", so that any short converter extending form BaseShortConverter
-			 * can directly use this marshal method to serialize "obj".	
-			 */
-			writer.addAttribute("uuid", ((BaseOpenmrsObject) obj).getUuid());
+		} 
+		else {
+			writer.addAttribute("uuid", uuid);
 		}
 	}
 	
