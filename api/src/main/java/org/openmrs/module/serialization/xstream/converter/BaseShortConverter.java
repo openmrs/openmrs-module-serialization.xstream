@@ -124,8 +124,10 @@ public abstract class BaseShortConverter implements Converter {
 	}
 	
 	/**
-	 * While obj is a sole object, xstream will serialize all attributes of it.<br />
-	 * While obj is a property of other classes, xstream will just serialize uuid.
+	 * If this object is an OpenMRS object, if it is not the base node in the serialization
+	 * (eg. it is a property of another object that is being serialized), and if it has been previously
+	 * saved to the database, this will serialize the object by uuid.  Otherwise, it will perform the
+	 * default full serialization of all of it's underlying properties
 	 * 
 	 * @see com.thoughtworks.xstream.converters.Converter#marshal(java.lang.Object,
 	 *      com.thoughtworks.xstream.io.HierarchicalStreamWriter,
