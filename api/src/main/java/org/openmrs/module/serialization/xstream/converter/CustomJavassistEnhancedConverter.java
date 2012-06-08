@@ -13,8 +13,6 @@
  */
 package org.openmrs.module.serialization.xstream.converter;
 
-import net.sf.cglib.proxy.Enhancer;
-
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 
@@ -25,16 +23,15 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.reflection.SerializationMethodInvoker;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import com.thoughtworks.xstream.mapper.CGLIBMapper;
 import com.thoughtworks.xstream.mapper.Mapper;
 
 /**
  * Converter which deals with Javassist proxy's serialization/deserialization. While serializing, it
  * will convert the proxy into its actual object and put its properties into the xml string. By
- * default, xstream won't serialize the cglib proxy's properties in the serialized xml string, but
+ * default, xstream won't serialize the javassist proxy's properties in the serialized xml string, but
  * just puts a few information in serialized xml string which describe the interfaces, packages and
  * other information of current class, so we need this own-defined "CustomJavassistEnhancedConverter"
- * for cglib proxies.
+ * for javassist proxies.
  */
 public class CustomJavassistEnhancedConverter implements Converter {
 	
@@ -63,7 +60,7 @@ public class CustomJavassistEnhancedConverter implements Converter {
 	public void marshal(Object obj, HierarchicalStreamWriter writer, MarshallingContext context) {
 		/*
 		 * through "SerializationMethodInvoker"'s callWriteReplace method, we
-		 * can get the actual type of any cglib proxy
+		 * can get the actual type of any proxy
 		 */
 		SerializationMethodInvoker serializationMethodInvoker = new SerializationMethodInvoker();
 		Object newObj = (Object) serializationMethodInvoker.callWriteReplace(obj);
@@ -105,8 +102,7 @@ public class CustomJavassistEnhancedConverter implements Converter {
 	 * @see com.thoughtworks.xstream.converters.ConverterMatcher#canConvert(java.lang.Class)
 	 */
 	public boolean canConvert(Class type) {
-		return (Enhancer.isEnhanced(type) && type.getName().indexOf(DEFAULT_NAMING_MARKER) > 0)
-		        || type == CGLIBMapper.Marker.class;
+		return type.getName().indexOf(DEFAULT_NAMING_MARKER) > 0;
 	}
 	
 }
