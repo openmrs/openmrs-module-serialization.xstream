@@ -127,7 +127,7 @@ public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 		xmlBuilder.append("  <creator id=\"2\" uuid=\"ba1b19c2-3ed6-4f63-b8c0-f762dc8d7562\"/>\n");
 		xmlBuilder.append("  <dateCreated class=\"sql-timestamp\" id=\"3\">2007-05-04 09:59:23 CST</dateCreated>\n");
 		xmlBuilder.append("  <dateRetired class=\"sql-timestamp\" id=\"4\">2008-08-15 00:00:00 CST</dateRetired>\n");
-		xmlBuilder.append("  <retiredBy reference=\"2\"/>\n");
+		xmlBuilder.append("  <retiredBy reference=\"1\"/>\n");
 		xmlBuilder.append("  <retireReason>test</retireReason>\n");
 		xmlBuilder.append("  <personAttributeTypeId>1</personAttributeTypeId>\n");
 		xmlBuilder.append("  <format>java.lang.String</format>\n");
@@ -180,9 +180,9 @@ public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 		col.add(user1);
 		col.add(user2);
 		String xmlOutput = Context.getSerializationService().serialize(col, XStreamShortSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("df8ae447-6745-45be-b859-403241d9913c", "/set/user[1]/@uuid", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("c1d8f5c2-e131-11de-babe-001e378eb67e", "/set/user[1]/@uuid", xmlOutput);
 		XMLAssert.assertXpathNotExists("/set/user[1]/*", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("341b4e41-790c-484f-b6ed-71dc8da222de", "/set/user[2]/@uuid", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("c98a1558-e131-11de-babe-001e378eb67e", "/set/user[2]/@uuid", xmlOutput);
 		XMLAssert.assertXpathNotExists("/set/user[2]/*", xmlOutput);
 	}
 	
@@ -203,9 +203,9 @@ public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 		map.put(user1, user1.getUsername());
 		map.put(user2, user2.getUsername());
 		String xmlOutput = Context.getSerializationService().serialize(map, XStreamShortSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("df8ae447-6745-45be-b859-403241d9913c", "/map/entry[1]/user/@uuid", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("c1d8f5c2-e131-11de-babe-001e378eb67e", "/map/entry[1]/user/@uuid", xmlOutput);
 		XMLAssert.assertXpathNotExists("/map/entry[1]/user/*", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("341b4e41-790c-484f-b6ed-71dc8da222de", "/map/entry[2]/user/@uuid", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("c98a1558-e131-11de-babe-001e378eb67e", "/map/entry[2]/user/@uuid", xmlOutput);
 		XMLAssert.assertXpathNotExists("/map/entry[2]/user/*", xmlOutput);
 	}
 }
