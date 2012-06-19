@@ -88,10 +88,10 @@ public class XStreamSerializerTest extends BaseModuleContextSensitiveTest {
 		
 		// [DJ] THIS IS DEFINITELY WRONG NOW THAT USERS ARE NOT PERSONS [/DJ]
 		//creator and person of 'pn' should be the same one, you can find this feature in "initialInMemoryTestDataSet.xml" and "standardTestDataset.xml"
-		assertEquals(pn.getCreator(), pn.getPerson());
+		/*assertEquals(pn.getCreator(), pn.getPerson());
 		
 		String xmlOutput = Context.getSerializationService().serialize(pn, XStreamSerializer.class);
-		XMLAssert.assertXpathValuesEqual("/personName/creator/@id", "/personName/person/@reference", xmlOutput);
+		XMLAssert.assertXpathValuesEqual("/personName/creator/@id", "/personName/person/@reference", xmlOutput);*/
 	}
 	
 	/**

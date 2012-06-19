@@ -52,7 +52,7 @@ public class PatientSerializationTest extends BaseModuleContextSensitiveTest {
 		String xmlOutput = Context.getSerializationService().serialize(patient, XStreamSerializer.class);
 		XMLAssert.assertXpathEvaluatesTo("86526ed6-3c11-11de-a0ba-001e378eb67e", "/patient/@uuid", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("true", "/patient/@voided", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1", "/patient/creator/personId", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("1", "/patient/creator/person/personId", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo(sdf.format(patient.getDateCreated()), "/patient/dateCreated", xmlOutput);
 		XMLAssert.assertXpathExists("/patient/changedBy/@reference", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo(sdf.format(patient.getDateChanged()), "/patient/dateChanged", xmlOutput);
@@ -80,7 +80,8 @@ public class PatientSerializationTest extends BaseModuleContextSensitiveTest {
 		xmlBuilder.append("    <dateCreated class=\"sql-timestamp\" id=\"3\">2005-01-01 00:00:00 CST</dateCreated>\n");
 		xmlBuilder.append("    <changedBy reference=\"2\"/>\n");
 		xmlBuilder.append("    <dateChanged class=\"sql-timestamp\" id=\"4\">2007-09-20 21:54:12 CST</dateChanged>\n");
-		xmlBuilder.append("    <voidReason></voidReason>\n");
+		xmlBuilder.append("    <retireReason></retireReason>\n");
+		xmlBuilder.append("    <person id=\"5\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" voided=\"false\">\n");
 		xmlBuilder.append("    <personId>1</personId>\n");
 		xmlBuilder.append("    <addresses class=\"tree-set\" id=\"5\">\n");
 		xmlBuilder.append("      <no-comparator/>\n");
@@ -104,7 +105,7 @@ public class PatientSerializationTest extends BaseModuleContextSensitiveTest {
 		xmlBuilder.append("    <personVoided>false</personVoided>\n");
 		xmlBuilder.append("    <personVoidReason></personVoidReason>\n");
 		xmlBuilder.append("    <isPatient>false</isPatient>\n");
-		xmlBuilder.append("    <isUser>true</isUser>\n");
+		xmlBuilder.append("    </person>\n");
 		xmlBuilder.append("    <userId>1</userId>\n");
 		xmlBuilder.append("    <systemId>1-8</systemId>\n");
 		xmlBuilder.append("    <username>admin</username>\n");
@@ -146,7 +147,6 @@ public class PatientSerializationTest extends BaseModuleContextSensitiveTest {
 		xmlBuilder.append("  <personVoided>true</personVoided>\n");
 		xmlBuilder.append("  <personVoidReason>For test purposes</personVoidReason>\n");
 		xmlBuilder.append("  <isPatient>true</isPatient>\n");
-		xmlBuilder.append("  <isUser>false</isUser>\n");
 		xmlBuilder.append("  <patientId>999</patientId>\n");
 		xmlBuilder.append("  <identifiers class=\"tree-set\" id=\"23\">\n");
 		xmlBuilder.append("    <no-comparator/>\n");

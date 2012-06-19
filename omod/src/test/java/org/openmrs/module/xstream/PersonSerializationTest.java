@@ -91,7 +91,8 @@ public class PersonSerializationTest extends BaseModuleContextSensitiveTest {
 		xmlBuilder.append("        <dateCreated class=\"sql-timestamp\" id=\"5\">2005-01-01 00:00:00 CST</dateCreated>\n");
 		xmlBuilder.append("        <changedBy reference=\"4\"/>\n");
 		xmlBuilder.append("        <dateChanged class=\"sql-timestamp\" id=\"6\">2007-09-20 21:54:12 CST</dateChanged>\n");
-		xmlBuilder.append("        <voidReason></voidReason>\n");
+		xmlBuilder.append("    <retireReason></retireReason>\n");
+		xmlBuilder.append("    <person id=\"1\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" voided=\"false\">\n");
 		xmlBuilder.append("        <personId>1</personId>\n");
 		xmlBuilder.append("        <addresses class=\"tree-set\" id=\"7\">\n");
 		xmlBuilder.append("          <no-comparator/>\n");
@@ -115,7 +116,7 @@ public class PersonSerializationTest extends BaseModuleContextSensitiveTest {
 		xmlBuilder.append("        <personVoided>false</personVoided>\n");
 		xmlBuilder.append("        <personVoidReason></personVoidReason>\n");
 		xmlBuilder.append("        <isPatient>false</isPatient>\n");
-		xmlBuilder.append("        <isUser>true</isUser>\n");
+		xmlBuilder.append("    </person>\n");
 		xmlBuilder.append("        <userId>1</userId>\n");
 		xmlBuilder.append("        <systemId>1-8</systemId>\n");
 		xmlBuilder.append("        <username>admin</username>\n");
@@ -228,7 +229,6 @@ public class PersonSerializationTest extends BaseModuleContextSensitiveTest {
 		        .append("  <personDateVoided class=\"sql-timestamp\" id=\"43\">2006-09-18 00:00:00 CST</personDateVoided>\n");
 		xmlBuilder.append("  <personVoidReason>test purpose</personVoidReason>\n");
 		xmlBuilder.append("  <isPatient>false</isPatient>\n");
-		xmlBuilder.append("  <isUser>false</isUser>\n");
 		xmlBuilder.append("</person>\n");
 		
 		//deserialize and make sure everything has been put into object

@@ -58,7 +58,7 @@ public class ConceptSourceSerializationTest extends BaseModuleContextSensitiveTe
 		XMLAssert.assertXpathEvaluatesTo("test", "/conceptSource/hl7Code", xmlOutput);
 		XMLAssert.assertXpathExists("/conceptSource/creator", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo(sdf.format(cs.getDateCreated()), "/conceptSource/dateCreated", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/conceptSource/@voided", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("false", "/conceptSource/@retired", xmlOutput);
 	}
 	
 	/**
@@ -70,7 +70,7 @@ public class ConceptSourceSerializationTest extends BaseModuleContextSensitiveTe
 	public void shouldDeserializeConceptSource() throws Exception {
 		//construct given string to be deserialized
 		StringBuilder xmlBuilder = new StringBuilder();
-		xmlBuilder.append("<conceptSource id=\"1\" uuid=\"14ea70c7-fe49-46ae-9957-8a678c82d1d8\" voided=\"false\">\n");
+		xmlBuilder.append("<conceptSource id=\"1\" uuid=\"14ea70c7-fe49-46ae-9957-8a678c82d1d8\" retired=\"false\">\n");
 		xmlBuilder.append("  <conceptSourceId>1</conceptSourceId>\n");
 		xmlBuilder.append("  <name>SNOMED</name>\n");
 		xmlBuilder.append("  <description>Systematized Nomenclature of Medicine -- Clinical Terms</description>\n");
@@ -80,7 +80,8 @@ public class ConceptSourceSerializationTest extends BaseModuleContextSensitiveTe
 		xmlBuilder.append("    <dateCreated class=\"sql-timestamp\" id=\"3\">2005-01-01 00:00:00 CST</dateCreated>\n");
 		xmlBuilder.append("    <changedBy reference=\"2\"/>\n");
 		xmlBuilder.append("    <dateChanged class=\"sql-timestamp\" id=\"4\">2007-09-20 21:54:12 CST</dateChanged>\n");
-		xmlBuilder.append("    <voidReason></voidReason>\n");
+		xmlBuilder.append("    <retireReason></retireReason>\n");
+		xmlBuilder.append("    <person id=\"1\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" voided=\"false\">\n");
 		xmlBuilder.append("    <personId>1</personId>\n");
 		xmlBuilder.append("    <addresses class=\"tree-set\" id=\"5\">\n");
 		xmlBuilder.append("      <no-comparator/>\n");
@@ -104,7 +105,7 @@ public class ConceptSourceSerializationTest extends BaseModuleContextSensitiveTe
 		xmlBuilder.append("    <personVoided>false</personVoided>\n");
 		xmlBuilder.append("    <personVoidReason></personVoidReason>\n");
 		xmlBuilder.append("    <isPatient>false</isPatient>\n");
-		xmlBuilder.append("    <isUser>true</isUser>\n");
+		xmlBuilder.append("    </person>\n");
 		xmlBuilder.append("    <userId>1</userId>\n");
 		xmlBuilder.append("    <systemId>1-8</systemId>\n");
 		xmlBuilder.append("    <username>admin</username>\n");

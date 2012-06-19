@@ -61,7 +61,7 @@ public class PersonNameSerializationTest extends BaseModuleContextSensitiveTest 
 		XMLAssert.assertXpathEvaluatesTo("Hornblower", "/personName/familyName", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("Esq.", "/personName/familyNameSuffix", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo(sdf.format(pn.getDateCreated()), "/personName/dateCreated", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/personName/voided", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("false", "/personName/@voided", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("399e3a7b-6482-487d-94ce-c07bb3ca3cc7", "/personName/@uuid", xmlOutput);
 	}
 	
@@ -80,7 +80,8 @@ public class PersonNameSerializationTest extends BaseModuleContextSensitiveTest 
 		xmlBuilder.append("    <dateCreated class=\"sql-timestamp\" id=\"3\">2005-01-01 00:00:00 CST</dateCreated>\n");
 		xmlBuilder.append("    <changedBy reference=\"2\"/>\n");
 		xmlBuilder.append("    <dateChanged class=\"sql-timestamp\" id=\"4\">2007-09-20 21:54:12 CST</dateChanged>\n");
-		xmlBuilder.append("    <voidReason></voidReason>\n");
+		xmlBuilder.append("    <retireReason></retireReason>\n");
+		xmlBuilder.append("    <person id=\"7\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" voided=\"false\">\n");
 		xmlBuilder.append("    <personId>1</personId>\n");
 		xmlBuilder.append("    <addresses class=\"tree-set\" id=\"5\">\n");
 		xmlBuilder.append("      <no-comparator/>\n");
@@ -102,7 +103,7 @@ public class PersonNameSerializationTest extends BaseModuleContextSensitiveTest 
 		xmlBuilder.append("    <personVoided>false</personVoided>\n");
 		xmlBuilder.append("    <personVoidReason></personVoidReason>\n");
 		xmlBuilder.append("    <isPatient>false</isPatient>\n");
-		xmlBuilder.append("    <isUser>true</isUser>\n");
+		xmlBuilder.append("    </person>\n");
 		xmlBuilder.append("    <userId>1</userId>\n");
 		xmlBuilder.append("    <systemId>1-8</systemId>\n");
 		xmlBuilder.append("    <username>admin</username>\n");
@@ -144,7 +145,6 @@ public class PersonNameSerializationTest extends BaseModuleContextSensitiveTest 
 		xmlBuilder.append("    <personDateCreated class=\"sql-timestamp\" id=\"24\">2005-09-22 00:00:00 CST</personDateCreated>\n");
 		xmlBuilder.append("    <personVoided>false</personVoided>\n");
 		xmlBuilder.append("    <isPatient>true</isPatient>\n");
-		xmlBuilder.append("    <isUser>false</isUser>\n");
 		xmlBuilder.append("    <patientId>2</patientId>\n");
 		xmlBuilder.append("    <identifiers class=\"tree-set\" id=\"25\">\n");
 		xmlBuilder.append("      <no-comparator/>\n");

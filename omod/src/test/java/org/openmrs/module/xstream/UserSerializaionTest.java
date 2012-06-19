@@ -51,19 +51,18 @@ public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(user, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("df8ae447-6745-45be-b859-403241d9913c", "/user/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("true", "/user/@voided", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1", "/user/creator/personId", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("55685062-1b48-11df-a5c7-001e378eb67e", "/user/@uuid", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("true", "/user/@retired", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("501", "/user/person/personId", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateCreated()), "/user/dateCreated", xmlOutput);
 		XMLAssert.assertXpathExists("/user/changedBy/@reference", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateChanged()), "/user/dateChanged", xmlOutput);
-		XMLAssert.assertXpathExists("/user/voidedBy/@reference", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateRetired()), "/user/dateVoided", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Test purposes", "/user/voidReason", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("501", "/user/personId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("F", "/user/gender", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/user/dead", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("true", "/user/isUser", xmlOutput);
+		XMLAssert.assertXpathExists("/user/person/personVoidedBy/@reference", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateRetired()), "/user/dateRetired", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("Test purposes", "/user/retireReason", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("501", "/user/person/personId", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("F", "/user/person/gender", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("false", "/user/person/dead", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("501", "/user/userId", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("2-6", "/user/systemId", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("bruno", "/user/username", xmlOutput);
@@ -81,37 +80,12 @@ public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 	public void shouldDeserializeUser() throws Exception {
 		//construct given string to be deserialized
 		StringBuilder xmlBuilder = new StringBuilder();
-		xmlBuilder.append("<user id=\"1\" uuid=\"df8ae447-6745-45be-b859-403241d9913c\" voided=\"true\">\n");
+		xmlBuilder.append("<user id=\"1\" uuid=\"df8ae447-6745-45be-b859-403241d9913c\" retired=\"true\">\n");
 		xmlBuilder.append("  <creator id=\"2\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" voided=\"false\">\n");
 		xmlBuilder.append("    <creator reference=\"2\"/>\n");
 		xmlBuilder.append("    <dateCreated class=\"sql-timestamp\" id=\"3\">2005-01-01 00:00:00 CST</dateCreated>\n");
 		xmlBuilder.append("    <changedBy reference=\"2\"/>\n");
 		xmlBuilder.append("    <dateChanged class=\"sql-timestamp\" id=\"4\">2007-09-20 21:54:12 CST</dateChanged>\n");
-		xmlBuilder.append("    <voidReason></voidReason>\n");
-		xmlBuilder.append("    <personId>1</personId>\n");
-		xmlBuilder.append("    <addresses class=\"tree-set\" id=\"5\">\n");
-		xmlBuilder.append("      <no-comparator/>\n");
-		xmlBuilder.append("    </addresses>\n");
-		xmlBuilder.append("    <names class=\"tree-set\" id=\"6\">\n");
-		xmlBuilder.append("      <no-comparator/>\n");
-		xmlBuilder.append("    </names>\n");
-		xmlBuilder.append("    <attributes class=\"tree-set\" id=\"7\">\n");
-		xmlBuilder.append("      <no-comparator/>\n");
-		xmlBuilder.append("    </attributes>\n");
-		xmlBuilder.append("    <gender></gender>\n");
-		xmlBuilder.append("    <birthdate class=\"sql-timestamp\" id=\"8\">1975-06-30 00:00:00 CST</birthdate>\n");
-		xmlBuilder.append("    <birthdateEstimated>false</birthdateEstimated>\n");
-		xmlBuilder.append("    <dead>false</dead>\n");
-		xmlBuilder.append("    <personCreator reference=\"2\"/>\n");
-		xmlBuilder
-		        .append("    <personDateCreated class=\"sql-timestamp\" id=\"9\">2005-01-01 00:00:00 CST</personDateCreated>\n");
-		xmlBuilder.append("    <personChangedBy reference=\"2\"/>\n");
-		xmlBuilder
-		        .append("    <personDateChanged class=\"sql-timestamp\" id=\"10\">2007-09-20 21:54:12 CST</personDateChanged>\n");
-		xmlBuilder.append("    <personVoided>false</personVoided>\n");
-		xmlBuilder.append("    <personVoidReason></personVoidReason>\n");
-		xmlBuilder.append("    <isPatient>false</isPatient>\n");
-		xmlBuilder.append("    <isUser>true</isUser>\n");
 		xmlBuilder.append("    <userId>1</userId>\n");
 		xmlBuilder.append("    <systemId>1-8</systemId>\n");
 		xmlBuilder.append("    <username>admin</username>\n");
@@ -132,9 +106,34 @@ public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 		xmlBuilder.append("  <changedBy reference=\"2\"/>\n");
 		xmlBuilder.append("  <dateChanged class=\"sql-timestamp\" id=\"17\">2008-08-15 15:47:07 CST</dateChanged>\n");
 		xmlBuilder.append("  <dateVoided class=\"sql-timestamp\" id=\"18\">2008-08-30 15:47:07 CST</dateVoided>\n");
-		xmlBuilder.append("  <voidedBy reference=\"2\"/>\n");
-		xmlBuilder.append("  <voidReason>Test purposes</voidReason>\n");
-		xmlBuilder.append("  <personId>501</personId>\n");
+		xmlBuilder.append("  <retireReason>Test purposes</retireReason>\n");
+		xmlBuilder.append("  <dateRetired class=\"sql-timestamp\" id=\"4\">2008-08-30 15:47:07 CST</dateRetired>\n");
+		xmlBuilder.append("  <retiredBy reference=\"2\"/>\n");
+		xmlBuilder.append("    <person id=\"6\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" voided=\"false\">\n");
+		xmlBuilder.append("    <personId>501</personId>\n");
+		xmlBuilder.append("    <addresses class=\"tree-set\" id=\"5\">\n");
+		xmlBuilder.append("      <no-comparator/>\n");
+		xmlBuilder.append("    </addresses>\n");
+		xmlBuilder.append("    <names class=\"tree-set\" id=\"6\">\n");
+		xmlBuilder.append("      <no-comparator/>\n");
+		xmlBuilder.append("    </names>\n");
+		xmlBuilder.append("    <attributes class=\"tree-set\" id=\"7\">\n");
+		xmlBuilder.append("      <no-comparator/>\n");
+		xmlBuilder.append("    </attributes>\n");
+		xmlBuilder.append("    <gender>F</gender>\n");
+		xmlBuilder.append("    <birthdate class=\"sql-timestamp\" id=\"8\">1975-06-30 00:00:00 CST</birthdate>\n");
+		xmlBuilder.append("    <birthdateEstimated>false</birthdateEstimated>\n");
+		xmlBuilder.append("    <dead>false</dead>\n");
+		xmlBuilder.append("    <personCreator reference=\"2\"/>\n");
+		xmlBuilder
+		        .append("    <personDateCreated class=\"sql-timestamp\" id=\"9\">2005-01-01 00:00:00 CST</personDateCreated>\n");
+		xmlBuilder.append("    <personChangedBy reference=\"2\"/>\n");
+		xmlBuilder
+		        .append("    <personDateChanged class=\"sql-timestamp\" id=\"10\">2007-09-20 21:54:12 CST</personDateChanged>\n");
+		xmlBuilder.append("    <personVoided>false</personVoided>\n");
+		xmlBuilder.append("    <personVoidReason></personVoidReason>\n");
+		xmlBuilder.append("    <isPatient>false</isPatient>\n");
+		xmlBuilder.append("    </person>\n");
 		xmlBuilder.append("  <addresses class=\"tree-set\" id=\"19\">\n");
 		xmlBuilder.append("    <no-comparator/>\n");
 		xmlBuilder.append("  </addresses>\n");
@@ -144,21 +143,6 @@ public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 		xmlBuilder.append("  <attributes class=\"tree-set\" id=\"21\">\n");
 		xmlBuilder.append("    <no-comparator/>\n");
 		xmlBuilder.append("  </attributes>\n");
-		xmlBuilder.append("  <gender>F</gender>\n");
-		xmlBuilder.append("  <dead>false</dead>\n");
-		xmlBuilder.append("  <personCreator reference=\"2\"/>\n");
-		xmlBuilder
-		        .append("  <personDateCreated class=\"sql-timestamp\" id=\"22\">2008-08-15 15:46:47 CST</personDateCreated>\n");
-		xmlBuilder.append("  <personChangedBy reference=\"2\"/>\n");
-		xmlBuilder
-		        .append("  <personDateChanged class=\"sql-timestamp\" id=\"23\">2008-08-15 15:47:07 CST</personDateChanged>\n");
-		xmlBuilder.append("  <personVoided>true</personVoided>\n");
-		xmlBuilder.append("  <personVoidedBy reference=\"2\"/>\n");
-		xmlBuilder
-		        .append("  <personDateVoided class=\"sql-timestamp\" id=\"24\">2008-08-30 15:47:07 CST</personDateVoided>\n");
-		xmlBuilder.append("  <personVoidReason>Test purposes</personVoidReason>\n");
-		xmlBuilder.append("  <isPatient>false</isPatient>\n");
-		xmlBuilder.append("  <isUser>true</isUser>\n");
 		xmlBuilder.append("  <userId>501</userId>\n");
 		xmlBuilder.append("  <systemId>2-6</systemId>\n");
 		xmlBuilder.append("  <username>bruno</username>\n");

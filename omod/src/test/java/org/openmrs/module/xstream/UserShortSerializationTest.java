@@ -45,7 +45,7 @@ public class UserShortSerializationTest extends BaseModuleContextSensitiveTest {
 		    "1a339fe9-38bc-4ab3-b180-320988c0b968");
 		String xmlOutput = Context.getSerializationService().serialize(pit, XStreamShortSerializer.class);
 		//should only serialize "uuid"
-		XMLAssert.assertXpathEvaluatesTo("6adb7c42-cfd2-4301-b53b-ff17c5654ff7", "/patientIdentifierType/creator/@uuid",
+		XMLAssert.assertXpathEvaluatesTo("1010d442-e134-11de-babe-001e378eb67e", "/patientIdentifierType/creator/@uuid",
 		    xmlOutput);
 		//with short serialization, the "user" element shouldn't contain any child element in the serialized xml
 		XMLAssert.assertXpathNotExists("/patientIdentifierType/creator/*", xmlOutput);
@@ -75,7 +75,7 @@ public class UserShortSerializationTest extends BaseModuleContextSensitiveTest {
 		        .append("<patientIdentifierType id=\"1\" uuid=\"1a339fe9-38bc-4ab3-b180-320988c0b968\" retired=\"false\">\n");
 		xmlBuilder.append("  <name>OpenMRS Identification Number</name>\n");
 		xmlBuilder.append("  <description>Unique number used in OpenMRS</description>\n");
-		xmlBuilder.append("  <creator id=\"2\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\"/>\n");
+		xmlBuilder.append("  <creator reference=\"1\" />\n");
 		xmlBuilder.append("  <dateCreated class=\"sql-timestamp\" id=\"3\">2005-09-22 00:00:00 CST</dateCreated>\n");
 		xmlBuilder.append("  <patientIdentifierTypeId>1</patientIdentifierTypeId>\n");
 		xmlBuilder.append("  <required>false</required>\n");
@@ -85,6 +85,6 @@ public class UserShortSerializationTest extends BaseModuleContextSensitiveTest {
 		
 		PatientIdentifierType pit = Context.getSerializationService().deserialize(xmlBuilder.toString(),
 		    PatientIdentifierType.class, XStreamShortSerializer.class);
-		assertEquals("6adb7c42-cfd2-4301-b53b-ff17c5654ff7", pit.getCreator().getUuid());
+		assertEquals("1a339fe9-38bc-4ab3-b180-320988c0b968", pit.getCreator().getUuid());
 	}
 }

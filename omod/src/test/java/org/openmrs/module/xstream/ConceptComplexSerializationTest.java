@@ -52,7 +52,7 @@ public class ConceptComplexSerializationTest extends BaseModuleContextSensitiveT
 		String xmlOutput = Context.getSerializationService().serialize(cc, XStreamSerializer.class);
 		XMLAssert.assertXpathEvaluatesTo("0cbe2ed3-cd5f-4f46-9459-26127c9265ab", "/conceptComplex/@uuid", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("3", "/conceptComplex/conceptId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/conceptComplex/retired", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("false", "/conceptComplex/@retired", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("4", "/conceptComplex/datatype/conceptDatatypeId", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("3", "/conceptComplex/conceptClass/conceptClassId", xmlOutput);
 		XMLAssert.assertXpathExists("/conceptComplex/creator", xmlOutput);
@@ -75,19 +75,20 @@ public class ConceptComplexSerializationTest extends BaseModuleContextSensitiveT
 	public void shouldDeserializeConceptComplex() throws Exception {
 		//construct given string to be deserialized
 		StringBuilder xmlBuilder = new StringBuilder();
-		xmlBuilder.append("<conceptComplex id=\"1\" uuid=\"0cbe2ed3-cd5f-4f46-9459-26127c9265ab\">\n");
+		xmlBuilder.append("<conceptComplex id=\"1\" uuid=\"0cbe2ed3-cd5f-4f46-9459-26127c9265ab\"> \n");
 		xmlBuilder.append("  <conceptId>3</conceptId>\n");
 		xmlBuilder.append("  <retired>false</retired>\n");
 		xmlBuilder.append("  <datatype id=\"2\" uuid=\"bf51481d-9b76-4a88-8ca4-88dd082ddf90\" retired=\"false\">\n");
 		xmlBuilder.append("    <name>N/A</name>\n");
 		xmlBuilder.append("    <description>Not associated with a datatype (e.g., term answers, sets)</description>\n");
-		xmlBuilder.append("    <creator id=\"3\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" voided=\"false\">\n");
+		xmlBuilder.append("    <creator id=\"3\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" retired=\"false\">\n");
 		xmlBuilder.append("      <creator reference=\"3\"/>\n");
 		xmlBuilder.append("      <dateCreated class=\"sql-timestamp\" id=\"4\">2005-01-01 00:00:00 CST</dateCreated>\n");
 		xmlBuilder.append("      <changedBy reference=\"3\"/>\n");
 		xmlBuilder.append("      <dateChanged class=\"sql-timestamp\" id=\"5\">2007-09-20 21:54:12 CST</dateChanged>\n");
-		xmlBuilder.append("      <voidReason></voidReason>\n");
-		xmlBuilder.append("      <personId>1</personId>\n");
+		xmlBuilder.append("    <retireReason></retireReason>\n");
+		xmlBuilder.append("    <person id=\"6\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" voided=\"false\">\n");
+		xmlBuilder.append("    <personId>1</personId>\n");
 		xmlBuilder.append("      <addresses class=\"tree-set\" id=\"6\">\n");
 		xmlBuilder.append("        <no-comparator/>\n");
 		xmlBuilder.append("      </addresses>\n");
@@ -110,7 +111,7 @@ public class ConceptComplexSerializationTest extends BaseModuleContextSensitiveT
 		xmlBuilder.append("      <personVoided>false</personVoided>\n");
 		xmlBuilder.append("      <personVoidReason></personVoidReason>\n");
 		xmlBuilder.append("      <isPatient>false</isPatient>\n");
-		xmlBuilder.append("      <isUser>true</isUser>\n");
+		xmlBuilder.append("    </person>\n");
 		xmlBuilder.append("      <userId>1</userId>\n");
 		xmlBuilder.append("      <systemId>1-8</systemId>\n");
 		xmlBuilder.append("      <username>admin</username>\n");
@@ -142,14 +143,13 @@ public class ConceptComplexSerializationTest extends BaseModuleContextSensitiveT
 		xmlBuilder.append("  <creator reference=\"3\"/>\n");
 		xmlBuilder.append("  <dateCreated class=\"sql-timestamp\" id=\"20\">2008-08-15 15:27:51 CST</dateCreated>\n");
 		xmlBuilder.append("  <names class=\"set\" id=\"21\">\n");
-		xmlBuilder.append("    <conceptName id=\"22\" uuid=\"b8159118-c97b-4d5a-a63e-d4aa4be0c4d3\">\n");
+		xmlBuilder.append("    <conceptName id=\"22\" uuid=\"b8159118-c97b-4d5a-a63e-d4aa4be0c4d3\" voided=\"false\">\n");
 		xmlBuilder.append("      <conceptNameId>2456</conceptNameId>\n");
 		xmlBuilder.append("      <concept class=\"conceptComplex\" reference=\"1\"/>\n");
 		xmlBuilder.append("      <name>COUGH SYRUP</name>\n");
 		xmlBuilder.append("      <locale id=\"23\">en</locale>\n");
 		xmlBuilder.append("      <creator reference=\"3\"/>\n");
 		xmlBuilder.append("      <dateCreated class=\"sql-timestamp\" id=\"24\">2008-08-15 15:27:51 CST</dateCreated>\n");
-		xmlBuilder.append("      <voided>false</voided>\n");
 		xmlBuilder.append("      <tags class=\"set\" id=\"25\">\n");
 		xmlBuilder.append("        <conceptNameTag id=\"26\" uuid=\"73e8f75b-9133-426e-ac3f-40a903ceb0bf\">\n");
 		xmlBuilder.append("          <conceptNameTagId>4</conceptNameTagId>\n");
@@ -158,7 +158,6 @@ public class ConceptComplexSerializationTest extends BaseModuleContextSensitiveT
 		xmlBuilder.append("          <creator reference=\"3\"/>\n");
 		xmlBuilder
 		        .append("          <dateCreated class=\"sql-timestamp\" id=\"27\">2007-05-01 00:00:00 CST</dateCreated>\n");
-		xmlBuilder.append("          <voided>false</voided>\n");
 		xmlBuilder.append("        </conceptNameTag>\n");
 		xmlBuilder.append("      </tags>\n");
 		xmlBuilder.append("    </conceptName>\n");
@@ -249,7 +248,6 @@ public class ConceptComplexSerializationTest extends BaseModuleContextSensitiveT
 		xmlBuilder.append("        <hl7Code>test</hl7Code>\n");
 		xmlBuilder.append("        <creator reference=\"3\"/>\n");
 		xmlBuilder.append("        <dateCreated class=\"sql-timestamp\" id=\"60\">2006-01-20 00:00:00 CST</dateCreated>\n");
-		xmlBuilder.append("        <voided>false</voided>\n");
 		xmlBuilder.append("      </source>\n");
 		xmlBuilder.append("      <sourceCode>test</sourceCode>\n");
 		xmlBuilder.append("      <comment>test</comment>\n");

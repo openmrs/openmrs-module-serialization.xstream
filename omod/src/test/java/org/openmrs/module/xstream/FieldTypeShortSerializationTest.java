@@ -83,7 +83,6 @@ public class FieldTypeShortSerializationTest extends BaseModuleContextSensitiveT
 		xmlBuilder.append("  <defaultValue></defaultValue>\n");
 		xmlBuilder.append("  <selectMultiple>false</selectMultiple>\n");
 		xmlBuilder.append("  <answers id=\"6\"/>\n");
-		xmlBuilder.append("  <forms id=\"7\"/>\n");
 		xmlBuilder.append("</field>\n");
 		
 		Field f = Context.getSerializationService().deserialize(xmlBuilder.toString(), Field.class,

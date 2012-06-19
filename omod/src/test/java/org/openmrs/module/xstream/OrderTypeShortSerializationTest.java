@@ -80,9 +80,9 @@ public class OrderTypeShortSerializationTest extends BaseModuleContextSensitiveT
 		xmlBuilder.append("  <concept id=\"6\" uuid=\"15f83cd6-64e9-4e06-a5f9-364d3b14a43d\"/>\n");
 		xmlBuilder.append("  <instructions></instructions>\n");
 		xmlBuilder.append("  <startDate class=\"sql-timestamp\" id=\"7\">2008-08-08 00:00:00 CST</startDate>\n");
-		xmlBuilder.append("  <orderer reference=\"2\"/>\n");
+		xmlBuilder.append("  <orderer reference=\"1\"/>\n");
 		xmlBuilder.append("  <discontinued>true</discontinued>\n");
-		xmlBuilder.append("  <discontinuedBy reference=\"2\"/>\n");
+		xmlBuilder.append("  <discontinuedBy reference=\"1\"/>\n");
 		xmlBuilder
 		        .append("  <discontinuedDate class=\"sql-timestamp\" id=\"8\">2008-08-15 00:00:00 CST</discontinuedDate>\n");
 		xmlBuilder.append("</order>\n");
