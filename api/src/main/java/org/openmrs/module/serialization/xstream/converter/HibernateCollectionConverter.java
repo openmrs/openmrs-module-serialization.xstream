@@ -1,16 +1,23 @@
 package org.openmrs.module.serialization.xstream.converter;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.hibernate.Hibernate;
 import org.hibernate.collection.PersistentCollection;
+import org.hibernate.collection.PersistentList;
+import org.hibernate.collection.PersistentMap;
 import org.hibernate.collection.PersistentSet;
+import org.hibernate.collection.PersistentSortedMap;
 import org.hibernate.collection.PersistentSortedSet;
 
 import com.thoughtworks.xstream.converters.Converter;
@@ -31,25 +38,10 @@ public class HibernateCollectionConverter implements Converter {
 	
 	private static Log log = LogFactory.getLog(HibernateCollectionConverter.class);
 	
-	private Converter listSetConverter;
-	
-	private Converter mapConverter;
-	
-	private Converter treeMapConverter;
-	
-	private Converter treeSetConverter;
-	
-	private Converter hashSetConverter;
-	
-	private Converter defaultConverter;
+	private final ConverterLookup converterLookup;
 	
 	public HibernateCollectionConverter(ConverterLookup converterLookup) {
-		listSetConverter = converterLookup.lookupConverterForType(ArrayList.class);
-		mapConverter = converterLookup.lookupConverterForType(HashMap.class);
-		treeMapConverter = converterLookup.lookupConverterForType(TreeMap.class);
-		treeSetConverter = converterLookup.lookupConverterForType(TreeSet.class);
-		hashSetConverter = converterLookup.lookupConverterForType(HashSet.class);
-		defaultConverter = converterLookup.lookupConverterForType(Object.class);
+		this.converterLookup = converterLookup;
 	}
 	
 	/**
@@ -65,46 +57,20 @@ public class HibernateCollectionConverter implements Converter {
 	 *      com.thoughtworks.xstream.converters.MarshallingContext)
 	 */
 	public void marshal(Object source, HierarchicalStreamWriter writer, MarshallingContext context) {
-		Object collection = source;
-		if (source instanceof PersistentCollection) {
-			PersistentCollection col = (PersistentCollection) source;
-			if (!Hibernate.isInitialized(source)) {
-				col.forceInitialization();
-			}
-			collection = col.getStoredSnapshot();
-			
+		if (source instanceof PersistentList) {
+			source = new ArrayList((Collection) source);
+		} else if (source instanceof PersistentMap) {
+			source = new HashMap((Map) source);
+		} else if (source instanceof PersistentSortedMap) {
+			source = new TreeMap((SortedMap) source);
+		} else if (source instanceof PersistentSortedSet) {
+			source = new TreeSet((SortedSet) source);
+		} else if (source instanceof PersistentSet) {
+			source = new HashSet((Set) source);
 		}
-		
-		// the set is returned as a map by Hibernate (unclear why exactly)
-		if (PersistentSortedSet.class.equals(source.getClass())) {
-			collection = new TreeSet(((HashMap) collection).keySet());
-		} else if (PersistentSet.class.equals(source.getClass())) {
-			collection = new HashSet(((HashMap) collection).keySet());
-		}
-		
-		// delegate the collection to the approapriate converter
-		if (listSetConverter.canConvert(collection.getClass())) {
-			listSetConverter.marshal(collection, writer, context);
-			return;
-		}
-		if (mapConverter.canConvert(collection.getClass())) {
-			mapConverter.marshal(collection, writer, context);
-			return;
-		}
-		if (treeMapConverter.canConvert(collection.getClass())) {
-			treeMapConverter.marshal(collection, writer, context);
-			return;
-		}
-		if (treeSetConverter.canConvert(collection.getClass())) {
-			treeSetConverter.marshal(collection, writer, context);
-			return;
-		}
-		if (hashSetConverter.canConvert(collection.getClass())) {
-			hashSetConverter.marshal(collection, writer, context);
-			return;
-		}
-		
-		defaultConverter.marshal(collection, writer, context);
+
+		// delegate the collection to the appropriate converter
+		converterLookup.lookupConverterForType(source.getClass()).marshal(source, writer, context);
 	}
 	
 	/**
