@@ -18,6 +18,7 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.junit.Ignore;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
 import org.openmrs.util.Reflect;
@@ -26,6 +27,7 @@ import org.openmrs.util.Reflect;
  * Utility methods used during unit testing
  *
  */
+@Ignore
 public class TestUtil {
 
 	/**
