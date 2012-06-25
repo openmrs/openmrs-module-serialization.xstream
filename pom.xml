@@ -136,7 +136,6 @@
 			<properties>
 				<openMRSVersion>1.6.5</openMRSVersion>
 				<openMRSMinorVersion>1.6</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
 			</properties>
 			
 			<dependencyManagement>
@@ -159,7 +158,6 @@
 			<properties>
 				<openMRSVersion>1.7.3</openMRSVersion>
 				<openMRSMinorVersion>1.7</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
 			</properties>
 			
 			<dependencyManagement>
@@ -182,7 +180,6 @@
 			<properties>
 				<openMRSVersion>1.8.3</openMRSVersion>
 				<openMRSMinorVersion>1.8</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
 			</properties>
 			
 			<dependencyManagement>
@@ -218,7 +215,6 @@
 			<properties>
 				<openMRSVersion>1.9.0</openMRSVersion>
 				<openMRSMinorVersion>1.9</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
 			</properties>
 			
 			<dependencyManagement>
@@ -255,7 +251,6 @@
 			<properties>
 				<openMRSVersion>1.10.0-SNAPSHOT</openMRSVersion>
 				<openMRSMinorVersion>1.10</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
 			</properties>
 			
 			<dependencyManagement>
@@ -284,89 +279,7 @@
 				</dependencies>
 			</dependencyManagement>
 		</profile>
-		
-		<profile>
-			<id>openmrs-1.6.3</id>
-			<properties>
-				<openMRSVersion>1.6.3</openMRSVersion>
-				<openMRSMinorVersion>1.6</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
-			</properties>
-		</profile>
-		
-		
-		<profile>
-			<id>openmrs-1.6.4</id>
-			<properties>
-				<openMRSVersion>1.6.4</openMRSVersion>
-				<openMRSMinorVersion>1.6</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
-			</properties>
-		</profile>
-		
-		<profile>
-			<id>openmrs-1.6.5</id>
-			<properties>
-				<openMRSVersion>1.6.5</openMRSVersion>
-				<openMRSMinorVersion>1.6</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
-			</properties>
-		</profile>
-		
-		<profile>
-			<id>openmrs-1.7.2</id>
-			<properties>
-				<openMRSVersion>1.7.2</openMRSVersion>
-				<openMRSMinorVersion>1.7</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
-			</properties>
-		</profile>
-		
-		<profile>
-			<id>openmrs-1.7.3</id>
-			<properties>
-				<openMRSVersion>1.7.3</openMRSVersion>
-				<openMRSMinorVersion>1.7</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
-			</properties>
-		</profile>
-		
-		<profile>
-			<id>openmrs-1.8.0</id>
-			<properties>
-				<openMRSVersion>1.8.0</openMRSVersion>
-				<openMRSMinorVersion>1.8</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
-			</properties>
-		</profile>
-		
-		<profile>
-			<id>openmrs-1.8.1</id>
-			<properties>
-				<openMRSVersion>1.8.1</openMRSVersion>
-				<openMRSMinorVersion>1.8</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
-			</properties>
-		</profile>
-		
-		<profile>
-			<id>openmrs-1.8.2</id>
-			<properties>
-				<openMRSVersion>1.8.2</openMRSVersion>
-				<openMRSMinorVersion>1.8</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
-			</properties>
-		</profile>
-		
-		<profile>
-			<id>openmrs-1.8.3</id>
-			<properties>
-				<openMRSVersion>1.8.3</openMRSVersion>
-				<openMRSMinorVersion>1.8</openMRSMinorVersion>
-				<logicVersion>0.5</logicVersion>
-			</properties>
-		</profile>
-		
+				
 		<profile>
 			<id>release-tests</id>
 			<modules>
