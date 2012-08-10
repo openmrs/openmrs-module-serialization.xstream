@@ -75,7 +75,7 @@ public class UserShortSerializationTest extends BaseModuleContextSensitiveTest {
 		        .append("<patientIdentifierType id=\"1\" uuid=\"1a339fe9-38bc-4ab3-b180-320988c0b968\" retired=\"false\">\n");
 		xmlBuilder.append("  <name>OpenMRS Identification Number</name>\n");
 		xmlBuilder.append("  <description>Unique number used in OpenMRS</description>\n");
-		xmlBuilder.append("  <creator reference=\"1\" />\n");
+		xmlBuilder.append("  <creator uuid=\"" + Context.getAuthenticatedUser().getUuid() + "\"/>\n");
 		xmlBuilder.append("  <dateCreated class=\"sql-timestamp\" id=\"3\">2005-09-22 00:00:00 CST</dateCreated>\n");
 		xmlBuilder.append("  <patientIdentifierTypeId>1</patientIdentifierTypeId>\n");
 		xmlBuilder.append("  <required>false</required>\n");
@@ -85,6 +85,6 @@ public class UserShortSerializationTest extends BaseModuleContextSensitiveTest {
 		
 		PatientIdentifierType pit = Context.getSerializationService().deserialize(xmlBuilder.toString(),
 		    PatientIdentifierType.class, XStreamShortSerializer.class);
-		assertEquals("1a339fe9-38bc-4ab3-b180-320988c0b968", pit.getCreator().getUuid());
+		assertEquals(Context.getAuthenticatedUser().getUuid(), pit.getCreator().getUuid());
 	}
 }

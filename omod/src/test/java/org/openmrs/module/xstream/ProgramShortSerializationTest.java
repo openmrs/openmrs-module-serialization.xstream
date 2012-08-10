@@ -60,7 +60,7 @@ public class ProgramShortSerializationTest extends BaseModuleContextSensitiveTes
 		xmlBuilder.append("<programWorkflow id=\"1\" uuid=\"84f0effa-dd73-46cb-b931-7cd6be6c5f81\" retired=\"false\">\n");
 		xmlBuilder.append("  <creator id=\"2\" uuid=\"ba1b19c2-3ed6-4f63-b8c0-f762dc8d7562\"/>\n");
 		xmlBuilder.append("  <dateCreated class=\"sql-timestamp\" id=\"3\">2008-08-15 17:01:00 CST</dateCreated>\n");
-		xmlBuilder.append("  <changedBy reference=\"1\"/>\n");
+		xmlBuilder.append("  <changedBy />\n");
 		xmlBuilder.append("  <dateChanged class=\"sql-timestamp\" id=\"4\">2008-08-15 17:04:50 CST</dateChanged>\n");
 		xmlBuilder.append("  <programWorkflowId>1</programWorkflowId>\n");
 		xmlBuilder.append("  <program id=\"5\" uuid=\"da4a0391-ba62-4fad-ad66-1e3722d16380\"/>\n");

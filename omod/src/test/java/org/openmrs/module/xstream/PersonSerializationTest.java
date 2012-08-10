@@ -63,7 +63,7 @@ public class PersonSerializationTest extends BaseModuleContextSensitiveTest {
 		XMLAssert.assertXpathEvaluatesTo(sdf.format(person.getDeathDate()), "/person/deathDate", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("1088", "/person/causeOfDeath/conceptId", xmlOutput);
 		XMLAssert.assertXpathExists("/person/personCreator", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("17", "/person/personDateCreated/@reference", xmlOutput);
+		XMLAssert.assertXpathExists("/person/personDateCreated/@reference", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("true", "/person/personVoided", xmlOutput);
 		XMLAssert.assertXpathExists("/person/personVoidedBy", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo(sdf.format(person.getPersonDateVoided()), "/person/personDateVoided", xmlOutput);

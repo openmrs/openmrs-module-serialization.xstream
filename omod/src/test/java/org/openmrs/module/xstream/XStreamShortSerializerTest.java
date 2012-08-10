@@ -16,9 +16,11 @@ package org.openmrs.module.xstream;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.LinkedHashMap;
 import java.util.Map;
 
 import org.custommonkey.xmlunit.XMLAssert;
@@ -127,7 +129,7 @@ public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 		xmlBuilder.append("  <creator id=\"2\" uuid=\"ba1b19c2-3ed6-4f63-b8c0-f762dc8d7562\"/>\n");
 		xmlBuilder.append("  <dateCreated class=\"sql-timestamp\" id=\"3\">2007-05-04 09:59:23 CST</dateCreated>\n");
 		xmlBuilder.append("  <dateRetired class=\"sql-timestamp\" id=\"4\">2008-08-15 00:00:00 CST</dateRetired>\n");
-		xmlBuilder.append("  <retiredBy reference=\"1\"/>\n");
+		xmlBuilder.append("  <retiredBy />\n");
 		xmlBuilder.append("  <retireReason>test</retireReason>\n");
 		xmlBuilder.append("  <personAttributeTypeId>1</personAttributeTypeId>\n");
 		xmlBuilder.append("  <format>java.lang.String</format>\n");
@@ -174,16 +176,16 @@ public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 		 * Because for current domain objects, there are a few classes which contain a collection attribute composed by short-serialized class,
 		 * here i just serialize a collection composed by short-serialized class for testing
 		 */
-		Collection<User> col = new HashSet<User>();
+		Collection<User> col = new ArrayList<User>();
 		User user1 = Context.getUserService().getUser(501);
 		User user2 = Context.getUserService().getUser(502);
 		col.add(user1);
 		col.add(user2);
 		String xmlOutput = Context.getSerializationService().serialize(col, XStreamShortSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("c1d8f5c2-e131-11de-babe-001e378eb67e", "/set/user[1]/@uuid", xmlOutput);
-		XMLAssert.assertXpathNotExists("/set/user[1]/*", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("c98a1558-e131-11de-babe-001e378eb67e", "/set/user[2]/@uuid", xmlOutput);
-		XMLAssert.assertXpathNotExists("/set/user[2]/*", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo(user1.getUuid(), "/list/user[1]/@uuid", xmlOutput);
+		XMLAssert.assertXpathNotExists("/list/user[1]/*", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo(user2.getUuid(), "/list/user[2]/@uuid", xmlOutput);
+		XMLAssert.assertXpathNotExists("/list/user[2]/*", xmlOutput);
 	}
 	
 	/**
@@ -197,15 +199,15 @@ public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 		/*
 		 * Because for key and value's short serialization is equal, here just test for while a short-serialized class exist as key in a map
 		 */
-		Map<User,String> map = new HashMap<User,String>();
+		Map<User,String> map = new LinkedHashMap<User, String>();
 		User user1 = Context.getUserService().getUser(501);
 		User user2 = Context.getUserService().getUser(502);
 		map.put(user1, user1.getUsername());
 		map.put(user2, user2.getUsername());
 		String xmlOutput = Context.getSerializationService().serialize(map, XStreamShortSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("c1d8f5c2-e131-11de-babe-001e378eb67e", "/map/entry[1]/user/@uuid", xmlOutput);
-		XMLAssert.assertXpathNotExists("/map/entry[1]/user/*", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("c98a1558-e131-11de-babe-001e378eb67e", "/map/entry[2]/user/@uuid", xmlOutput);
-		XMLAssert.assertXpathNotExists("/map/entry[2]/user/*", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo(user1.getUuid(), "/linked-hash-map/entry[1]/user/@uuid", xmlOutput);
+		XMLAssert.assertXpathNotExists("/linked-hash-map/entry[1]/user/*", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo(user2.getUuid(), "/linked-hash-map/entry[2]/user/@uuid", xmlOutput);
+		XMLAssert.assertXpathNotExists("/linked-hash-map/entry[2]/user/*", xmlOutput);
 	}
 }
