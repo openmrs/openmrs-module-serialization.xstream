@@ -3,7 +3,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>serialization.xstream</artifactId>
-	<version>0.2.7</version>
+	<version>0.2.8-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Serialization Xstream</name>
 	<description>Parent project for Serialization Xstream</description>
@@ -11,9 +11,9 @@
 	<url>http://openmrs.org</url>
 
 	<scm>
-		<connection>scm:svn:http://svn.openmrs.org/openmrs-modules/serialization.xstream/tags/serialization.xstream-0.2.7</connection>
-		<developerConnection>scm:svn:http://svn.openmrs.org/openmrs-modules/serialization.xstream/tags/serialization.xstream-0.2.7</developerConnection>
-		<url>http://svn.openmrs.org/openmrs-modules/serialization.xstream/tags/serialization.xstream-0.2.7</url>
+		<connection>scm:svn:http://svn.openmrs.org/openmrs-modules/serialization.xstream/trunk/</connection>
+		<developerConnection>scm:svn:http://svn.openmrs.org/openmrs-modules/serialization.xstream/trunk/</developerConnection>
+		<url>http://svn.openmrs.org/openmrs-modules/serialization.xstream/trunk/</url>
 	</scm>
 
     <distributionManagement>
