@@ -11,9 +11,9 @@
 	<url>http://openmrs.org</url>
 
 	<scm>
-		<connection>scm:svn:http://svn.openmrs.org/openmrs-modules/serialization.xstream/trunk/</connection>
-		<developerConnection>scm:svn:http://svn.openmrs.org/openmrs-modules/serialization.xstream/trunk/</developerConnection>
-		<url>http://svn.openmrs.org/openmrs-modules/serialization.xstream/trunk/</url>
+		<connection>scm:git:https://github.com/openmrs/openmrs-module-serialization.xstream/</connection>
+		<developerConnection>scm:git:https://github.com/openmrs/openmrs-module-serialization.xstream/</developerConnection>
+		<url>https://github.com/openmrs/openmrs-module-serialization.xstream/</url>
 	</scm>
 
     <distributionManagement>
