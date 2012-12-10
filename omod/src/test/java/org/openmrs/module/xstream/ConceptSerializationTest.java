@@ -80,12 +80,12 @@ public class ConceptSerializationTest extends BaseVersionSensitiveTest {
 	 */
 	@Test
 	public void shouldDeserializeConcept() throws Exception {
-		String serializedTest = getSerializedContents("org/openmrs/module/xstream/include/ConceptDeserializationTest"
+		String serializedText = getSerializedContents("org/openmrs/module/xstream/include/ConceptDeserializationTest"
 		        + VERSION_PLACE_HOLDER + ".xml");
 		//deserialize and make sure everything has been put into object
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 		
-		Concept concept = Context.getSerializationService().deserialize(serializedTest, Concept.class,
+		Concept concept = Context.getSerializationService().deserialize(serializedText, Concept.class,
 		    XStreamSerializer.class);
 		assertEquals("0cbe2ed3-cd5f-4f46-9459-26127c9265ab", concept.getUuid());
 		assertEquals(3, concept.getConceptId().intValue());
