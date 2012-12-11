@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.text.SimpleDateFormat;
@@ -28,14 +27,11 @@ import junit.framework.Assert;
 import org.custommonkey.xmlunit.XMLAssert;
 import org.hibernate.proxy.HibernateProxy;
 import org.junit.Test;
-import org.openmrs.Cohort;
 import org.openmrs.ConceptSource;
-import org.openmrs.Encounter;
 import org.openmrs.PersonName;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 /**
