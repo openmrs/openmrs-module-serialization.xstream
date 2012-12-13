@@ -23,13 +23,14 @@ import org.openmrs.ConceptMap;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.Version;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 import org.openmrs.util.OpenmrsConstants;
 
 /**
  * Test class that tests the serialization and deserialization of a conceptMap
  */
-public class ConceptMapSerializationTest extends BaseVersionSensitiveTest {
+public class ConceptMapSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a conceptMap and make sure it can be serialized correctly
@@ -41,8 +42,8 @@ public class ConceptMapSerializationTest extends BaseVersionSensitiveTest {
 	public void shouldSerializeConceptMap() throws Exception {
 		//instantiate object
 		initializeInMemoryDatabase();
-		executeDataSet(resolveTestDatasetFilename("org/openmrs/module/xstream/include/ConceptMapSerializationTest"
-		        + VERSION_PLACE_HOLDER + ".xml"));
+		executeDataSet(TestUtil.resolveTestDatasetFilename("org/openmrs/module/xstream/include/ConceptMapSerializationTest"
+		        + TestUtil.VERSION_PLACE_HOLDER + ".xml"));
 		authenticate();
 		
 		ConceptMap cm = Context.getConceptService().getConcept(3).getConceptMappings().iterator().next();
@@ -56,7 +57,7 @@ public class ConceptMapSerializationTest extends BaseVersionSensitiveTest {
 		XMLAssert.assertXpathEvaluatesTo("3", "/conceptMap/concept/conceptId", xmlOutput);
 		XMLAssert.assertXpathExists("/conceptMap/creator", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo(sdf.format(cm.getDateCreated()), "/conceptMap/dateCreated", xmlOutput);
-		if (VERSION_ONE_NINE.compareTo(new Version(OpenmrsConstants.OPENMRS_VERSION_SHORT)) <= 0) {
+		if (TestUtil.VERSION_ONE_NINE.compareTo(new Version(OpenmrsConstants.OPENMRS_VERSION_SHORT)) <= 0) {
 			XMLAssert.assertXpathExists("/conceptMap/conceptMapType[conceptMapTypeId=1]", xmlOutput);
 			XMLAssert.assertXpathExists("/conceptMap/conceptReferenceTerm[conceptReferenceTermId=1]", xmlOutput);
 			XMLAssert.assertXpathEvaluatesTo("1", "/conceptMap/conceptReferenceTerm/conceptSource/conceptSourceId[1]",
@@ -75,8 +76,9 @@ public class ConceptMapSerializationTest extends BaseVersionSensitiveTest {
 	 */
 	@Test
 	public void shouldDeserializeConceptMap() throws Exception {
-		String serializedText = getSerializedContents("org/openmrs/module/xstream/include/ConceptMapDeserializationTest"
-		        + VERSION_PLACE_HOLDER + ".xml");
+		String serializedText = TestUtil
+		        .getSerializedContents("org/openmrs/module/xstream/include/ConceptMapDeserializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml");
 		//deserialize and make sure everything has been put into object
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 		
@@ -87,7 +89,7 @@ public class ConceptMapSerializationTest extends BaseVersionSensitiveTest {
 		assertEquals(3, cm.getConcept().getConceptId().intValue());
 		assertEquals(1, cm.getSource().getConceptSourceId().intValue());
 		assertEquals("test", cm.getSourceCode());
-		if (VERSION_ONE_NINE.compareTo(new Version(OpenmrsConstants.OPENMRS_VERSION_SHORT)) > 0) {
+		if (TestUtil.VERSION_ONE_NINE.compareTo(new Version(OpenmrsConstants.OPENMRS_VERSION_SHORT)) > 0) {
 			assertEquals("test", cm.getComment());
 		}
 		assertEquals(1, cm.getCreator().getUserId().intValue());

@@ -23,12 +23,13 @@ import org.junit.Test;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 /**
  * Test class that tests the serialization and deserialization of a conceptSource
  */
-public class ConceptSourceSerializationTest extends BaseVersionSensitiveTest {
+public class ConceptSourceSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a conceptSource and make sure it can be serialized correctly
@@ -40,8 +41,9 @@ public class ConceptSourceSerializationTest extends BaseVersionSensitiveTest {
 	public void shouldSerializeConceptSource() throws Exception {
 		//instantiate object
 		initializeInMemoryDatabase();
-		executeDataSet(resolveTestDatasetFilename("org/openmrs/module/xstream/include/ConceptSourceSerializationTest"
-		        + VERSION_PLACE_HOLDER + ".xml"));
+		executeDataSet(TestUtil
+		        .resolveTestDatasetFilename("org/openmrs/module/xstream/include/ConceptSourceSerializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml"));
 		authenticate();
 		
 		ConceptSource cs = Context.getConceptService().getConceptSource(1);

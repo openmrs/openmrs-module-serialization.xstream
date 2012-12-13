@@ -24,13 +24,14 @@ import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.Version;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 import org.openmrs.util.OpenmrsConstants;
 
 /**
  * Test class that tests the serialization and deserialization of a concept
  */
-public class ConceptSerializationTest extends BaseVersionSensitiveTest {
+public class ConceptSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a concept and make sure it can be serialized correctly
@@ -42,8 +43,9 @@ public class ConceptSerializationTest extends BaseVersionSensitiveTest {
 	public void shouldSerializeConcept() throws Exception {
 		//instantiate object
 		initializeInMemoryDatabase();
-		String testdatasetFilename = resolveTestDatasetFilename("org/openmrs/module/xstream/include/ConceptSerializationTest"
-		        + VERSION_PLACE_HOLDER + ".xml");
+		String testdatasetFilename = TestUtil
+		        .resolveTestDatasetFilename("org/openmrs/module/xstream/include/ConceptSerializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml");
 		executeDataSet(testdatasetFilename);
 		authenticate();
 		
@@ -66,7 +68,7 @@ public class ConceptSerializationTest extends BaseVersionSensitiveTest {
 		XMLAssert.assertXpathExists("/concept/conceptSets/conceptSet[conceptSetId=1]", xmlOutput);
 		XMLAssert.assertXpathExists("/concept/descriptions/conceptDescription[conceptDescriptionId=9]", xmlOutput);
 		XMLAssert.assertXpathExists("/concept/conceptMappings/conceptMap[conceptMapId=1]", xmlOutput);
-		if (VERSION_ONE_NINE.compareTo(new Version(OpenmrsConstants.OPENMRS_VERSION_SHORT)) <= 0) {
+		if (TestUtil.VERSION_ONE_NINE.compareTo(new Version(OpenmrsConstants.OPENMRS_VERSION_SHORT)) <= 0) {
 			XMLAssert.assertXpathExists("/concept/conceptMappings/conceptMap/conceptMapType[conceptMapTypeId=1]", xmlOutput);
 			XMLAssert.assertXpathExists(
 			    "/concept/conceptMappings/conceptMap/conceptReferenceTerm[conceptReferenceTermId=1]", xmlOutput);
@@ -80,8 +82,9 @@ public class ConceptSerializationTest extends BaseVersionSensitiveTest {
 	 */
 	@Test
 	public void shouldDeserializeConcept() throws Exception {
-		String serializedText = getSerializedContents("org/openmrs/module/xstream/include/ConceptDeserializationTest"
-		        + VERSION_PLACE_HOLDER + ".xml");
+		String serializedText = TestUtil
+		        .getSerializedContents("org/openmrs/module/xstream/include/ConceptDeserializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml");
 		//deserialize and make sure everything has been put into object
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 		

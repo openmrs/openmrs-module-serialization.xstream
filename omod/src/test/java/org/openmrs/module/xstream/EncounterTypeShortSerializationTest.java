@@ -20,12 +20,13 @@ import org.junit.Test;
 import org.openmrs.Encounter;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 /**
  * Test class that test the short serialization and short deserialization of a encounterType
  */
-public class EncounterTypeShortSerializationTest extends BaseVersionSensitiveTest {
+public class EncounterTypeShortSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * generate the relative objects and make sure the short serialization can work
@@ -38,8 +39,9 @@ public class EncounterTypeShortSerializationTest extends BaseVersionSensitiveTes
 		
 		//prepare the necessary data
 		initializeInMemoryDatabase();
-		executeDataSet(resolveTestDatasetFilename("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest"
-		        + VERSION_PLACE_HOLDER + ".xml"));
+		executeDataSet(TestUtil
+		        .resolveTestDatasetFilename("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml"));
 		authenticate();
 		
 		Encounter e = Context.getEncounterService().getEncounter(4);
@@ -66,8 +68,9 @@ public class EncounterTypeShortSerializationTest extends BaseVersionSensitiveTes
 		 * We also need to use the "EncounterTypeShortSerializationTest.xml" here 
 		 */
 		initializeInMemoryDatabase();
-		executeDataSet(resolveTestDatasetFilename("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest"
-		        + VERSION_PLACE_HOLDER + ".xml"));
+		executeDataSet(TestUtil
+		        .resolveTestDatasetFilename("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml"));
 		authenticate();
 		
 		//prepare the necessary data

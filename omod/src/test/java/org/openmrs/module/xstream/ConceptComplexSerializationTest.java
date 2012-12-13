@@ -23,12 +23,13 @@ import org.junit.Test;
 import org.openmrs.ConceptComplex;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
+import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 /**
  * Test class that tests the serialization and deserialization of a conceptComplex
  */
-public class ConceptComplexSerializationTest extends BaseVersionSensitiveTest {
+public class ConceptComplexSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a conceptComplex and make sure it can be serialized correctly
@@ -40,8 +41,9 @@ public class ConceptComplexSerializationTest extends BaseVersionSensitiveTest {
 	public void shouldSerializeConceptComplex() throws Exception {
 		//instantiate object
 		initializeInMemoryDatabase();
-		executeDataSet(resolveTestDatasetFilename("org/openmrs/module/xstream/include/ConceptComplexSerializationTest"
-		        + VERSION_PLACE_HOLDER + ".xml"));
+		executeDataSet(TestUtil
+		        .resolveTestDatasetFilename("org/openmrs/module/xstream/include/ConceptComplexSerializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml"));
 		authenticate();
 		
 		ConceptComplex cc = Context.getConceptService().getConceptComplex(3);
@@ -73,8 +75,9 @@ public class ConceptComplexSerializationTest extends BaseVersionSensitiveTest {
 	 */
 	@Test
 	public void shouldDeserializeConceptComplex() throws Exception {
-		String serializedText = getSerializedContents("org/openmrs/module/xstream/include/ConceptComplexDeserializationTest"
-		        + VERSION_PLACE_HOLDER + ".xml");
+		String serializedText = TestUtil
+		        .getSerializedContents("org/openmrs/module/xstream/include/ConceptComplexDeserializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml");
 		//deserialize and make sure everything has been put into object
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 		
