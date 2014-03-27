@@ -24,10 +24,14 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
+import org.springframework.stereotype.Component;
+import org.openmrs.annotation.OpenmrsProfile;
 
 /**
  * Test class that tests the serialization and deserialization of a conceptMap
  */
+@Component
+@OpenmrsProfile(openmrsVersion = "[1.6.0 - 1.9.*]")
 public class ConceptMapSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
@@ -106,7 +110,7 @@ public class ConceptMapSerializationTest extends BaseModuleContextSensitiveTest 
 		xmlBuilder.append("        <personVoided>false</personVoided>\n");
 		xmlBuilder.append("        <personVoidReason></personVoidReason>\n");
 		xmlBuilder.append("        <isPatient>false</isPatient>\n");
-		xmlBuilder.append("    </person>\n");;
+		xmlBuilder.append("    </person>\n");
 		xmlBuilder.append("        <userId>1</userId>\n");
 		xmlBuilder.append("        <systemId>1-8</systemId>\n");
 		xmlBuilder.append("        <username>admin</username>\n");

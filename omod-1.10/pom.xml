@@ -6,13 +6,13 @@
 		<version>0.2.8-SNAPSHOT</version>
 	</parent>
 	<groupId>org.openmrs.module</groupId>
-	<artifactId>serialization.xstream-omod</artifactId>
+	<artifactId>serialization.xstream-omod-1.10</artifactId>
 	<packaging>jar</packaging>
-	<name>Serialization Xstream OMOD</name>
+	<name>Serialization Xstream OMOD 1.10</name>
 	<description>OpenMRS module project for Serialization Xstream</description>
 
 	<dependencies>
-	
+
 		<dependency>
 			<groupId>${project.parent.groupId}</groupId>
 			<artifactId>${project.parent.artifactId}-api</artifactId>
@@ -21,6 +21,11 @@
         <dependency>
             <groupId>${project.parent.groupId}</groupId>
             <artifactId>${project.parent.artifactId}-omod-common</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>${project.parent.groupId}</groupId>
+            <artifactId>${project.parent.artifactId}-omod</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
@@ -164,9 +169,6 @@
 					<type>pom</type>
 				</dependency>
 			</dependencies>
-            <properties>
-                <exclude.tests>**/*1_9*.java</exclude.tests>
-            </properties>
 		</profile>
 
 	</profiles>

@@ -16,18 +16,23 @@ package org.openmrs.module.xstream;
 import static org.junit.Assert.assertEquals;
 
 import org.custommonkey.xmlunit.XMLAssert;
+import org.junit.Before;
 import org.junit.Test;
 import org.openmrs.Encounter;
+import org.openmrs.annotation.OpenmrsProfile;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
+import org.springframework.stereotype.Component;
 
 /**
  * Test class that test the short serialization and short deserialization of a location
  */
-public class LocationShortSerializationTest extends BaseModuleContextSensitiveTest {
-	
+@Component
+@OpenmrsProfile(openmrsVersion = "[1.6.0 - 1.9.*]")
+ public class LocationShortSerializationTest extends BaseModuleContextSensitiveTest {
+
 	/**
 	 * generate the relative objects and make sure the short serialization can work
 	 * 
@@ -62,7 +67,7 @@ public class LocationShortSerializationTest extends BaseModuleContextSensitiveTe
 		
 		/*
 		 * Because "XXXShortConverter.unmarshal(HierarchicalStreamReader, UnmarshallingContext)" has operations accessing data in database,
-		 * We also need to use the "EncounterTypeShortSerializationTest.xml" here 
+		 * We also need to use the "EncounterTypeShortSerializationTest.xml" here
 		 */
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest.xml");

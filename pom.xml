@@ -31,7 +31,9 @@
 
 	<modules>
 		<module>api</module>
+        <module>omod-common</module>
 		<module>omod</module>
+        <module>omod-1.10</module>
 	</modules>
 
 	<dependencyManagement>
