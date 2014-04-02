@@ -39,7 +39,9 @@ public class EncounterTypeShortSerializationTest extends BaseModuleContextSensit
 		
 		//prepare the necessary data
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest.xml");
+		executeDataSet(TestUtil
+		        .resolveTestDatasetFilename("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml"));
 		authenticate();
 		
 		Encounter e = Context.getEncounterService().getEncounter(4);
@@ -66,7 +68,9 @@ public class EncounterTypeShortSerializationTest extends BaseModuleContextSensit
 		 * We also need to use the "EncounterTypeShortSerializationTest.xml" here 
 		 */
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest.xml");
+		executeDataSet(TestUtil
+		        .resolveTestDatasetFilename("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml"));
 		authenticate();
 		
 		//prepare the necessary data

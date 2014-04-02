@@ -1,0 +1,88 @@
+<conceptMap id="1" uuid="6c36f786-957d-4a14-a6ed-e66ced057066">
+  <conceptMapId>1</conceptMapId>
+  <concept id="2" uuid="0cbe2ed3-cd5f-4f46-9459-26127c9265ab">
+    <conceptId>3</conceptId>
+    <retired>false</retired>
+    <datatype id="3" uuid="bf51481d-9b76-4a88-8ca4-88dd082ddf90" retired="false">
+      <name>N/A</name>
+      <description>Not associated with a datatype (e.g., term answers, sets)</description>
+      <creator id="4" uuid="6adb7c42-cfd2-4301-b53b-ff17c5654ff7" voided="false">
+        <creator reference="4"/>
+        <dateCreated class="sql-timestamp" id="5">2005-01-01 00:00:00 CST</dateCreated>
+        <changedBy reference="4"/>
+        <dateChanged class="sql-timestamp" id="6">2007-09-20 21:54:12 CST</dateChanged>
+    <retireReason></retireReason>
+    <person id="7" uuid="6adb7c42-cfd2-4301-b53b-ff17c5654ff7" voided="false">
+    <personId>1</personId>
+        <addresses class="tree-set" id="7">
+          <no-comparator/>
+        </addresses>
+        <names class="tree-set" id="8">
+          <no-comparator/>
+        </names>
+        <attributes class="tree-set" id="9">
+          <no-comparator/>
+        </attributes>
+        <gender></gender>
+        <birthdate class="sql-timestamp" id="10">1975-06-30 00:00:00 CST</birthdate>
+        <birthdateEstimated>false</birthdateEstimated>
+        <dead>false</dead>
+        <personCreator reference="4"/>
+        <personDateCreated class="sql-timestamp" id="11">2005-01-01 00:00:00 CST</personDateCreated>
+        <personChangedBy reference="4"/>
+        <personDateChanged class="sql-timestamp" id="12">2007-09-20 21:54:12 CST</personDateChanged>
+        <personVoided>false</personVoided>
+        <personVoidReason></personVoidReason>
+        <isPatient>false</isPatient>
+    </person>
+        <userId>1</userId>
+        <systemId>1-8</systemId>
+        <username>admin</username>
+        <secretQuestion></secretQuestion>
+        <roles id="13">
+          <role id="14" uuid="0e43640b-67d1-4458-b47f-b64fd8ce4b0d" retired="false">
+            <description>Developers of the OpenMRS .. have additional access to change fundamental structure of the database model.</description>
+            <role>System Developer</role>
+            <privileges id="15"/>
+            <inheritedRoles id="16"/>
+          </role>
+        </roles>
+        <userProperties id="17"/>
+        <parsedProficientLocalesProperty></parsedProficientLocalesProperty>
+      </creator>
+      <dateCreated class="sql-timestamp" id="18">2004-02-02 00:00:00 CST</dateCreated>
+      <conceptDatatypeId>4</conceptDatatypeId>
+      <hl7Abbreviation>ZZ</hl7Abbreviation>
+    </datatype>
+    <conceptClass id="19" uuid="3d065ed4-b0b9-4710-9a17-6d8c4fd259b7" retired="false">
+      <name>Drug</name>
+      <description>Drug</description>
+      <creator reference="4"/>
+      <dateCreated class="sql-timestamp" id="20">2004-02-02 00:00:00 CST</dateCreated>
+      <conceptClassId>3</conceptClassId>
+    </conceptClass>
+    <set>false</set>
+    <version></version>
+    <creator reference="4"/>
+    <dateCreated class="sql-timestamp" id="21">2008-08-15 15:27:51 CST</dateCreated>
+    <names class="set" id="22"/>
+    <answers class="set" id="23"/>
+    <conceptSets class="set" id="24"/>
+    <descriptions class="set" id="25"/>
+    <conceptMappings class="set" id="26">
+      <conceptMap reference="1"/>
+    </conceptMappings>
+  </concept>
+  <source id="27" uuid="14ea70c7-fe49-46ae-9957-8a678c82d1d8">
+    <conceptSourceId>1</conceptSourceId>
+    <name>SNOMED</name>
+    <description>Systematized Nomenclature of Medicine -- Clinical Terms</description>
+    <hl7Code>test</hl7Code>
+    <creator reference="4"/>
+    <dateCreated class="sql-timestamp" id="28">2006-01-20 00:00:00 CST</dateCreated>
+  </source>
+  <sourceCode>test</sourceCode>
+  <comment>test</comment>
+  <creator reference="4"/>
+  <dateCreated class="sql-timestamp" id="29">2006-02-20 00:00:00 CST</dateCreated>
+</conceptMap>

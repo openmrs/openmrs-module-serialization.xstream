@@ -41,7 +41,9 @@ public class ConceptSourceSerializationTest extends BaseModuleContextSensitiveTe
 	public void shouldSerializeConceptSource() throws Exception {
 		//instantiate object
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/ConceptSourceSerializationTest.xml");
+		executeDataSet(TestUtil
+		        .resolveTestDatasetFilename("org/openmrs/module/xstream/include/ConceptSourceSerializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml"));
 		authenticate();
 		
 		ConceptSource cs = Context.getConceptService().getConceptSource(1);
@@ -127,8 +129,9 @@ public class ConceptSourceSerializationTest extends BaseModuleContextSensitiveTe
 		
 		//deserialize and make sure everything has been put into object
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
-
-		ConceptSource cs = Context.getSerializationService().deserialize(xmlBuilder.toString(), ConceptSource.class, XStreamSerializer.class);
+		
+		ConceptSource cs = Context.getSerializationService().deserialize(xmlBuilder.toString(), ConceptSource.class,
+		    XStreamSerializer.class);
 		assertEquals("14ea70c7-fe49-46ae-9957-8a678c82d1d8", cs.getUuid());
 		assertEquals(1, cs.getConceptSourceId().intValue());
 		assertEquals("SNOMED", cs.getName());

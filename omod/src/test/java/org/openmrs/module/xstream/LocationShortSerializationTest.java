@@ -39,7 +39,9 @@ public class LocationShortSerializationTest extends BaseModuleContextSensitiveTe
 		
 		//prepare the necessary data
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest.xml");
+		executeDataSet(TestUtil
+		        .resolveTestDatasetFilename("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml"));
 		authenticate();
 		
 		Encounter e = Context.getEncounterService().getEncounter(4);
@@ -65,7 +67,9 @@ public class LocationShortSerializationTest extends BaseModuleContextSensitiveTe
 		 * We also need to use the "EncounterTypeShortSerializationTest.xml" here 
 		 */
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest.xml");
+		executeDataSet(TestUtil
+		        .resolveTestDatasetFilename("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest"
+		                + TestUtil.VERSION_PLACE_HOLDER + ".xml"));
 		authenticate();
 		
 		//prepare the necessary data
@@ -98,7 +102,8 @@ public class LocationShortSerializationTest extends BaseModuleContextSensitiveTe
 		xmlBuilder.append("  <obs id=\"17\"/>\n");
 		xmlBuilder.append("</encounter>\n");
 		
-		Encounter e = Context.getSerializationService().deserialize(xmlBuilder.toString(), Encounter.class, XStreamShortSerializer.class);
+		Encounter e = Context.getSerializationService().deserialize(xmlBuilder.toString(), Encounter.class,
+		    XStreamShortSerializer.class);
 		assertEquals("dc5c1fcc-0459-4201-bf70-0b90535ba362", e.getLocation().getUuid());
 	}
 }

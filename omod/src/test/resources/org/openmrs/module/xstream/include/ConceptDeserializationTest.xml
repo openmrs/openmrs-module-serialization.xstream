@@ -1,0 +1,174 @@
+<concept id="1" uuid="0cbe2ed3-cd5f-4f46-9459-26127c9265ab" retired="false">
+  <conceptId>3</conceptId>
+  <datatype id="2" uuid="bf51481d-9b76-4a88-8ca4-88dd082ddf90" retired="false">
+    <name>N/A</name>
+    <description>Not associated with a datatype (e.g., term answers, sets)</description>
+    <creator id="3" uuid="6adb7c42-cfd2-4301-b53b-ff17c5654ff7" voided="false">
+      <creator reference="3"/>
+      <dateCreated class="sql-timestamp" id="4">2005-01-01 00:00:00 CST</dateCreated>
+      <changedBy reference="3"/>
+      <dateChanged class="sql-timestamp" id="5">2007-09-20 21:54:12 CST</dateChanged>
+    <retireReason></retireReason>
+    <person id="7" uuid="6adb7c42-cfd2-4301-b53b-ff17c5654ff7" voided="false">
+    <personId>1</personId>
+      <addresses class="tree-set" id="6">
+        <no-comparator/>
+      </addresses>
+      <names class="tree-set" id="7">
+        <no-comparator/>
+      </names>
+      <attributes class="tree-set" id="8">
+        <no-comparator/>
+      </attributes>
+      <gender></gender>
+      <birthdate class="sql-timestamp" id="9">1975-06-30 00:00:00 CST</birthdate>
+      <birthdateEstimated>false</birthdateEstimated>
+      <dead>false</dead>
+      <personCreator reference="3"/>
+      <personDateCreated class="sql-timestamp" id="10">2005-01-01 00:00:00 CST</personDateCreated>
+      <personChangedBy reference="3"/>
+      <personDateChanged class="sql-timestamp" id="11">2007-09-20 21:54:12 CST</personDateChanged>
+      <personVoided>false</personVoided>
+      <personVoidReason></personVoidReason>
+      <isPatient>false</isPatient>
+    </person>
+      <userId>1</userId>
+      <systemId>1-8</systemId>
+      <username>admin</username>
+      <secretQuestion></secretQuestion>
+      <roles id="12">
+        <role id="13" uuid="0e43640b-67d1-4458-b47f-b64fd8ce4b0d" retired="false">
+          <description>Developers of the OpenMRS .. have additional access to change fundamental structure of the database model.</description>
+          <role>System Developer</role>
+          <privileges id="14"/>
+          <inheritedRoles id="15"/>
+        </role>
+      </roles>
+      <userProperties id="16"/>
+      <parsedProficientLocalesProperty></parsedProficientLocalesProperty>
+    </creator>
+    <dateCreated class="sql-timestamp" id="17">2004-02-02 00:00:00 CST</dateCreated>
+    <conceptDatatypeId>4</conceptDatatypeId>
+    <hl7Abbreviation>ZZ</hl7Abbreviation>
+  </datatype>
+  <conceptClass id="18" uuid="3d065ed4-b0b9-4710-9a17-6d8c4fd259b7" retired="false">
+    <name>Drug</name>
+    <description>Drug</description>
+    <creator reference="3"/>
+    <dateCreated class="sql-timestamp" id="19">2004-02-02 00:00:00 CST</dateCreated>
+    <conceptClassId>3</conceptClassId>
+  </conceptClass>
+  <set>false</set>
+  <creator reference="3"/>
+  <dateCreated class="sql-timestamp" id="20">2008-08-15 15:27:51 CST</dateCreated>
+  <names class="set" id="21">
+    <conceptName id="22" uuid="b8159118-c97b-4d5a-a63e-d4aa4be0c4d3" voided="false">
+      <conceptNameId>2456</conceptNameId>
+      <concept reference="1"/>
+      <name>COUGH SYRUP</name>
+      <locale id="23">en</locale>
+      <creator reference="3"/>
+      <dateCreated class="sql-timestamp" id="24">2008-08-15 15:27:51 CST</dateCreated>
+      <tags class="set" id="25">
+        <conceptNameTag id="26" uuid="73e8f75b-9133-426e-ac3f-40a903ceb0bf">
+          <conceptNameTagId>4</conceptNameTagId>
+          <tag>preferred</tag>
+          <description>preferred name in English</description>
+          <creator reference="3"/>
+          <dateCreated class="sql-timestamp" id="27">2007-05-01 00:00:00 CST</dateCreated>
+        </conceptNameTag>
+      </tags>
+    </conceptName>
+  </names>
+  <answers class="set" id="28">
+    <conceptAnswer id="29" uuid="0038bcf6-92b2-102c-adee-6014420f8468">
+      <conceptAnswerId>762</conceptAnswerId>
+      <concept reference="1"/>
+      <answerConcept id="30" uuid="00174a3f-92b2-102c-adee-6014420f8468">
+        <conceptId>796</conceptId>
+        <retired>false</retired>
+        <datatype reference="2"/>
+        <conceptClass reference="18"/>
+        <set>false</set>
+        <creator reference="3"/>
+        <dateCreated class="sql-timestamp" id="31">2004-04-08 00:00:00 CST</dateCreated>
+        <changedBy reference="3"/>
+        <dateChanged class="sql-timestamp" id="32">2005-02-22 12:50:02 CST</dateChanged>
+        <names class="set" id="33"/>
+        <answers class="set" id="34"/>
+        <conceptSets class="set" id="35"/>
+        <descriptions class="set" id="36"/>
+        <conceptMappings class="set" id="37"/>
+      </answerConcept>
+      <answerDrug id="38" uuid="00a66162-92b2-102c-adee-6014420f8468" retired="false">
+        <name>DDI 200</name>
+        <creator reference="3"/>
+        <dateCreated class="sql-timestamp" id="39">2005-02-24 00:00:00 CST</dateCreated>
+        <drugId>10</drugId>
+        <combination>false</combination>
+        <units>mg</units>
+        <concept reference="30"/>
+      </answerDrug>
+      <creator reference="3"/>
+      <dateCreated class="sql-timestamp" id="40">2006-02-14 14:22:55 CST</dateCreated>
+    </conceptAnswer>
+  </answers>
+  <conceptSets class="set" id="41">
+    <conceptSet id="42" uuid="1a111827-639f-4cb4-961f-1e025bf88d90">
+      <conceptSetId>1</conceptSetId>
+      <concept id="43" uuid="0f97e14e-cdc2-49ac-9255-b5126f8a5147">
+        <conceptId>23</conceptId>
+        <retired>false</retired>
+        <datatype reference="2"/>
+        <conceptClass id="44" uuid="0248f513-d023-40b6-a274-235a33f6e25f" retired="false">
+          <name>ConvSet</name>
+          <description>Term to describe convenience sets</description>
+          <creator reference="3"/>
+          <dateCreated class="sql-timestamp" id="45">2004-03-02 00:00:00 CST</dateCreated>
+          <conceptClassId>10</conceptClassId>
+        </conceptClass>
+        <set>true</set>
+        <version></version>
+        <creator reference="3"/>
+        <dateCreated class="sql-timestamp" id="46">2008-08-18 12:38:58 CST</dateCreated>
+        <names class="set" id="47"/>
+        <answers class="set" id="48"/>
+        <conceptSets class="set" id="49"/>
+        <descriptions class="set" id="50"/>
+        <conceptMappings class="set" id="51"/>
+      </concept>
+      <conceptSet reference="1"/>
+      <sortWeight>0.0</sortWeight>
+      <creator reference="3"/>
+      <dateCreated class="sql-timestamp" id="52">2008-08-18 12:38:58 CST</dateCreated>
+    </conceptSet>
+  </conceptSets>
+  <descriptions class="set" id="53">
+    <conceptDescription id="54" uuid="79a3efa7-3a43-4b38-ac5d-9b68aee086c6">
+      <conceptDescriptionId>9</conceptDescriptionId>
+      <concept reference="1"/>
+      <description>This is used for coughs</description>
+      <locale id="55">en</locale>
+      <creator reference="3"/>
+      <dateCreated class="sql-timestamp" id="56">2008-08-15 15:27:51 CST</dateCreated>
+    </conceptDescription>
+  </descriptions>
+  <conceptMappings class="set" id="57">
+    <conceptMap id="58" uuid="6c36f786-957d-4a14-a6ed-e66ced057066">
+      <conceptMapId>1</conceptMapId>
+      <concept reference="1"/>
+      <source id="59" uuid="14ea70c7-fe49-46ae-9957-8a678c82d1d8">
+        <conceptSourceId>1</conceptSourceId>
+        <name>SNOMED</name>
+        <description>Systematized Nomenclature of Medicine -- Clinical Terms</description>
+        <hl7Code>test</hl7Code>
+        <creator reference="3"/>
+        <dateCreated class="sql-timestamp" id="60">2006-01-20 00:00:00 CST</dateCreated>
+      </source>
+      <sourceCode>test</sourceCode>
+      <comment>test</comment>
+      <creator reference="3"/>
+      <dateCreated class="sql-timestamp" id="61">2006-02-20 00:00:00 CST</dateCreated>
+    </conceptMap>
+  </conceptMappings>
+</concept>
