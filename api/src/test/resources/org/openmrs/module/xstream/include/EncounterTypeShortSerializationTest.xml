@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<dataset>
+  	<encounter encounter_id="4" encounter_type="1" patient_id="7" provider_id="502" location_id="1" form_id="1" encounter_datetime="2008-08-15 00:00:00.0" creator="1" date_created="2008-08-18 14:22:17.0" voided="false" uuid="eec646cb-c847-45a7-98bc-91c8c4f70add"/>
+  	<encounter_type encounter_type_id="1" name="Scheduled" description="Scheduled Visit" creator="1" date_created="2005-02-24 00:00:00.0" retired="false" uuid="61ae96f4-6afe-4351-b6f8-cd4fc383cce1"/>
+  	<patient patient_id="7" creator="1" date_created="2006-01-18 00:00:00.0" changed_by="1" date_changed="2008-08-18 12:25:57.0" voided="false" void_reason=""/>
+  	<person person_id="7" gender="F" birthdate="1976-08-25 00:00:00.0" dead="false" creator="1" date_created="2006-01-18 00:00:00.0" voided="false" uuid="5946f880-b197-400b-9caa-a3c661d23041"/>
+  	<users user_id="502" person_id="502" system_id="3-4" username="butch" password="eeeda5c0cc3837151b2d61cfeab54a91fb0c27d" salt="42af4c437a47cd778a54f6564d71b3cd6e8e5ca" creator="1" date_created="2008-08-15 15:57:09.0" changed_by="1" date_changed="2008-08-18 11:51:56.0" retired="false" uuid="55685062-1b48-11df-a5c7-001e378eb67e"/>
+  	<person person_id="502" gender="M" dead="false" creator="1" date_created="2008-08-15 15:57:09.0" voided="false" uuid="341b4e41-790c-484f-b6ed-71dc8da222de"/>
+  	<location location_id="1" name="Unknown Location" description="The default location used when limited information is known" creator="1" date_created="2005-09-22 00:00:00.0" retired="false" uuid="dc5c1fcc-0459-4201-bf70-0b90535ba362"/>
+  	<form form_id="1" name="Basic Form" version="0.1" build="0" published="0" description="Test form" creator="1" date_created="2005-08-07 00:00:00.0" changed_by="1" date_changed="2007-10-24 14:51:53.0" retired="false" uuid="d9218f76-6c39-45f4-8efa-4c5c6c199f50"/>
+</dataset>
