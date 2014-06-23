@@ -70,7 +70,10 @@
 				<targetPath>web/module</targetPath>
 			</resource>
             <resource>
-                <directory>../api/src/main/resources/message.properties</directory>
+                <directory>../api/src/main/resources</directory>
+                <includes>
+                    <include>messages.properties</include>
+                </includes>
                 <filtering>true</filtering>
             </resource>
         </resources>
