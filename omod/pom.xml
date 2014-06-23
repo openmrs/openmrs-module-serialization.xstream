@@ -61,7 +61,7 @@
 				</excludes>
 				<targetPath>web/module</targetPath>
 			</resource>
-			<resource>
+            <resource>
 				<directory>src/main/webapp</directory>
 				<filtering>false</filtering>
 				<includes>
@@ -69,7 +69,11 @@
 				</includes>
 				<targetPath>web/module</targetPath>
 			</resource>
-		</resources>
+            <resource>
+                <directory>../api/src/main/resources/message.properties</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
 		<testResources>
 			<testResource>
 				<directory>src/test/resources</directory>
@@ -259,5 +263,7 @@
 		</profile>
 
 	</profiles>
-	
+
+
+
 </project>
