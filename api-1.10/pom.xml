@@ -12,7 +12,7 @@
     <description>1.10 Support API project for Serialization Xstream</description>
 
     <properties>
-        <openmrsVersion.1.10>1.10.0-SNAPSHOT</openmrsVersion.1.10>
+        <openmrsVersion.1.10>1.10.0</openmrsVersion.1.10>
     </properties>
 
     <dependencies>
