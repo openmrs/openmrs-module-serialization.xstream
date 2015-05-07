@@ -3,37 +3,25 @@ package org.openmrs.module.serialization.xstream.mapper;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.SortedMap;
+import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
-
-import org.hibernate.collection.PersistentList;
-import org.hibernate.collection.PersistentMap;
-import org.hibernate.collection.PersistentSet;
-import org.hibernate.collection.PersistentSortedMap;
-import org.hibernate.collection.PersistentSortedSet;
 
 import com.thoughtworks.xstream.mapper.Mapper;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
- * Replaces Hibernate 3 specific collections with java.util implementations. This mapper takes care
+ * Replaces Hibernate specific collections with java.util implementations. This mapper takes care
  * only of the writing to the XML (deflating) not the other way around (inflating) because there is
  * no need.
  * 
  * Borrowed from Costin Leau - http://jira.codehaus.org/browse/XSTR-226
  */
 public class HibernateCollectionMapper extends MapperWrapper {
-	
-	private final static String[] hbClassNames = { PersistentList.class.getName(), PersistentSet.class.getName(),
-	        PersistentMap.class.getName(), PersistentSortedSet.class.getName(), PersistentSortedMap.class.getName() };
-	
-	private final static String[] jdkClassNames = { ArrayList.class.getName(), HashSet.class.getName(),
-	        HashMap.class.getName(), TreeSet.class.getName(), TreeMap.class.getName() };
-	
-	private final static Class[] hbClasses = { PersistentList.class, PersistentSet.class, PersistentMap.class,
-	        PersistentSortedSet.class, PersistentSortedMap.class };
-	
-	private final static Class[] jdkClasses = { ArrayList.class, HashSet.class, HashMap.class, TreeSet.class, TreeMap.class };
 	
 	public HibernateCollectionMapper(Mapper wrapped) {
 		super(wrapped);
@@ -55,31 +43,25 @@ public class HibernateCollectionMapper extends MapperWrapper {
 	}
 	
 	/**
-	 * Simple replacements between the HB 3 collections and their underlying collections from
-	 * java.util.
-	 * 
-	 * @param name
-	 * @return the equivalent JDK class name
-	 */
-	private String replaceClasses(String name) {
-		for (int i = 0; i < hbClassNames.length; i++) {
-			if (name.equals(hbClassNames[i]))
-				return jdkClassNames[i];
-		}
-		return name;
-	}
-	
-	/**
-	 * Simple replacements between the HB 3 collections and their underlying collections from
+	 * Simple replacements between the Hibernate collections and their underlying collections from
 	 * java.util.
 	 * 
 	 * @param clazz
 	 * @return the equivalent JDK class
 	 */
-	private Class replaceClasses(Class clazz) {
-		for (int i = 0; i < hbClasses.length; i++) {
-			if (clazz.equals(hbClasses[i]))
-				return jdkClasses[i];
+	private Class<?> replaceClasses(Class<?> clazz) {
+		if (clazz.getName().startsWith("org.hibernate")) {
+			if (List.class.isAssignableFrom(clazz)) {
+				return ArrayList.class;
+			} else if (SortedSet.class.isAssignableFrom(clazz)) {
+				return TreeSet.class;
+			} else if (SortedMap.class.isAssignableFrom(clazz)) {
+				return TreeMap.class;
+			} else if (Set.class.isAssignableFrom(clazz)) {
+				return HashSet.class;
+			} else if (Map.class.isAssignableFrom(clazz)) {
+				return HashMap.class;
+			}
 		}
 		return clazz;
 	}
