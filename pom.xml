@@ -10,11 +10,11 @@
 
 	<url>http://openmrs.org</url>
 
-	<scm>
-		<connection>scm:git:https://github.com/openmrs/openmrs-module-serialization.xstream/</connection>
-		<developerConnection>scm:git:https://github.com/openmrs/openmrs-module-serialization.xstream/</developerConnection>
-		<url>https://github.com/openmrs/openmrs-module-serialization.xstream/</url>
-	</scm>
+    <scm>
+        <connection>scm:git:git@github.com:openmrs/openmrs-module-serialization.xstream.git</connection>
+        <developerConnection>scm:git:git@github.com:openmrs/openmrs-module-serialization.xstream.git</developerConnection>
+        <url>https://github.com/openmrs/openmrs-module-serialization.xstream</url>
+    </scm>
 	
 	<distributionManagement>
 		<repository>
@@ -119,6 +119,13 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+                <plugin>
+                    <artifactId>maven-release-plugin</artifactId>
+                    <version>2.5</version>
+                    <configuration>
+                        <tagNameFormat>@{project.version}</tagNameFormat>
+                    </configuration>
                 </plugin>
 			</plugins>
 		</pluginManagement>
