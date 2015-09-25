@@ -3,7 +3,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>serialization.xstream</artifactId>
-	<version>0.2.8-SNAPSHOT</version>
+	<version>0.2.8</version>
 	<packaging>pom</packaging>
 	<name>Serialization Xstream</name>
 	<description>Parent project for Serialization Xstream</description>
@@ -14,7 +14,8 @@
         <connection>scm:git:git@github.com:openmrs/openmrs-module-serialization.xstream.git</connection>
         <developerConnection>scm:git:git@github.com:openmrs/openmrs-module-serialization.xstream.git</developerConnection>
         <url>https://github.com/openmrs/openmrs-module-serialization.xstream</url>
-    </scm>
+      <tag>0.2.8</tag>
+  </scm>
 	
 	<distributionManagement>
 		<repository>
