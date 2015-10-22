@@ -13,8 +13,10 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  * Borrowed from Costin Leau - http://jira.codehaus.org/browse/XSTR-238
  */
 public class JavassistMapper extends MapperWrapper {
-	
-	public static final String marker = "_$$_javassist_";
+
+    public static String OLD_NAMING_MARKER = "_$$_javassist_";
+
+    public static String NEW_NAMING_MARKER = "_$$_jvst";
 	
 	public JavassistMapper(Mapper wrapped) {
 		super(wrapped);
@@ -47,16 +49,20 @@ public class JavassistMapper extends MapperWrapper {
 	}
 	
 	/**
-	 * Convenience method to remove "_$$_javassist_" string.
+	 * Convenience method to remove "_$$_javassist_" or "_$$_jvst_" string.
 	 * 
-	 * @param name the class name that has "_$$_javassist_" in it.
-	 * @return the class name with the marker (_$$_javassist_) in it
+	 * @param name the class name that has "_$$_javassist_" or "_$$_jvst_" in it.
+	 * @return the class name with the marker removed
 	 */
 	private String removeSignature(String name) {
-		int count = name.indexOf(marker);
+		int count = name.indexOf(OLD_NAMING_MARKER);
 		if (count >= 0) {
 			return name.substring(0, count);
 		}
+        count = name.indexOf(NEW_NAMING_MARKER);
+        if (count >= 0) {
+            return name.substring(0, count);
+        }
 		return name;
 	}
 }

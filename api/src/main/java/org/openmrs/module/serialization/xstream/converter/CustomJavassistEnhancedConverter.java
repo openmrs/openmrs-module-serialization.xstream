@@ -24,6 +24,7 @@ import com.thoughtworks.xstream.converters.reflection.SerializationMethodInvoker
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
+import org.openmrs.module.serialization.xstream.mapper.JavassistMapper;
 
 /**
  * Converter which deals with Javassist proxy's serialization/deserialization. While serializing, it
@@ -36,8 +37,6 @@ import com.thoughtworks.xstream.mapper.Mapper;
 public class CustomJavassistEnhancedConverter implements Converter {
 	
 	private static Log log = LogFactory.getLog(CustomJavassistEnhancedConverter.class);
-	
-	private static String DEFAULT_NAMING_MARKER = "_$$_javassist_";
 	
 	private Converter defaultConverter;
 	
@@ -102,7 +101,8 @@ public class CustomJavassistEnhancedConverter implements Converter {
 	 * @see com.thoughtworks.xstream.converters.ConverterMatcher#canConvert(java.lang.Class)
 	 */
 	public boolean canConvert(Class type) {
-		return type.getName().indexOf(DEFAULT_NAMING_MARKER) > 0;
+		return type.getName().indexOf(JavassistMapper.OLD_NAMING_MARKER) > 0
+        || type.getName().indexOf(JavassistMapper.NEW_NAMING_MARKER) > 0;
 	}
 	
 }

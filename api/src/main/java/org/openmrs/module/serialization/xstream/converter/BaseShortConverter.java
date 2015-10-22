@@ -89,7 +89,8 @@ public abstract class BaseShortConverter implements Converter {
 	 * @return whether type is a type of Javassist proxy
 	 */
 	protected boolean isJavassistProxy(Class<?> type) {
-		return (type.getName().indexOf(JavassistMapper.marker) > 0);
+        return type.getName().indexOf(JavassistMapper.OLD_NAMING_MARKER) > 0
+                || type.getName().indexOf(JavassistMapper.NEW_NAMING_MARKER) > 0;
 	}
 	
 	/**
