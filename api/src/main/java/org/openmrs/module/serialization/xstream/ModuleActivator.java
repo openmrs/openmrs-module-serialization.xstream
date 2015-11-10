@@ -2,24 +2,25 @@ package org.openmrs.module.serialization.xstream;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
-import org.openmrs.module.Activator;
+import org.openmrs.module.BaseModuleActivator;
 
-public class ModuleActivator implements Activator {
+public class ModuleActivator extends BaseModuleActivator {
 
 	private Log log = LogFactory.getLog(this.getClass());
 	
 	/**
-	 * @see org.openmrs.module.Activator#startup()
+	 * @see org.openmrs.module.ModuleActivator#started()
 	 */
-	public void shutdown() {
-		log.info("Starting Serialization XStream Module ...");
+	@Override
+	public void started() {
+		log.info("Started Serialization XStream Module ...");
 	}
 
 	/**
-	 *  @see org.openmrs.module.Activator#shutdown()
+	 * @see org.openmrs.module.ModuleActivator#stopped()
 	 */
-	public void startup() {
-		log.info("Shutting down Serialization XStream Module ...");
+	@Override
+	public void stopped() {
+		log.info("Stopped Serialization XStream Module ...");
 	}
-
 }
