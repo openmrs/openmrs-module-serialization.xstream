@@ -52,9 +52,9 @@ public class ConceptMapSerializationTest extends BaseModuleContextSensitiveTest 
 		XMLAssert.assertXpathEvaluatesTo("6c36f786-957d-4a14-a6ed-e66ced057066", "/conceptMap/@uuid", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("1", "/conceptMap/conceptMapId", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("3", "/conceptMap/concept/conceptId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1", "/conceptMap/source/conceptSourceId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("test", "/conceptMap/sourceCode", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("test", "/conceptMap/comment", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("1", "/conceptMap/conceptReferenceTerm/conceptSource/conceptSourceId", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("test", "/conceptMap/conceptReferenceTerm/code", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo("test", "/conceptMap/conceptReferenceTerm/description", xmlOutput);
 		XMLAssert.assertXpathExists("/conceptMap/creator", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo(sdf.format(cm.getDateCreated()), "/conceptMap/dateCreated", xmlOutput);
 	}
@@ -145,17 +145,18 @@ public class ConceptMapSerializationTest extends BaseModuleContextSensitiveTest 
 		xmlBuilder.append("    <conceptMappings class=\"set\" id=\"26\">\n");
 		xmlBuilder.append("      <conceptMap reference=\"1\"/>\n");
 		xmlBuilder.append("    </conceptMappings>\n");
-		xmlBuilder.append("  </concept>\n");
-		xmlBuilder.append("  <source id=\"27\" uuid=\"14ea70c7-fe49-46ae-9957-8a678c82d1d8\">\n");
-		xmlBuilder.append("    <conceptSourceId>1</conceptSourceId>\n");
-		xmlBuilder.append("    <name>SNOMED</name>\n");
+		xmlBuilder.append("  </concept>\n");	
+		xmlBuilder.append("  <conceptReferenceTerm id=\"59\" uuid=\"14ea70c7-fe49-46ae-9957-8a678c82d1d8\">\n");
+		xmlBuilder.append("    <conceptReferenceTermId>1</conceptReferenceTermId>\n");
+		xmlBuilder.append("    <code>SNOMED</code>\n");
 		xmlBuilder.append("    <description>Systematized Nomenclature of Medicine -- Clinical Terms</description>\n");
-		xmlBuilder.append("    <hl7Code>test</hl7Code>\n");
-		xmlBuilder.append("    <creator reference=\"4\"/>\n");
-		xmlBuilder.append("    <dateCreated class=\"sql-timestamp\" id=\"28\">2006-01-20 00:00:00 CST</dateCreated>\n");
-		xmlBuilder.append("  </source>\n");
-		xmlBuilder.append("  <sourceCode>test</sourceCode>\n");
-		xmlBuilder.append("  <comment>test</comment>\n");
+		xmlBuilder.append("    <conceptSource>\n");	
+		xmlBuilder.append("      <conceptSourceId>1</conceptSourceId>\n");
+		xmlBuilder.append("      <hl7Code>test</hl7Code>\n");
+		xmlBuilder.append("    </conceptSource>\n");
+		xmlBuilder.append("    <creator reference=\"3\"/>\n");
+		xmlBuilder.append("    <dateCreated class=\"sql-timestamp\" id=\"60\">2006-01-20 00:00:00 CST</dateCreated>\n");
+		xmlBuilder.append("  </conceptReferenceTerm>\n");
 		xmlBuilder.append("  <creator reference=\"4\"/>\n");
 		xmlBuilder.append("  <dateCreated class=\"sql-timestamp\" id=\"29\">2006-02-20 00:00:00 CST</dateCreated>\n");
 		xmlBuilder.append("</conceptMap>\n");
@@ -167,9 +168,9 @@ public class ConceptMapSerializationTest extends BaseModuleContextSensitiveTest 
 		assertEquals("6c36f786-957d-4a14-a6ed-e66ced057066", cm.getUuid());
 		assertEquals(1, cm.getConceptMapId().intValue());
 		assertEquals(3, cm.getConcept().getConceptId().intValue());
-		assertEquals(1, cm.getSource().getConceptSourceId().intValue());
-		assertEquals("test", cm.getSourceCode());
-		assertEquals("test", cm.getComment());
+		assertEquals(1, cm.getConceptReferenceTerm().getConceptSource().getConceptSourceId().intValue());
+		assertEquals("SNOMED", cm.getConceptReferenceTerm().getCode());
+		assertEquals("Systematized Nomenclature of Medicine -- Clinical Terms", cm.getConceptReferenceTerm().getDescription());
 		assertEquals(1, cm.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2006-02-20 00:00:00 CST"), cm.getDateCreated());
 	}
