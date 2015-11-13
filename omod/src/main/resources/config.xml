@@ -10,7 +10,7 @@
 	<author>luzhuangwei</author>
 	<description>Core (de)serialize API and services supported by xstream library</description>
 	<activator>@MODULE_PACKAGE@.ModuleActivator</activator>
-	<require_version>1.6.0</require_version>
+	<require_version>1.9.9</require_version>
 
 	<!-- Extensions -->
 	

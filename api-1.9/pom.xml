@@ -5,14 +5,14 @@
         <artifactId>serialization.xstream</artifactId>
         <version>0.2.10-SNAPSHOT</version>
     </parent>
-    <groupId>org.openmrs.module</groupId>
+
     <artifactId>serialization.xstream-api-1.9</artifactId>
     <packaging>jar</packaging>
     <name>Serialization Xstream 1.9 API</name>
     <description>1.9 Support API project for Serialization Xstream</description>
 
     <properties>
-        <openmrsVersion.1.9>1.9.0</openmrsVersion.1.9>
+        <openmrsVersion.1.9>1.9.9</openmrsVersion.1.9>
     </properties>
 
     <dependencies>

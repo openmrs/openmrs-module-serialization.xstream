@@ -32,6 +32,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
 import org.openmrs.api.SerializationService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.converter.CustomCGLIBEnhancedConverter;
 import org.openmrs.module.serialization.xstream.converter.CustomJavassistEnhancedConverter;
 import org.openmrs.module.serialization.xstream.converter.CustomReflectionConverter;
@@ -134,7 +135,11 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		 * Converters so that we can better deal with the serialization/deserializtion 
 		 * of cglib, sql-timestamp, hibernate collections, etc
 		 */
-		xstream.registerConverter(new HibernateCollectionConverter(xstream.getConverterLookup()));
+		
+		HibernateCollectionConverter collectionConverter = Context.getRegisteredComponent("collectionConverter", HibernateCollectionConverter.class);
+		collectionConverter.setConverterLookup(xstream.getConverterLookup());
+		
+		xstream.registerConverter(collectionConverter);
 		xstream.registerConverter(new CustomCGLIBEnhancedConverter(xstream.getMapper(), xstream.getConverterLookup()));
 		xstream.registerConverter(new CustomJavassistEnhancedConverter(xstream.getMapper(), xstream.getConverterLookup()));
 		xstream.registerConverter(new CustomSQLTimestampConverter());
