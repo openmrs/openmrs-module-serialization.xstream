@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.text.SimpleDateFormat;
@@ -27,15 +26,17 @@ import junit.framework.Assert;
 
 import org.custommonkey.xmlunit.XMLAssert;
 import org.hibernate.proxy.HibernateProxy;
+import org.junit.Rule;
 import org.junit.Test;
-import org.openmrs.Cohort;
+import org.junit.rules.ExpectedException;
+import org.openmrs.ConceptName;
 import org.openmrs.ConceptSource;
-import org.openmrs.Encounter;
+import org.openmrs.OpenmrsObject;
 import org.openmrs.PersonName;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
+import org.openmrs.serialization.SerializationException;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 /**
@@ -43,6 +44,9 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
  * reference for cglib and omit "log", etc
  */
 public class XStreamSerializerTest extends BaseModuleContextSensitiveTest {
+
+    @Rule
+    public ExpectedException expectedException = ExpectedException.none();
 	
 	/**
 	 * When serialize a proxy of cglib type, we should treat it as a common entity obj without
@@ -160,5 +164,33 @@ public class XStreamSerializerTest extends BaseModuleContextSensitiveTest {
 		Assert.assertEquals("key2", entry2.getKey());
 		Assert.assertNull(entry2.getValue());
 	}
+
+    /**
+     * @see XStreamSerializer#deserialize(String, Class)
+     * @verifies not deserialize proxies
+     */
+    @Test
+    public void deserialize_shouldNotDeserializeProxies() throws Exception {
+        String serialized = "<dynamic-proxy>" + "<interface>org.openmrs.OpenmrsObject</interface>"
+                + "<handler class=\"java.beans.EventHandler\">" + "<target class=\"java.lang.ProcessBuilder\">"
+                + "<command>" + "<string>someApp</string>" + "</command></target>" + "<action>start</action>" + "</handler>"
+                + "</dynamic-proxy>";
+
+        expectedException.expect(SerializationException.class);
+        Context.getSerializationService().deserialize(serialized, OpenmrsObject.class, XStreamSerializer.class);
+    }
+
+    /**
+     * @see XStreamSerializer#deserialize(String,Class)
+     * @verifies ignore entities
+     */
+    @Test
+    public void deserialize_shouldIgnoreEntities() throws Exception {
+        String xml = "<!DOCTYPE ZSL [<!ENTITY xxe1 \"some attribute value\" >]>" + "<org.openmrs.ConceptName>"
+                + "<name>&xxe1;</name>" + "</org.openmrs.ConceptName>";
+
+        expectedException.expect(SerializationException.class);
+        Context.getSerializationService().deserialize(xml, ConceptName.class, XStreamSerializer.class);
+    }
 
 }

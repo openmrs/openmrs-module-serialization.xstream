@@ -38,6 +38,10 @@
 			<artifactId>openmrs-test</artifactId>
 			<type>pom</type>
 		</dependency>
+        <dependency>
+            <groupId>xpp3</groupId>
+            <artifactId>xpp3_min</artifactId>
+        </dependency>
 	</dependencies>
 
 	<!-- different profiles for building/testing against different version of
