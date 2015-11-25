@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.openmrs.module</groupId>
         <artifactId>serialization.xstream</artifactId>
-        <version>0.2.9</version>
+        <version>0.2.9.1-SNAPSHOT</version>
     </parent>
     <groupId>org.openmrs.module</groupId>
     <artifactId>serialization.xstream-api-1.9</artifactId>
@@ -45,6 +45,10 @@
             <version>${project.parent.version}</version>
             <classifier>tests</classifier>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>xpp3</groupId>
+            <artifactId>xpp3_min</artifactId>
         </dependency>
     </dependencies>
 
