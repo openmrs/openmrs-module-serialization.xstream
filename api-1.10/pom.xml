@@ -3,7 +3,7 @@
     <parent>
         <groupId>org.openmrs.module</groupId>
         <artifactId>serialization.xstream</artifactId>
-        <version>0.2.10-SNAPSHOT</version>
+        <version>0.2.10</version>
     </parent>
     <groupId>org.openmrs.module</groupId>
     <artifactId>serialization.xstream-api-1.10</artifactId>
