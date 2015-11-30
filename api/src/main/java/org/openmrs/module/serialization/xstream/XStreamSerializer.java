@@ -295,6 +295,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	
 	/**
 	 * @see OpenmrsSerializer#serialize(java.lang.Object)
+	 * @should not serialize proxies
 	 */
 	public String serialize(Object o) throws SerializationException {
 		return xstream.toXML(o);
@@ -332,6 +333,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		}
 		
 		public void marshal(Object value, HierarchicalStreamWriter writer, MarshallingContext context) {
+			throw new XStreamException("Can't serialize proxies");
 		}
 		
 		public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
