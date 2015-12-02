@@ -49,8 +49,13 @@ import org.openmrs.serialization.SerializationException;
 import org.openmrs.util.OpenmrsClassLoader;
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.XStreamException;
+import com.thoughtworks.xstream.converters.MarshallingContext;
+import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.converters.basic.DateConverter;
-import com.thoughtworks.xstream.io.xml.DomDriver;
+import com.thoughtworks.xstream.converters.extended.DynamicProxyConverter;
+import com.thoughtworks.xstream.io.HierarchicalStreamReader;
+import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 
 /**
@@ -59,7 +64,10 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  * It is recommended that you use the {@link SerializationService} to get the current serializer.
  * 
  * <pre>
+ * 
+ * 
  * Person person = Context.getPersonService().getPerson(123);
+ * 
  * String xml = Context.getSerializationService().serialize(person, XStreamSerializer.class);
  * </pre>
  */
@@ -78,7 +86,8 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	
 	/**
 	 * Constructor that takes a custom XStream object
-	 * @param xstream
+	 * 
+	 * @param customXstream
 	 * @throws SerializationException
 	 */
 	public XStreamSerializer(XStream customXstream) throws SerializationException {
@@ -89,7 +98,8 @@ public class XStreamSerializer implements OpenmrsSerializer {
 			 * (1) we can use the reasonable name for cglib and Hibernate's Collection
 			 * (2) ignore unknow element while deserializing
 			 */
-			xstream = new XStream(new DomDriver()) {
+			xstream = new XStream() {
+				
 				protected MapperWrapper wrapMapper(MapperWrapper next) {
 					MapperWrapper mapper = new CGLibMapper(next);
 					mapper = new JavassistMapper(mapper);
@@ -115,18 +125,19 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		xstream.useAttributeFor(BaseOpenmrsMetadata.class, "retired");
 		
 		// Other classes has voided or retired property
-		xstream.useAttributeFor(Concept.class, "retired");		
+		xstream.useAttributeFor(Concept.class, "retired");
 		xstream.useAttributeFor(ConceptName.class, "voided");
 		xstream.useAttributeFor(ConceptNameTag.class, "voided");
 		//xstream.useAttributeFor(ConceptSource.class, "retired");
-
+		
 		/*
 		 * alias className for all classses current need to serialize
 		 */
 		this.commonConfig();
 		
 		// CustomReflectionConverter to avoid the exception thrown when xstream deserialize a unknown elment
-		xstream.registerConverter(new CustomReflectionConverter(xstream.getMapper(), xstream.getReflectionProvider()), xstream.PRIORITY_LOW);
+		xstream.registerConverter(new CustomReflectionConverter(xstream.getMapper(), xstream.getReflectionProvider()),
+		    xstream.PRIORITY_LOW);
 		
 		// register this converter, so that we can let xstream serialize User.user only as its uuid
 		xstream.registerConverter(new UserConverter(xstream));
@@ -136,7 +147,8 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		 * of cglib, sql-timestamp, hibernate collections, etc
 		 */
 		
-		HibernateCollectionConverter collectionConverter = Context.getRegisteredComponent("collectionConverter", HibernateCollectionConverter.class);
+		HibernateCollectionConverter collectionConverter = Context.getRegisteredComponent("collectionConverter",
+		    HibernateCollectionConverter.class);
 		collectionConverter.setConverterLookup(xstream.getConverterLookup());
 		
 		xstream.registerConverter(collectionConverter);
@@ -146,6 +158,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		xstream.registerConverter(new DateConverter("yyyy-MM-dd HH:mm:ss z", new String[] { "yyyy-MM-dd HH:mm:ss.S z",
 		        "yyyy-MM-dd HH:mm:ssz", "yyyy-MM-dd HH:mm:ss.S a", "yyyy-MM-dd HH:mm:ssa" }));
 		
+		xstream.registerConverter(new CustomDynamicProxyConverter(), XStream.PRIORITY_VERY_HIGH);
 		// set our own defined marshalling strategy so that we can build references for cglib
 		xstream.setMarshallingStrategy(new CustomReferenceByIdMarshallingStrategy());
 	}
@@ -294,6 +307,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	
 	/**
 	 * @see OpenmrsSerializer#serialize(java.lang.Object)
+	 * @should not serialize proxies
 	 */
 	public String serialize(Object o) throws SerializationException {
 		return xstream.toXML(o);
@@ -301,9 +315,42 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	
 	/**
 	 * @see OpenmrsSerializer#deserialize(String, Class)
+	 * @should not deserialize proxies
+	 * @should ignore entities
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Object> T deserialize(String serializedObject, Class<? extends T> clazz) throws SerializationException {
 		return (T) xstream.fromXML(serializedObject);
+	}
+	
+	/**
+	 * An instance of this converter needs to be registered with a higher priority than the rest so
+	 * that it's called early in the converter chain. This way, we can make sure we never get to
+	 * xstream's DynamicProxyConverter that can deserialize proxies.
+	 *
+	 * @see <a href="http://tinyurl.com/ord2rry">this blog</a>
+	 */
+	private class CustomDynamicProxyConverter extends DynamicProxyConverter {
+		
+		CustomDynamicProxyConverter() {
+			super(null);
+		}
+		
+		@Override
+		public boolean canConvert(Class type) {
+			if (type == null) {
+				return false;
+			}
+			return super.canConvert(type);
+		}
+		
+		public void marshal(Object value, HierarchicalStreamWriter writer, MarshallingContext context) {
+			throw new XStreamException("Can't serialize proxies");
+		}
+		
+		public Object unmarshal(HierarchicalStreamReader reader, UnmarshallingContext context) {
+			throw new XStreamException("Can't deserialize proxies");
+		}
+		
 	}
 }
