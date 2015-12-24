@@ -57,6 +57,10 @@ import com.thoughtworks.xstream.converters.extended.DynamicProxyConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import javax.annotation.PostConstruct;
 
 /**
  * Provides serialization using XStream. <br/>
@@ -71,9 +75,13 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
  * String xml = Context.getSerializationService().serialize(person, XStreamSerializer.class);
  * </pre>
  */
+@Component("xstreamSerializer")
 public class XStreamSerializer implements OpenmrsSerializer {
 	
 	public XStream xstream = null;
+
+    @Autowired
+    private HibernateCollectionConverter collectionConverter;
 	
 	/**
 	 * Default Constructor
@@ -141,27 +149,27 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		
 		// register this converter, so that we can let xstream serialize User.user only as its uuid
 		xstream.registerConverter(new UserConverter(xstream));
-		
-		/*
-		 * Converters so that we can better deal with the serialization/deserializtion 
-		 * of cglib, sql-timestamp, hibernate collections, etc
-		 */
-		
-		HibernateCollectionConverter collectionConverter = Context.getRegisteredComponent("collectionConverter",
-		    HibernateCollectionConverter.class);
-		collectionConverter.setConverterLookup(xstream.getConverterLookup());
-		
-		xstream.registerConverter(collectionConverter);
 		xstream.registerConverter(new CustomCGLIBEnhancedConverter(xstream.getMapper(), xstream.getConverterLookup()));
 		xstream.registerConverter(new CustomJavassistEnhancedConverter(xstream.getMapper(), xstream.getConverterLookup()));
 		xstream.registerConverter(new CustomSQLTimestampConverter());
 		xstream.registerConverter(new DateConverter("yyyy-MM-dd HH:mm:ss z", new String[] { "yyyy-MM-dd HH:mm:ss.S z",
 		        "yyyy-MM-dd HH:mm:ssz", "yyyy-MM-dd HH:mm:ss.S a", "yyyy-MM-dd HH:mm:ssa" }));
-		
+
 		xstream.registerConverter(new CustomDynamicProxyConverter(), XStream.PRIORITY_VERY_HIGH);
 		// set our own defined marshalling strategy so that we can build references for cglib
 		xstream.setMarshallingStrategy(new CustomReferenceByIdMarshallingStrategy());
 	}
+
+    @PostConstruct
+    private void init(){
+		/*
+		 * Converters so that we can better deal with the serialization/deserializtion
+		 * of cglib, sql-timestamp, hibernate collections, etc
+		 */
+        collectionConverter.setConverterLookup(xstream.getConverterLookup());
+        xstream.registerConverter(collectionConverter);
+
+    }
 	
 	/**
 	 * Get a list of package in which we will serialize all classes in it. Here we will serialize

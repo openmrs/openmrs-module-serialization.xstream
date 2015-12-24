@@ -14,7 +14,5 @@
 			</list>
 		</property>
 	</bean>
-	<bean name="collectionConverter" class="org.openmrs.module.serialization.xstream.converter.HibernateCollectionConverter"/>
-	<bean id="xstreamSerializer" class="org.openmrs.module.serialization.xstream.XStreamSerializer"/>
 	<bean id="xstreamShortSerializer" class="org.openmrs.module.serialization.xstream.XStreamShortSerializer"/>
 </beans>

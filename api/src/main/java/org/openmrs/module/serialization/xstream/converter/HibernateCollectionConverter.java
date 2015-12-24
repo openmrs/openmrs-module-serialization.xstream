@@ -10,6 +10,7 @@ import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
+import org.springframework.stereotype.Component;
 
 /**
  * XStream converter that strips HB collection specific information and retrieves the underlying
@@ -18,6 +19,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
  * 
  * Borrowed from Costin Leau - http://jira.codehaus.org/browse/XSTR-226
  */
+@Component("collectionConverter")
 public class HibernateCollectionConverter implements Converter {
 	
 	private static Log log = LogFactory.getLog(HibernateCollectionConverter.class);
