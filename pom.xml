@@ -3,7 +3,7 @@
 
 	<groupId>org.openmrs.module</groupId>
 	<artifactId>serialization.xstream</artifactId>
-	<version>0.2.10-SNAPSHOT</version>
+	<version>0.2.11-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>Serialization Xstream</name>
 	<description>Parent project for Serialization Xstream</description>
