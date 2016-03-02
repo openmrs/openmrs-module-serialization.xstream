@@ -237,7 +237,7 @@
 			<id>openmrs-2.0</id>
 			
 			<properties>
-				<openMRSVersion>2.0.0-SNAPSHOT</openMRSVersion>
+				<openMRSVersion>2.0.0-alpha</openMRSVersion>
 				<openMRSMinorVersion>2.0</openMRSMinorVersion>
 			</properties>
 			

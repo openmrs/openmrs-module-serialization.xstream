@@ -12,7 +12,7 @@
     <description>2.0 Support API project for Serialization Xstream</description>
 
     <properties>
-        <openmrsVersion.2.0>2.0.0-SNAPSHOT</openmrsVersion.2.0>
+        <openmrsVersion.2.0>2.0.0-alpha</openmrsVersion.2.0>
     </properties>
 
     <dependencies>
