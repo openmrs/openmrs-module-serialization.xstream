@@ -36,8 +36,8 @@ import com.thoughtworks.xstream.converters.ConverterLookup;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.0")
-public class CollectionCompatibility2_0 implements CollectionCompatibility {
+@OpenmrsProfile(openmrsPlatformVersion = "2.*")
+public class CollectionCompatibility2_x implements CollectionCompatibility {
 
 	@Override
 	public boolean canConvert(Class type) {
