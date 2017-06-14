@@ -31,7 +31,9 @@ import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
+import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.SerializationService;
+import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.converter.CustomCGLIBEnhancedConverter;
 import org.openmrs.module.serialization.xstream.converter.CustomJavassistEnhancedConverter;
 import org.openmrs.module.serialization.xstream.converter.CustomReflectionConverter;
@@ -327,7 +329,10 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Object> T deserialize(String serializedObject, Class<? extends T> clazz) throws SerializationException {
-		return (T) xstream.fromXML(serializedObject);
+        if (Context.isAuthenticated()) {
+            throw new APIAuthenticationException("Authentication is required");
+        }
+        return (T) xstream.fromXML(serializedObject);
 	}
 	
 	/**
