@@ -329,7 +329,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	 */
 	@SuppressWarnings("unchecked")
 	public <T extends Object> T deserialize(String serializedObject, Class<? extends T> clazz) throws SerializationException {
-        if (Context.isAuthenticated()) {
+        if (!Context.isAuthenticated()) {
             throw new APIAuthenticationException("Authentication is required");
         }
         return (T) xstream.fromXML(serializedObject);
