@@ -58,6 +58,13 @@ public class CGLibMapper extends MapperWrapper {
 			count -= 2;
 			return name.substring(0, count);
 		}
+		else {
+			count = name.indexOf("$HibernateProxy$");
+			if (count >= 0) {
+				return name.substring(0, count);
+			}
+		}
+		
 		return name;
 	}
 }
