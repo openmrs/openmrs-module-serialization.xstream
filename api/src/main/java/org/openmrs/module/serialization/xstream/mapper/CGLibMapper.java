@@ -15,7 +15,7 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 public class CGLibMapper extends MapperWrapper {
 	
 	public static final String marker = new String("EnhancerByCGLIB");
-	public static final String hibernateProxy = new String("$HibernateProxy$");
+	private static final String HIBERNATE_PROXY = "$HibernateProxy$";
 	
 	public CGLibMapper(Mapper wrapped) {
 		super(wrapped);
@@ -60,7 +60,7 @@ public class CGLibMapper extends MapperWrapper {
 			return name.substring(0, count);
 		}
 		else {
-			count = name.indexOf(hibernateProxy);
+			count = name.indexOf(HIBERNATE_PROXY);
 			if (count >= 0) {
 				return name.substring(0, count);
 			}
