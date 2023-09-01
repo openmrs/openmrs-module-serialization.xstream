@@ -73,6 +73,11 @@ public class XStreamShortSerializer extends XStreamSerializer {
 	
 	public XStreamShortSerializer(XStream customXstream) throws SerializationException {
 		super(customXstream);
+	}
+
+	@Override
+	protected void initXStream(XStream xstream) {
+		super.initXStream(xstream);
 
 		//all base config information for serialization inherited from XStreamSerializer
 		Mapper mapper = xstream.getMapper();
