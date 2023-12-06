@@ -25,7 +25,6 @@ import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.BaseOpenmrsObject;
@@ -59,10 +58,10 @@ import com.thoughtworks.xstream.converters.extended.DynamicProxyConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 
 /**
  * Provides serialization using XStream. <br/>
@@ -78,7 +77,7 @@ import javax.annotation.PostConstruct;
  * </pre>
  */
 @Component("xstreamSerializer")
-public class XStreamSerializer implements OpenmrsSerializer {
+public class XStreamSerializer implements OpenmrsSerializer, InitializingBean {
 	
 	public XStream xstream = null;
 
@@ -160,20 +159,18 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		xstream.registerConverter(new CustomDynamicProxyConverter(), XStream.PRIORITY_VERY_HIGH);
 		// set our own defined marshalling strategy so that we can build references for cglib
 		xstream.setMarshallingStrategy(new CustomReferenceByIdMarshallingStrategy());
-		xstream.addPermission(AnyTypePermission.ANY);
 	}
 
-    @PostConstruct
-    private void init(){
+	@Override
+	public void afterPropertiesSet() throws Exception {
 		/*
-		 * Converters so that we can better deal with the serialization/deserializtion
-		 * of cglib, sql-timestamp, hibernate collections, etc
-		 */
-        collectionConverter.setConverterLookup(xstream.getConverterLookup());
-        xstream.registerConverter(collectionConverter);
+//		 * Converters so that we can better deal with the serialization/deserializtion
+//		 * of cglib, sql-timestamp, hibernate collections, etc
+//		 */
+		collectionConverter.setConverterLookup(xstream.getConverterLookup());
+		xstream.registerConverter(collectionConverter);
+	}
 
-    }
-	
 	/**
 	 * Get a list of package in which we will serialize all classes in it. Here we will serialize
 	 * classes as the unit of package
@@ -336,7 +333,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
         }
         return (T) xstream.fromXML(serializedObject);
 	}
-	
+
 	/**
 	 * An instance of this converter needs to be registered with a higher priority than the rest so
 	 * that it's called early in the converter chain. This way, we can make sure we never get to
