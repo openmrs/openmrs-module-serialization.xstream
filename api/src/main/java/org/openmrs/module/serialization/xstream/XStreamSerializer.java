@@ -25,6 +25,7 @@ import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import com.thoughtworks.xstream.security.AnyTypePermission;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.BaseOpenmrsObject;
@@ -159,6 +160,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		xstream.registerConverter(new CustomDynamicProxyConverter(), XStream.PRIORITY_VERY_HIGH);
 		// set our own defined marshalling strategy so that we can build references for cglib
 		xstream.setMarshallingStrategy(new CustomReferenceByIdMarshallingStrategy());
+		xstream.addPermission(AnyTypePermission.ANY);
 	}
 
     @PostConstruct
