@@ -15,6 +15,7 @@ package org.openmrs.module.serialization.xstream;
 
 import java.io.File;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.net.JarURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,6 +26,9 @@ import java.util.jar.JarFile;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.apache.commons.lang3.reflect.MethodUtils;
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import org.openmrs.BaseOpenmrsData;
 import org.openmrs.BaseOpenmrsMetadata;
 import org.openmrs.BaseOpenmrsObject;
@@ -32,6 +36,7 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
 import org.openmrs.api.APIAuthenticationException;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.SerializationService;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.converter.CustomCGLIBEnhancedConverter;
@@ -47,6 +52,7 @@ import org.openmrs.module.serialization.xstream.mapper.NullValueMapper;
 import org.openmrs.module.serialization.xstream.strategy.CustomReferenceByIdMarshallingStrategy;
 import org.openmrs.serialization.OpenmrsSerializer;
 import org.openmrs.serialization.SerializationException;
+import org.openmrs.serialization.SimpleXStreamSerializer;
 import org.openmrs.util.OpenmrsClassLoader;
 
 import com.thoughtworks.xstream.XStream;
@@ -60,6 +66,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.servlet.view.xslt.XsltView;
 
 import javax.annotation.PostConstruct;
 
@@ -78,11 +85,18 @@ import javax.annotation.PostConstruct;
  */
 @Component("xstreamSerializer")
 public class XStreamSerializer implements OpenmrsSerializer {
+
+	protected static Log log = LogFactory.getLog(XStreamSerializer.class);
+
+	private volatile XStream xstream = null;
 	
-	public XStream xstream = null;
+	private final XStream customXStream;
 
     @Autowired
     private HibernateCollectionConverter collectionConverter;
+	
+	@Autowired
+	private AdministrationService adminService;
 	
 	/**
 	 * Default Constructor
@@ -96,81 +110,78 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	/**
 	 * Constructor that takes a custom XStream object
 	 * 
-	 * @param customXstream
+	 * @param customXStream
 	 * @throws SerializationException
 	 */
-	public XStreamSerializer(XStream customXstream) throws SerializationException {
-		if (customXstream == null) {
-			/*
-			 * use own-defined mapper to wrap xstream's default mapper, 
-			 * The purpose:
-			 * (1) we can use the reasonable name for cglib and Hibernate's Collection
-			 * (2) ignore unknow element while deserializing
-			 */
-			xstream = new XStream() {
-				
-				protected MapperWrapper wrapMapper(MapperWrapper next) {
-					MapperWrapper mapper = new CGLibMapper(next);
-					mapper = new JavassistMapper(mapper);
-					mapper = new HibernateCollectionMapper(mapper);
-					mapper = new NullValueMapper(mapper);
-					//mapper = new IgnoreUnknownElementMapper(mapper);
-					return mapper;
-				}
-			};
-		} else {
-			this.xstream = customXstream;
-		}
-		
+	public XStreamSerializer(XStream customXStream) throws SerializationException {
+		this.customXStream = customXStream;
+	}
+
+	/**
+	 * Called by getXstream() during lazy-initialization of XStream.
+	 * 
+	 * @param xstream
+	 */
+	protected void initXStream(XStream xstream) {
 		// config the basic attributes
-		
+
 		// BaseOpenmrsObject
 		xstream.useAttributeFor(BaseOpenmrsObject.class, "uuid");
-		
+
 		// BaseOpenmrsData
 		xstream.useAttributeFor(BaseOpenmrsData.class, "voided");
-		
+
 		// BaseOpenmrsMetadata
 		xstream.useAttributeFor(BaseOpenmrsMetadata.class, "retired");
-		
+
 		// Other classes has voided or retired property
 		xstream.useAttributeFor(Concept.class, "retired");
 		xstream.useAttributeFor(ConceptName.class, "voided");
 		xstream.useAttributeFor(ConceptNameTag.class, "voided");
 		//xstream.useAttributeFor(ConceptSource.class, "retired");
-		
+
 		/*
 		 * alias className for all classses current need to serialize
 		 */
-		this.commonConfig();
-		
+		try {
+			aliasClassNames(xstream);
+		} catch (SerializationException e) {
+			throw new RuntimeException(e);
+		}
+
 		// CustomReflectionConverter to avoid the exception thrown when xstream deserialize a unknown elment
 		xstream.registerConverter(new CustomReflectionConverter(xstream.getMapper(), xstream.getReflectionProvider()),
-		    xstream.PRIORITY_LOW);
-		
+			xstream.PRIORITY_LOW);
+
 		// register this converter, so that we can let xstream serialize User.user only as its uuid
 		xstream.registerConverter(new UserConverter(xstream));
 		xstream.registerConverter(new CustomCGLIBEnhancedConverter(xstream.getMapper(), xstream.getConverterLookup()));
 		xstream.registerConverter(new CustomJavassistEnhancedConverter(xstream.getMapper(), xstream.getConverterLookup()));
 		xstream.registerConverter(new CustomSQLTimestampConverter());
 		xstream.registerConverter(new DateConverter("yyyy-MM-dd HH:mm:ss z", new String[] { "yyyy-MM-dd HH:mm:ss.S z",
-		        "yyyy-MM-dd HH:mm:ssz", "yyyy-MM-dd HH:mm:ss.S a", "yyyy-MM-dd HH:mm:ssa" }));
+			"yyyy-MM-dd HH:mm:ssz", "yyyy-MM-dd HH:mm:ss.S a", "yyyy-MM-dd HH:mm:ssa" }));
 
 		xstream.registerConverter(new CustomDynamicProxyConverter(), XStream.PRIORITY_VERY_HIGH);
 		// set our own defined marshalling strategy so that we can build references for cglib
 		xstream.setMarshallingStrategy(new CustomReferenceByIdMarshallingStrategy());
-	}
 
-    @PostConstruct
-    private void init(){
 		/*
 		 * Converters so that we can better deal with the serialization/deserializtion
 		 * of cglib, sql-timestamp, hibernate collections, etc
 		 */
-        collectionConverter.setConverterLookup(xstream.getConverterLookup());
-        xstream.registerConverter(collectionConverter);
+		if (collectionConverter != null) {
+			collectionConverter.setConverterLookup(xstream.getConverterLookup());
+			xstream.registerConverter(collectionConverter);
+		}
 
-    }
+		try {
+			MethodUtils.invokeExactStaticMethod(SimpleXStreamSerializer.class,
+				"setupXStreamSecurity", xstream, adminService);
+		} catch (Exception e) {
+			log.warn("XStream security not configured properly. Please upgrade to openmrs-core 2.7.0, 2.6.2, " +
+				"2.5.13 or above.");
+		}
+	}
 	
 	/**
 	 * Get a list of package in which we will serialize all classes in it. Here we will serialize
@@ -283,7 +294,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	 * 
 	 * @param c - the class need to alias its className
 	 */
-	private void aliasClassName(Class<?> c) {
+	private void aliasClassName(XStream xstream, Class<?> c) {
 		//through Class.getSimpleName(), we get the short name of a class, such as get "User" for class "org.openmrs.User"
 		String simpleName = c.getSimpleName();
 		String firstLetter = simpleName.substring(0, 1);
@@ -295,13 +306,18 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	/**
 	 * Alias className for all classes current need to serialize
 	 * 
+	 * @deprecated use aliasClassNames(XStream)
 	 * @see XStreamSerializer#getAllSerializedClasses()
 	 * @throws SerializationException
 	 */
 	public void commonConfig() throws SerializationException {
+		aliasClassNames(xstream);
+	}
+	
+	public void aliasClassNames(XStream xstream) throws SerializationException {
 		List<Class<?>> allSerializedClasses = this.getAllSerializedClasses();
 		for (Class<?> c : allSerializedClasses) {
-			this.aliasClassName(c);
+			this.aliasClassName(xstream, c);
 		}
 	}
 	
@@ -311,6 +327,30 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	 * @return xstream can be configed by module
 	 */
 	public XStream getXstream() {
+		if (xstream == null) {
+			XStream newXStream = customXStream;
+			if (newXStream == null) {
+				/*
+				 * use own-defined mapper to wrap xstream's default mapper,
+				 * The purpose:
+				 * (1) we can use the reasonable name for cglib and Hibernate's Collection
+				 * (2) ignore unknow element while deserializing
+				 */
+				newXStream = new XStream() {
+
+					protected MapperWrapper wrapMapper(MapperWrapper next) {
+						MapperWrapper mapper = new CGLibMapper(next);
+						mapper = new JavassistMapper(mapper);
+						mapper = new HibernateCollectionMapper(mapper);
+						mapper = new NullValueMapper(mapper);
+						//mapper = new IgnoreUnknownElementMapper(mapper);
+						return mapper;
+					}
+				};
+			}
+			initXStream(newXStream);
+			this.xstream = newXStream;
+		}
 		return xstream;
 	}
 	
@@ -319,7 +359,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 	 * @should not serialize proxies
 	 */
 	public String serialize(Object o) throws SerializationException {
-		return xstream.toXML(o);
+		return getXstream().toXML(o);
 	}
 	
 	/**
@@ -332,7 +372,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
         if (!Context.isAuthenticated()) {
             throw new APIAuthenticationException("Authentication is required");
         }
-        return (T) xstream.fromXML(serializedObject);
+        return (T) getXstream().fromXML(serializedObject);
 	}
 	
 	/**
