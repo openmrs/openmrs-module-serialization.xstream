@@ -38,6 +38,15 @@
         <module>api-2.0</module>
 		<module>omod</module>
 	</modules>
+	
+	<dependencies>
+		<dependency>
+			<groupId>com.thoughtworks.xstream</groupId>
+			<artifactId>xstream</artifactId>
+			<version>1.4.17</version>
+			<scope>provided</scope>
+		</dependency>
+	</dependencies>
 
 	<dependencyManagement>
 		<dependencies>
@@ -99,7 +108,7 @@
 	</dependencyManagement>
 
 	<properties>
-		<openMRSVersion>1.9.9</openMRSVersion>
+		<openMRSVersion>2.0.0</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 
@@ -110,8 +119,8 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
-						<target>1.6</target>
-						<source>1.6</source>
+						<target>1.7</target>
+						<source>1.7</source>
 					</configuration>
 				</plugin>
 				<plugin>
@@ -168,8 +177,8 @@
 			<id>openmrs-1.9</id>
 			
 			<properties>
-				<openMRSVersion>1.9.9</openMRSVersion>
-				<openMRSMinorVersion>1.9</openMRSMinorVersion>
+				<openMRSVersion>2.0.0</openMRSVersion>
+				<openMRSMinorVersion>2.0</openMRSMinorVersion>
 			</properties>
 			
 			<dependencyManagement>
@@ -275,6 +284,27 @@
 			<modules>
 				<module>release-tests</module>
 			</modules>
+		</profile>
+
+		<profile>
+			<id>Java 17</id>
+			<activation>
+				<jdk>17</jdk>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>3.2.2</version>
+						<configuration>
+							<argLine>--add-opens java.base/java.lang=ALL-UNNAMED
+								--add-opens java.base/java.util=ALL-UNNAMED
+							</argLine>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
 		</profile>
 
 	</profiles>
