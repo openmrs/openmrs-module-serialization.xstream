@@ -58,10 +58,10 @@ import com.thoughtworks.xstream.converters.extended.DynamicProxyConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
 
 /**
  * Provides serialization using XStream. <br/>
@@ -77,7 +77,7 @@ import javax.annotation.PostConstruct;
  * </pre>
  */
 @Component("xstreamSerializer")
-public class XStreamSerializer implements OpenmrsSerializer {
+public class XStreamSerializer implements OpenmrsSerializer, InitializingBean {
 	
 	public XStream xstream = null;
 
@@ -160,9 +160,9 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		// set our own defined marshalling strategy so that we can build references for cglib
 		xstream.setMarshallingStrategy(new CustomReferenceByIdMarshallingStrategy());
 	}
-
-    @PostConstruct
-    private void init(){
+	
+	@Override
+	public void afterPropertiesSet(){
 		/*
 		 * Converters so that we can better deal with the serialization/deserializtion
 		 * of cglib, sql-timestamp, hibernate collections, etc
