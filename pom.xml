@@ -33,9 +33,9 @@
 
 	<modules>
 		<module>api</module>
-        <module>api-1.9</module>
-        <module>api-1.10</module>
-        <module>api-2.0</module>
+<!--        <module>api-1.9</module>-->
+<!--        <module>api-1.10</module>-->
+<!--        <module>api-2.0</module>-->
 		<module>omod</module>
 	</modules>
 
@@ -99,7 +99,7 @@
 	</dependencyManagement>
 
 	<properties>
-		<openMRSVersion>1.9.9</openMRSVersion>
+		<openMRSVersion>2.7.3</openMRSVersion>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 	</properties>
 

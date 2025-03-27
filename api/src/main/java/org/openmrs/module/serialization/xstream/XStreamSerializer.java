@@ -32,8 +32,10 @@ import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
 import org.openmrs.api.APIAuthenticationException;
+import org.openmrs.api.AdministrationService;
 import org.openmrs.api.SerializationService;
 import org.openmrs.api.context.Context;
+import org.openmrs.api.impl.AdministrationServiceImpl;
 import org.openmrs.module.serialization.xstream.converter.CustomCGLIBEnhancedConverter;
 import org.openmrs.module.serialization.xstream.converter.CustomJavassistEnhancedConverter;
 import org.openmrs.module.serialization.xstream.converter.CustomReflectionConverter;
@@ -58,6 +60,8 @@ import com.thoughtworks.xstream.converters.extended.DynamicProxyConverter;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.MapperWrapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -83,6 +87,8 @@ public class XStreamSerializer implements OpenmrsSerializer {
 
     @Autowired
     private HibernateCollectionConverter collectionConverter;
+	
+	private static Logger log = LoggerFactory.getLogger(XStreamSerializer.class);
 	
 	/**
 	 * Default Constructor
@@ -161,12 +167,43 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		xstream.setMarshallingStrategy(new CustomReferenceByIdMarshallingStrategy());
 	}
 
-    @PostConstruct
+	public static void setupXStreamSecurity(XStream newXStream, AdministrationService adminService) {
+		if (adminService != null) {
+			List<String> serializerWhitelistTypes = adminService.getSerializerWhitelistTypes();
+			int prefixLength = AdministrationService.GP_SERIALIZER_WHITELIST_HIERARCHY_TYPES_PREFIX.length();
+			for (String type: serializerWhitelistTypes) {
+				if (type.startsWith(AdministrationService.GP_SERIALIZER_WHITELIST_HIERARCHY_TYPES_PREFIX)) {
+					try {
+						Class<?> aClass = Class.forName(type.substring(prefixLength));
+						newXStream.allowTypeHierarchy(aClass);
+					} catch (ClassNotFoundException e) {
+						log.warn("XStream serializer not configured to whitelist hierarchy of " + type, e);
+					}
+				} else if (type.contains("*")) {
+					newXStream.allowTypesByWildcard(new String[] {type});
+				} else {
+					newXStream.allowTypes(new String[] {type});
+				}
+			}
+		} else {
+			log.warn("XStream serializer not configured with whitelists defined in GPs suffixed " +
+				"with '.serializer.whitelist.types' due to adminService not being set.");
+			List<Class<?>> types = AdministrationServiceImpl.getSerializerDefaultWhitelistHierarchyTypes();
+			for (Class<?> type: types) {
+				newXStream.allowTypeHierarchy(type);
+			}
+		}
+	}
+
+
+	@PostConstruct
     private void init(){
 		/*
 		 * Converters so that we can better deal with the serialization/deserializtion
 		 * of cglib, sql-timestamp, hibernate collections, etc
 		 */
+		setupXStreamSecurity(xstream, Context.getAdministrationService());
+		xstream.ignoreUnknownElements();
         collectionConverter.setConverterLookup(xstream.getConverterLookup());
         xstream.registerConverter(collectionConverter);
 
