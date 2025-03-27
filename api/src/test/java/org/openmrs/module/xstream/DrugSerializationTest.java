@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a drug
@@ -51,17 +52,16 @@ public class DrugSerializationTest extends BaseModuleContextSensitiveTest {
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(drug, XStreamSerializer.class);
-		XmlAssert.assertThat(xmlOutput).valueByXPath("/drug/@uuid").isEqualTo("3cfcf118-931c-46f7-8ff6-7b876f0d4202");
-//		XmlAssert.assertXpathEvaluatesTo("3cfcf118-931c-46f7-8ff6-7b876f0d4202", "/drug/@uuid", xmlOutput);
-//		XMLAssert.assertXpathEvaluatesTo("2", "/drug/drugId", xmlOutput);
-//		XMLAssert.assertXpathEvaluatesTo("false", "/drug/@retired", xmlOutput);
-//		XMLAssert.assertXpathEvaluatesTo("Triomune-30", "/drug/name", xmlOutput);
-//		XMLAssert.assertXpathExists("/drug/creator", xmlOutput);
-//		XMLAssert.assertXpathEvaluatesTo(sdf.format(drug.getDateCreated()), "/drug/dateCreated", xmlOutput);
-//		XMLAssert.assertXpathEvaluatesTo("true", "/drug/combination", xmlOutput);
-//		XMLAssert.assertXpathEvaluatesTo("3", "/drug/dosageForm/conceptId", xmlOutput);
-//		XMLAssert.assertXpathEvaluatesTo("1.0tab(s)", "/drug/strength", xmlOutput);
-//		XMLAssert.assertXpathEvaluatesTo("4", "/drug/concept/conceptId", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/drug/@uuid").isEqualTo("3cfcf118-931c-46f7-8ff6-7b876f0d4202");
+		assertThat(xmlOutput).valueByXPath("/drug/drugId").isEqualTo("2");
+		assertThat(xmlOutput).valueByXPath("/drug/@retired").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/drug/name").isEqualTo("Triomune-30");
+		assertThat(xmlOutput).nodeByXPath("/drug/creator").exists();
+		assertThat(xmlOutput).valueByXPath("/drug/dateCreated").isEqualTo(sdf.format(drug.getDateCreated()));
+		assertThat(xmlOutput).valueByXPath("/drug/combination").isEqualTo("true");
+		assertThat(xmlOutput).valueByXPath("/drug/dosageForm/conceptId").isEqualTo("3");
+		assertThat(xmlOutput).valueByXPath("/drug/strength").isEqualTo("1.0tab(s)");
+		assertThat(xmlOutput).valueByXPath("/drug/concept/conceptId").isEqualTo("4");
 	}
 	
 	/**
