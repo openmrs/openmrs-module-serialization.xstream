@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Cohort;
 import org.openmrs.User;
@@ -24,10 +23,12 @@ import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
+import static org.xmlunit.assertj.XmlAssert.assertThat;
+
 /**
  * Test class that tests the serialization and deserialization of a cohort
  */
-public class CohortSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class CohortSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a cohort and make sure it can be serialized correctly
@@ -52,17 +53,18 @@ public class CohortSerialization1_9Test extends BaseModuleContextSensitiveTest {
 		cohort.getCreator().setChangedBy(user2);
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(cohort, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("1", "/cohort/cohortId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("57b9e333-751c-4291-80d1-449412ac2cd3", "/cohort/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/cohort/@voided", xmlOutput);
-		XMLAssert.assertXpathExists("/cohort/creator", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(cohort.getDateCreated()), "/cohort/dateCreated", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("old cohorts", "/cohort/name", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("This is a cohort in which every one's age is above 60", "/cohort/description",
-		    xmlOutput);
-		XMLAssert.assertXpathExists("/cohort/memberIds[int=6]", xmlOutput);
-		XMLAssert.assertXpathExists("/cohort/memberIds[int=7]", xmlOutput);
-		XMLAssert.assertXpathExists("/cohort/memberIds[int=8]", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/cohort/cohortId").isEqualTo("1");
+		assertThat(xmlOutput).valueByXPath("/cohort/@uuid").isEqualTo("57b9e333-751c-4291-80d1-449412ac2cd3");
+		assertThat(xmlOutput).valueByXPath("/cohort/@voided").isEqualTo("false");
+		assertThat(xmlOutput).nodesByXPath("/cohort/creator").exist();
+		assertThat(xmlOutput).valueByXPath("/cohort/dateCreated").isEqualTo(sdf.format(cohort.getDateCreated()));
+		assertThat(xmlOutput).valueByXPath("/cohort/name").isEqualTo("old cohorts");
+		assertThat(xmlOutput).valueByXPath("/cohort/description")
+			.isEqualTo("This is a cohort in which every one's age is above 60");
+
+		assertThat(xmlOutput).nodesByXPath("/cohort/memberIds[int='6']").exist();
+		assertThat(xmlOutput).nodesByXPath("/cohort/memberIds[int='7']").exist();
+		assertThat(xmlOutput).nodesByXPath("/cohort/memberIds[int='8']").exist();
 	}
 	
 	/**

@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Order;
 import org.openmrs.api.context.Context;
@@ -22,11 +21,12 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that test the short serialization and short deserialization of a orderType
  */
-public class OrderTypeShortSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class OrderTypeShortSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * generate the relative objects and make sure the short serialization can work
@@ -46,9 +46,9 @@ public class OrderTypeShortSerialization1_9Test extends BaseModuleContextSensiti
 		
 		String xmlOutput = Context.getSerializationService().serialize(o, XStreamShortSerializer.class);
 		//should only serialize "uuid"
-		XMLAssert.assertXpathEvaluatesTo("f149b5e1-4314-4d0d-a95f-1c4f8031161d", "/order/orderType/@uuid", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/order/orderType/@uuid").isEqualTo("f149b5e1-4314-4d0d-a95f-1c4f8031161d");	
 		//with short serialization, the "orderType" element shouldn't contain any child element in the serialized xml
-		XMLAssert.assertXpathNotExists("/order/orderType/*", xmlOutput);
+		assertThat(xmlOutput).nodesByXPath("/order/orderType/*").doNotExist();
 	}
 	
 	/**

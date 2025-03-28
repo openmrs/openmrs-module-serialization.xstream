@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
@@ -26,11 +25,12 @@ import java.text.SimpleDateFormat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a patient
  */
-public class PatientSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class PatientSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a patient and make sure it can be serialized correctly
@@ -50,19 +50,19 @@ public class PatientSerialization1_9Test extends BaseModuleContextSensitiveTest 
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(patient, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("86526ed6-3c11-11de-a0ba-001e378eb67e", "/patient/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("true", "/patient/@voided", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1", "/patient/creator/person/personId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(patient.getDateCreated()), "/patient/dateCreated", xmlOutput);
-		XMLAssert.assertXpathExists("/patient/changedBy/@reference", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(patient.getDateChanged()), "/patient/dateChanged", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("For test purposes", "/patient/voidReason", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("999", "/patient/personId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("M", "/patient/gender", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/patient/dead", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("true", "/patient/isPatient", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("999", "/patient/patientId", xmlOutput);
-		XMLAssert.assertXpathExists("/patient/identifiers/patientIdentifier[patientIdentifierId=7]", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/patient/@uuid").isEqualTo("86526ed6-3c11-11de-a0ba-001e378eb67e");
+		assertThat(xmlOutput).valueByXPath("/patient/@voided").isEqualTo("true");
+		assertThat(xmlOutput).valueByXPath("/patient/creator/person/personId").isEqualTo("1");
+		assertThat(xmlOutput).valueByXPath("/patient/dateCreated").isEqualTo(sdf.format(patient.getDateCreated()));
+		assertThat(xmlOutput).nodesByXPath("/patient/changedBy/@reference").exist();
+		assertThat(xmlOutput).valueByXPath("/patient/dateChanged").isEqualTo(sdf.format(patient.getDateChanged()));
+		assertThat(xmlOutput).valueByXPath("/patient/voidReason").isEqualTo("For test purposes");
+		assertThat(xmlOutput).valueByXPath("/patient/personId").isEqualTo("999");
+		assertThat(xmlOutput).valueByXPath("/patient/gender").isEqualTo("M");
+		assertThat(xmlOutput).valueByXPath("/patient/dead").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/patient/isPatient").isEqualTo("true");
+		assertThat(xmlOutput).valueByXPath("/patient/patientId").isEqualTo("999");
+		assertThat(xmlOutput).nodesByXPath("/patient/identifiers/patientIdentifier[patientIdentifierId='7']").exist();
 	}
 	
 	/**

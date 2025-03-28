@@ -18,9 +18,11 @@ import java.util.List;
 
 import junit.framework.Assert;
 
+import org.apache.commons.io.IOUtils;
 import org.junit.Ignore;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
+import org.openmrs.util.OpenmrsClassLoader;
 import org.openmrs.util.Reflect;
 
 /**
@@ -44,5 +46,17 @@ public class TestUtil {
 		for (Field field : fields) {
 			Assert.assertEquals(field.get(object), field.get(deserializedObject));
 		}
+	}
+
+	/**
+	 * Reads and returns the contents of the file with the specified name, assumes the file is on
+	 * the classpath
+	 *
+	 * @param filename
+	 * @return
+	 * @throws Exception
+	 */
+	public static String getFileContents(String filename) throws Exception {
+		return IOUtils.toString(OpenmrsClassLoader.getInstance().getResourceAsStream(filename), "UTF-8");
 	}
 }

@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.ConceptSet;
 import org.openmrs.api.context.Context;
@@ -24,11 +23,12 @@ import org.openmrs.test.SkipBaseSetup;
 import java.text.SimpleDateFormat;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a conceptSet
  */
-public class ConceptSetSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class ConceptSetSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a conceptSet and make sure it can be serialized correctly
@@ -49,13 +49,13 @@ public class ConceptSetSerialization1_9Test extends BaseModuleContextSensitiveTe
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(cs, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("1a111827-639f-4cb4-961f-1e025bf88d90", "/conceptSet/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1", "/conceptSet/conceptSetId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("18", "/conceptSet/concept/conceptId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("23", "/conceptSet/conceptSet/conceptId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("0.0", "/conceptSet/sortWeight", xmlOutput);
-		XMLAssert.assertXpathExists("/conceptSet/creator", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(cs.getDateCreated()), "/conceptSet/dateCreated", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/conceptSet/@uuid").isEqualTo("1a111827-639f-4cb4-961f-1e025bf88d90");
+		assertThat(xmlOutput).valueByXPath("/conceptSet/conceptSetId").isEqualTo("1");
+		assertThat(xmlOutput).valueByXPath("/conceptSet/concept/conceptId").isEqualTo("18");
+		assertThat(xmlOutput).valueByXPath("/conceptSet/conceptSet/conceptId").isEqualTo("23");
+		assertThat(xmlOutput).valueByXPath("/conceptSet/sortWeight").isEqualTo("0.0");
+		assertThat(xmlOutput).nodesByXPath("/conceptSet/creator").exist();
+		assertThat(xmlOutput).valueByXPath("/conceptSet/dateCreated").isEqualTo(sdf.format(cs.getDateCreated()));
 	}
 	
 	/**

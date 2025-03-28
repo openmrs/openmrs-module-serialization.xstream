@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.PersonAttribute;
 import org.openmrs.api.context.Context;
@@ -25,11 +24,12 @@ import java.text.SimpleDateFormat;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a PersonAttribute
  */
-public class PersonAttributeSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class PersonAttributeSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a person attribute and make sure it can be serialized correctly
@@ -49,13 +49,13 @@ public class PersonAttributeSerialization1_9Test extends BaseModuleContextSensit
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(pa, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("1", "/personAttribute/personAttributeId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/personAttribute/@voided", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("0768f3da-b692-44b7-a33f-abf2c450474e", "/personAttribute/@uuid", xmlOutput);
-		XMLAssert.assertXpathExists("/personAttribute/creator", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(pa.getDateCreated()), "/personAttribute/dateCreated", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("501", "/personAttribute/person/personId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1", "/personAttribute/attributeType/personAttributeTypeId", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/personAttribute/personAttributeId").isEqualTo("1");
+		assertThat(xmlOutput).valueByXPath("/personAttribute/@voided").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/personAttribute/@uuid").isEqualTo("0768f3da-b692-44b7-a33f-abf2c450474e");
+		assertThat(xmlOutput).nodesByXPath("/personAttribute/creator").exist();
+		assertThat(xmlOutput).valueByXPath("/personAttribute/dateCreated").isEqualTo(sdf.format(pa.getDateCreated()));
+		assertThat(xmlOutput).valueByXPath("/personAttribute/person/personId").isEqualTo("501");
+		assertThat(xmlOutput).valueByXPath("/personAttribute/attributeType/personAttributeTypeId").isEqualTo("1");
 	}
 	
 	/**

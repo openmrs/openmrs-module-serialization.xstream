@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.ProgramWorkflow;
 import org.openmrs.api.context.Context;
@@ -21,11 +20,12 @@ import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that test the short serialization and short deserialization of a Program object
  */
-public class ProgramShortSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class ProgramShortSerializationTest extends BaseModuleContextSensitiveTest {
 	/**
 	 * generate the relative objects and make sure the short serialization can work
 	 * 
@@ -38,11 +38,9 @@ public class ProgramShortSerialization1_9Test extends BaseModuleContextSensitive
 		ProgramWorkflow pwf = Context.getProgramWorkflowService().getWorkflow(1);
 		String xmlOutput = Context.getSerializationService().serialize(pwf, XStreamShortSerializer.class);
 		//should only serialize "uuid"
-		XMLAssert.assertXpathEvaluatesTo("da4a0391-ba62-4fad-ad66-1e3722d16380", "/programWorkflow/program/@uuid",
-		    xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/programWorkflow/program/@uuid").isEqualTo("da4a0391-ba62-4fad-ad66-1e3722d16380");
 		//with short serialization, the "program" element shouldn't contain any child element in the serialized xml
-		XMLAssert.assertXpathNotExists("/programWorkflow/program/*", xmlOutput);
-	}
+		assertThat(xmlOutput).nodesByXPath("/programWorkflow/program/*").doNotExist();	}
 	
 	/**
 	 * give a expected xml string and make sure it can be shortly deserialized

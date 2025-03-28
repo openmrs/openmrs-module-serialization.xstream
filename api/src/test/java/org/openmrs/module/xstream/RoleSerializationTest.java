@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Role;
 import org.openmrs.api.context.Context;
@@ -23,11 +22,12 @@ import org.openmrs.test.SkipBaseSetup;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a role
  */
-public class RoleSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class RoleSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * Make sure a {@link Role} can be serialized correctly
@@ -44,17 +44,16 @@ public class RoleSerialization1_9Test extends BaseModuleContextSensitiveTest {
 		Role role = Context.getUserService().getRole("Data Manager");
 		//serialize and compare with a given string
 		String xmlOutput = Context.getSerializationService().serialize(role, XStreamSerializer.class);
-		
-		XMLAssert.assertXpathEvaluatesTo("00eb3992-92b2-102c-adee-6014420f8468", "/role/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Data Manager", "/role/role", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/role/@retired", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("User who maintains clinical data stored within the OpenMRS repository.",
-		    "/role/description", xmlOutput);
-		XMLAssert.assertXpathExists("/role/privileges/privilege[privilege='Add Observations']", xmlOutput);
-		XMLAssert.assertXpathExists("/role/privileges/privilege[privilege='Add Patients']", xmlOutput);
-		XMLAssert.assertXpathExists("/role/privileges/privilege[privilege='Delete Observations']", xmlOutput);
-		XMLAssert.assertXpathExists("/role/privileges/privilege[privilege='Delete Report Objects']", xmlOutput);
-		XMLAssert.assertXpathExists("/role/inheritedRoles/role[role='Data Assistant']", xmlOutput);
+
+		assertThat(xmlOutput).valueByXPath("/role/@uuid").isEqualTo("00eb3992-92b2-102c-adee-6014420f8468");
+		assertThat(xmlOutput).valueByXPath("/role/role").isEqualTo("Data Manager");
+		assertThat(xmlOutput).valueByXPath("/role/@retired").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/role/description").isEqualTo("User who maintains clinical data stored within the OpenMRS repository.");
+		assertThat(xmlOutput).nodesByXPath("/role/privileges/privilege[privilege='Add Observations']").exist();
+		assertThat(xmlOutput).nodesByXPath("/role/privileges/privilege[privilege='Add Patients']").exist();
+		assertThat(xmlOutput).nodesByXPath("/role/privileges/privilege[privilege='Delete Observations']").exist();
+		assertThat(xmlOutput).nodesByXPath("/role/privileges/privilege[privilege='Delete Report Objects']").exist();
+		assertThat(xmlOutput).nodesByXPath("/role/inheritedRoles/role[role='Data Assistant']").exist();
 	}
 	
 	/**

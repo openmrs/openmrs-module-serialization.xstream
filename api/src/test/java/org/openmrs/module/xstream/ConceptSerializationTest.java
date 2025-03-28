@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
@@ -25,11 +24,12 @@ import java.text.SimpleDateFormat;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a concept
  */
-public class ConceptSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class ConceptSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a concept and make sure it can be serialized correctly
@@ -41,7 +41,7 @@ public class ConceptSerialization1_9Test extends BaseModuleContextSensitiveTest 
 	public void shouldSerializeConcept() throws Exception {
 		//instantiate object
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/ConceptSerialization1_9Test.xml");
+		executeDataSet("org/openmrs/module/xstream/include/ConceptSerializationTest.xml");
 		authenticate();
 		
 		Concept concept = Context.getConceptService().getConcept(3);
@@ -50,19 +50,19 @@ public class ConceptSerialization1_9Test extends BaseModuleContextSensitiveTest 
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(concept, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("0cbe2ed3-cd5f-4f46-9459-26127c9265ab", "//concept/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("3", "/concept/conceptId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/concept/@retired", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("4", "/concept/datatype/conceptDatatypeId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("3", "/concept/conceptClass/conceptClassId", xmlOutput);
-		XMLAssert.assertXpathExists("/concept/creator", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/concept/set", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(concept.getDateCreated()), "/concept/dateCreated", xmlOutput);
-		XMLAssert.assertXpathExists("/concept/names/conceptName[conceptNameId=2456]", xmlOutput);
-		XMLAssert.assertXpathExists("/concept/answers/conceptAnswer[conceptAnswerId=762]", xmlOutput);
-		XMLAssert.assertXpathExists("/concept/conceptSets/conceptSet[conceptSetId=1]", xmlOutput);
-		XMLAssert.assertXpathExists("/concept/descriptions/conceptDescription[conceptDescriptionId=9]", xmlOutput);
-		XMLAssert.assertXpathExists("/concept/conceptMappings/conceptMap[conceptMapId=1]", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("//concept/@uuid").isEqualTo("0cbe2ed3-cd5f-4f46-9459-26127c9265ab");
+		assertThat(xmlOutput).valueByXPath("/concept/conceptId").isEqualTo("3");
+		assertThat(xmlOutput).valueByXPath("/concept/@retired").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/concept/datatype/conceptDatatypeId").isEqualTo("4");
+		assertThat(xmlOutput).valueByXPath("/concept/conceptClass/conceptClassId").isEqualTo("3");
+		assertThat(xmlOutput).nodesByXPath("/concept/creator").exist();
+		assertThat(xmlOutput).valueByXPath("/concept/set").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/concept/dateCreated").isEqualTo(sdf.format(concept.getDateCreated()));
+		assertThat(xmlOutput).nodesByXPath("/concept/names/conceptName[conceptNameId='2456']").exist();
+		assertThat(xmlOutput).nodesByXPath("/concept/answers/conceptAnswer[conceptAnswerId='762']").exist();
+		assertThat(xmlOutput).nodesByXPath("/concept/conceptSets/conceptSet[conceptSetId='1']").exist();
+		assertThat(xmlOutput).nodesByXPath("/concept/descriptions/conceptDescription[conceptDescriptionId='9']").exist();
+		assertThat(xmlOutput).nodesByXPath("/concept/conceptMappings/conceptMap[conceptMapId='1']").exist();
 	}
 	
 	/**

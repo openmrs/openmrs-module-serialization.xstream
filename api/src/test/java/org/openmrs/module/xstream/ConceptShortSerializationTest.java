@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.ConceptDescription;
 import org.openmrs.api.context.Context;
@@ -22,11 +21,12 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that test the short serialization and short deserialization of a concept
  */
-public class ConceptShortSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class ConceptShortSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * generate the relative objects and make sure the short serialization can work
@@ -45,11 +45,9 @@ public class ConceptShortSerialization1_9Test extends BaseModuleContextSensitive
 		ConceptDescription cd = (ConceptDescription) Context.getConceptService().getConceptDescriptionByUuid("79a3efa7-3a43-4b38-ac5d-9b68aee086c6");
 		String xmlOutput = Context.getSerializationService().serialize(cd, XStreamShortSerializer.class);
 		//should only serialize "uuid"
-		XMLAssert.assertXpathEvaluatesTo("0cbe2ed3-cd5f-4f46-9459-26127c9265ab", "/conceptDescription/concept/@uuid",
-		    xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/conceptDescription/concept/@uuid").isEqualTo("0cbe2ed3-cd5f-4f46-9459-26127c9265ab");
 		//with short serialization, the "concept" element shouldn't contain any child element in the serialized xml
-		XMLAssert.assertXpathNotExists("/conceptDescription/concept/*", xmlOutput);
-	}
+		assertThat(xmlOutput).nodesByXPath("/conceptDescription/concept/*").doNotExist();	}
 	
 	/**
 	 * give a expected xml string and make sure it can be shortly deserialized

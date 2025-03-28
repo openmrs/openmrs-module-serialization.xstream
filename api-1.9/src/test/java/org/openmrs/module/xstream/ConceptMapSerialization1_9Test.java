@@ -40,7 +40,7 @@ public class ConceptMapSerialization1_9Test extends BaseModuleContextSensitiveTe
 	public void shouldSerializeConceptMap() throws Exception {
 		//instantiate object
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/ConceptMapSerialization1_9Test.xml");
+		executeDataSet("org/openmrs/module/xstream/include/ConceptMapSerializationTest.xml");
 		authenticate();
 		
 		ConceptMap cm = Context.getConceptService().getConcept(3).getConceptMappings().iterator().next();

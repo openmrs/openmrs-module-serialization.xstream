@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.ConceptDescription;
 import org.openmrs.api.context.Context;
@@ -24,11 +23,12 @@ import org.openmrs.test.SkipBaseSetup;
 import java.text.SimpleDateFormat;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a conceptDescription
  */
-public class ConceptDescriptionSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class ConceptDescriptionSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a conceptDescription and make sure it can be serialized correctly
@@ -50,13 +50,13 @@ public class ConceptDescriptionSerialization1_9Test extends BaseModuleContextSen
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(cd, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("79a3efa7-3a43-4b38-ac5d-9b68aee086c6", "/conceptDescription/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("9", "/conceptDescription/conceptDescriptionId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("3", "/conceptDescription/concept/conceptId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("This is used for coughs", "/conceptDescription/description", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("en", "/conceptDescription/locale", xmlOutput);
-		XMLAssert.assertXpathExists("/conceptDescription/creator", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(cd.getDateCreated()), "/conceptDescription/dateCreated", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/conceptDescription/@uuid").isEqualTo("79a3efa7-3a43-4b38-ac5d-9b68aee086c6");
+		assertThat(xmlOutput).valueByXPath("/conceptDescription/conceptDescriptionId").isEqualTo("9");
+		assertThat(xmlOutput).valueByXPath("/conceptDescription/concept/conceptId").isEqualTo("3");
+		assertThat(xmlOutput).valueByXPath("/conceptDescription/description").isEqualTo("This is used for coughs");
+		assertThat(xmlOutput).valueByXPath("/conceptDescription/locale").isEqualTo("en");
+		assertThat(xmlOutput).nodesByXPath("/conceptDescription/creator").exist();
+		assertThat(xmlOutput).valueByXPath("/conceptDescription/dateCreated").isEqualTo(sdf.format(cd.getDateCreated()));
 	}	
 	/**
 	 * Construct a serialized xml string and make sure it can be deserialized correctly

@@ -41,7 +41,7 @@ public class ConceptSerialization1_9Test extends BaseModuleContextSensitiveTest 
 	public void shouldSerializeConcept() throws Exception {
 		//instantiate object
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/ConceptSerialization1_9Test.xml");
+		executeDataSet("org/openmrs/module/xstream/include/ConceptSerializationTest.xml");
 		authenticate();
 		
 		Concept concept = Context.getConceptService().getConcept(3);

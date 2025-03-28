@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.PersonAttribute;
 import org.openmrs.api.context.Context;
@@ -22,11 +21,12 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that test the short serialization and short deserialization of a personAttributeType
  */
-public class PersonAttributeTypeShortSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class PersonAttributeTypeShortSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * generate the relative objects and make sure the short serialization can work
@@ -44,11 +44,9 @@ public class PersonAttributeTypeShortSerialization1_9Test extends BaseModuleCont
 		PersonAttribute pa = Context.getPersonService().getPersonAttributeByUuid("0768f3da-b692-44b7-a33f-abf2c450474e");
 		String xmlOutput = Context.getSerializationService().serialize(pa, XStreamShortSerializer.class);
 		//should only serialize "uuid"
-		XMLAssert.assertXpathEvaluatesTo("b3b6d540-a32e-44c7-91b3-292d97667518", "/personAttribute/attributeType/@uuid",
-		    xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/personAttribute/attributeType/@uuid").isEqualTo("b3b6d540-a32e-44c7-91b3-292d97667518");
 		//with short serialization, the "attributeType" element shouldn't contain any child element in the serialized xml
-		XMLAssert.assertXpathNotExists("/personAttribute/attributeType/*", xmlOutput);
-	}
+		assertThat(xmlOutput).nodesByXPath("/personAttribute/attributeType/*").doNotExist();	}
 	
 	/**
 	 * give a expected xml string and make sure it can be shortly deserialized

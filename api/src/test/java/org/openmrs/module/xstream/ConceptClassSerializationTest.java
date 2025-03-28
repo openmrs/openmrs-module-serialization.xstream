@@ -13,9 +13,8 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
-import org.openmrs.ConceptSource;
+import org.openmrs.ConceptClass;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
@@ -24,41 +23,43 @@ import org.openmrs.test.SkipBaseSetup;
 import java.text.SimpleDateFormat;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
- * Test class that tests the serialization and deserialization of a conceptSource
+ * Test class that tests the serialization and deserialization of a conceptClass
  */
-public class ConceptSourceSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class ConceptClassSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
-	 * create a conceptSource and make sure it can be serialized correctly
+	 * create a conceptClass and make sure it can be serialized correctly
 	 * 
 	 * @throws Exception
 	 */
 	@Test
 	@SkipBaseSetup
-	public void shouldSerializeConceptSource() throws Exception {
+	public void shouldSerializeConceptClass() throws Exception {
 		//instantiate object
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/ConceptSourceSerialization1_9Test.xml");
+		executeDataSet("org/openmrs/module/xstream/include/ConceptClassSerializationTest.xml");
 		authenticate();
 		
-		ConceptSource cs = Context.getConceptService().getConceptSource(1);
+		ConceptClass cc = Context.getConceptService().getConceptClass(4);
 		
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 		
 		//serialize and compare with a give string
-		String xmlOutput = Context.getSerializationService().serialize(cs, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("14ea70c7-fe49-46ae-9957-8a678c82d1d8", "/conceptSource/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1", "/conceptSource/conceptSourceId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("SNOMED", "/conceptSource/name", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Systematized Nomenclature of Medicine -- Clinical Terms",
-		    "/conceptSource/description", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("test", "/conceptSource/hl7Code", xmlOutput);
-		XMLAssert.assertXpathExists("/conceptSource/creator", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(cs.getDateCreated()), "/conceptSource/dateCreated", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/conceptSource/@retired", xmlOutput);
+		String xmlOutput = Context.getSerializationService().serialize(cc, XStreamSerializer.class);
+		assertThat(xmlOutput).valueByXPath("/conceptClass/conceptClassId").isEqualTo("4");
+		assertThat(xmlOutput).valueByXPath("/conceptClass/@uuid").isEqualTo("003d0731-92b2-102c-adee-6014420f8468");
+		assertThat(xmlOutput).valueByXPath("/conceptClass/@retired").isEqualTo("true");
+		assertThat(xmlOutput).valueByXPath("/conceptClass/name").isEqualTo("Diagnosis");
+		assertThat(xmlOutput).valueByXPath("/conceptClass/description").isEqualTo("Conclusion drawn through findings");
+		assertThat(xmlOutput).nodesByXPath("/conceptClass/creator").exist();
+		assertThat(xmlOutput).valueByXPath("/conceptClass/dateCreated").isEqualTo(sdf.format(cc.getDateCreated()));
+		assertThat(xmlOutput).nodesByXPath("/conceptClass/retiredBy").exist();
+		assertThat(xmlOutput).valueByXPath("/conceptClass/dateRetired").isEqualTo(sdf.format(cc.getDateRetired()));
+		assertThat(xmlOutput).valueByXPath("/conceptClass/retireReason").isEqualTo("we don't want to use it");
 	}
 	
 	/**
@@ -67,21 +68,20 @@ public class ConceptSourceSerialization1_9Test extends BaseModuleContextSensitiv
 	 * @throws Exception
 	 */
 	@Test
-	public void shouldDeserializeConceptSource() throws Exception {
+	public void shouldDeserializeConceptClass() throws Exception {
 		//construct given string to be deserialized
 		StringBuilder xmlBuilder = new StringBuilder();
-		xmlBuilder.append("<conceptSource id=\"1\" uuid=\"14ea70c7-fe49-46ae-9957-8a678c82d1d8\" retired=\"false\">\n");
-		xmlBuilder.append("  <conceptSourceId>1</conceptSourceId>\n");
-		xmlBuilder.append("  <name>SNOMED</name>\n");
-		xmlBuilder.append("  <description>Systematized Nomenclature of Medicine -- Clinical Terms</description>\n");
-		xmlBuilder.append("  <hl7Code>test</hl7Code>\n");
+		xmlBuilder.append("<conceptClass id=\"1\" uuid=\"003d0731-92b2-102c-adee-6014420f8468\" retired=\"true\">\n");
+		xmlBuilder.append("  <name>Diagnosis</name>\n");
+		xmlBuilder.append("  <description>Conclusion drawn through findings</description>\n");
 		xmlBuilder.append("  <creator id=\"2\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" voided=\"false\">\n");
 		xmlBuilder.append("    <creator reference=\"2\"/>\n");
 		xmlBuilder.append("    <dateCreated class=\"sql-timestamp\" id=\"3\">2005-01-01 00:00:00 CST</dateCreated>\n");
 		xmlBuilder.append("    <changedBy reference=\"2\"/>\n");
 		xmlBuilder.append("    <dateChanged class=\"sql-timestamp\" id=\"4\">2007-09-20 21:54:12 CST</dateChanged>\n");
 		xmlBuilder.append("    <retireReason></retireReason>\n");
-		xmlBuilder.append("    <person id=\"1\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" voided=\"false\">\n");
+		xmlBuilder.append("    <userId>1</userId>\n");
+		xmlBuilder.append("    <person id=\"5\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" voided=\"false\">\n");
 		xmlBuilder.append("    <personId>1</personId>\n");
 		xmlBuilder.append("    <addresses class=\"tree-set\" id=\"5\">\n");
 		xmlBuilder.append("      <no-comparator/>\n");
@@ -106,7 +106,6 @@ public class ConceptSourceSerialization1_9Test extends BaseModuleContextSensitiv
 		xmlBuilder.append("    <personVoidReason></personVoidReason>\n");
 		xmlBuilder.append("    <isPatient>false</isPatient>\n");
 		xmlBuilder.append("    </person>\n");
-		xmlBuilder.append("    <userId>1</userId>\n");
 		xmlBuilder.append("    <systemId>1-8</systemId>\n");
 		xmlBuilder.append("    <username>admin</username>\n");
 		xmlBuilder.append("    <secretQuestion></secretQuestion>\n");
@@ -122,21 +121,27 @@ public class ConceptSourceSerialization1_9Test extends BaseModuleContextSensitiv
 		xmlBuilder.append("    <userProperties id=\"15\"/>\n");
 		xmlBuilder.append("    <parsedProficientLocalesProperty></parsedProficientLocalesProperty>\n");
 		xmlBuilder.append("  </creator>\n");
-		xmlBuilder.append("  <dateCreated class=\"sql-timestamp\" id=\"16\">2006-01-20 00:00:00 CST</dateCreated>\n");
-		xmlBuilder.append("</conceptSource>\n");
+		xmlBuilder.append("  <dateCreated class=\"sql-timestamp\" id=\"16\">2004-02-02 00:00:00 CST</dateCreated>\n");
+		xmlBuilder.append("  <dateRetired class=\"sql-timestamp\" id=\"17\">2006-02-02 00:00:00 CST</dateRetired>\n");
+		xmlBuilder.append("  <retiredBy reference=\"2\"/>\n");
+		xmlBuilder.append("  <retireReason>we don&apos;t want to use it</retireReason>\n");
+		xmlBuilder.append("  <conceptClassId>4</conceptClassId>\n");
+		xmlBuilder.append("</conceptClass>\n");
 		
 		//deserialize and make sure everything has been put into object
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
 		
-		ConceptSource cs = Context.getSerializationService().deserialize(xmlBuilder.toString(), ConceptSource.class,
+		ConceptClass cc = Context.getSerializationService().deserialize(xmlBuilder.toString(), ConceptClass.class,
 		    XStreamSerializer.class);
-		assertEquals("14ea70c7-fe49-46ae-9957-8a678c82d1d8", cs.getUuid());
-		assertEquals(1, cs.getConceptSourceId().intValue());
-		assertEquals("SNOMED", cs.getName());
-		assertEquals("Systematized Nomenclature of Medicine -- Clinical Terms", cs.getDescription());
-		assertEquals("test", cs.getHl7Code());
-		assertEquals(1, cs.getCreator().getUserId().intValue());
-		assertEquals(sdf.parse("2006-01-20 00:00:00 CST"), cs.getDateCreated());
-		assertFalse("The retired shouldn't be " + cs.isRetired(), cs.isRetired());
+		assertEquals("003d0731-92b2-102c-adee-6014420f8468", cc.getUuid());
+		assertEquals(4, cc.getConceptClassId().intValue());
+		assertEquals("Diagnosis", cc.getName());
+		assertEquals("Conclusion drawn through findings", cc.getDescription());
+		assertEquals(1, cc.getCreator().getUserId().intValue());
+		assertEquals(sdf.parse("2004-02-02 00:00:00 CST"), cc.getDateCreated());
+		assertTrue("The retired shouldn't be " + cc.getRetired(), cc.getRetired());
+		assertEquals(sdf.parse("2006-02-02 00:00:00 CST"), cc.getDateRetired());
+		assertEquals(1, cc.getRetiredBy().getUserId().intValue());
+		assertEquals("we don't want to use it", cc.getRetireReason());
 	}
 }

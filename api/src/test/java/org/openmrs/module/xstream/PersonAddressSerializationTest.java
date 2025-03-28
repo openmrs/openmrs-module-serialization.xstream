@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.PersonAddress;
 import org.openmrs.api.context.Context;
@@ -25,11 +24,12 @@ import java.text.SimpleDateFormat;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a PersonAddress
  */
-public class PersonAddressSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class PersonAddressSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a person address and make sure it can be serialized correctly
@@ -50,20 +50,20 @@ public class PersonAddressSerialization1_9Test extends BaseModuleContextSensitiv
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(pa, XStreamSerializer.class);
-		
-		XMLAssert.assertXpathEvaluatesTo("921c0e23-d941-4bac-8ce4-ab0d0f7d8123", "/personAddress/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1", "/personAddress/personAddressId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/personAddress/@voided", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/personAddress/preferred", xmlOutput);
-		XMLAssert.assertXpathExists("/personAddress/creator", xmlOutput);
-		XMLAssert.assertXpathExists("/personAddress/person/@reference", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1050 Wishard Blvd.", "/personAddress/address1", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("RG5", "/personAddress/address2", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("New York", "/personAddress/stateProvince", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("USA", "/personAddress/country", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Kapina", "/personAddress/cityVillage", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("46202", "/personAddress/postalCode", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(pa.getDateCreated()), "/personAddress/dateCreated", xmlOutput);
+
+		assertThat(xmlOutput).valueByXPath("/personAddress/@uuid").isEqualTo("921c0e23-d941-4bac-8ce4-ab0d0f7d8123");
+		assertThat(xmlOutput).valueByXPath("/personAddress/personAddressId").isEqualTo("1");
+		assertThat(xmlOutput).valueByXPath("/personAddress/@voided").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/personAddress/preferred").isEqualTo("false");
+		assertThat(xmlOutput).nodesByXPath("/personAddress/creator").exist();
+		assertThat(xmlOutput).nodesByXPath("/personAddress/person/@reference").exist();
+		assertThat(xmlOutput).valueByXPath("/personAddress/address1").isEqualTo("1050 Wishard Blvd.");
+		assertThat(xmlOutput).valueByXPath("/personAddress/address2").isEqualTo("RG5");
+		assertThat(xmlOutput).valueByXPath("/personAddress/stateProvince").isEqualTo("New York");
+		assertThat(xmlOutput).valueByXPath("/personAddress/country").isEqualTo("USA");
+		assertThat(xmlOutput).valueByXPath("/personAddress/cityVillage").isEqualTo("Kapina");
+		assertThat(xmlOutput).valueByXPath("/personAddress/postalCode").isEqualTo("46202");
+		assertThat(xmlOutput).valueByXPath("/personAddress/dateCreated").isEqualTo(sdf.format(pa.getDateCreated()));
 	}
 	
 	/**

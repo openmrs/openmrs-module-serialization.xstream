@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.PersonName;
 import org.openmrs.api.context.Context;
@@ -26,11 +25,12 @@ import java.text.SimpleDateFormat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a PersonName
  */
-public class PersonNameSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class PersonNameSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a person name and make sure it can be serialized correctly
@@ -50,19 +50,18 @@ public class PersonNameSerialization1_9Test extends BaseModuleContextSensitiveTe
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(pn, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("2", "//personName/personNameId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("true", "/personName/preferred", xmlOutput);
-		XMLAssert.assertXpathExists("/personName/creator", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("2", "/personName/person/personId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Mr.", "/personName/prefix", xmlOutput);
-		
-		XMLAssert.assertXpathEvaluatesTo("Horatio", "/personName/givenName", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Test", "/personName/middleName", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Hornblower", "/personName/familyName", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Esq.", "/personName/familyNameSuffix", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(pn.getDateCreated()), "/personName/dateCreated", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/personName/@voided", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("399e3a7b-6482-487d-94ce-c07bb3ca3cc7", "/personName/@uuid", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/personName/personNameId").isEqualTo("2");
+		assertThat(xmlOutput).valueByXPath("/personName/preferred").isEqualTo("true");
+		assertThat(xmlOutput).nodesByXPath("/personName/creator").exist();
+		assertThat(xmlOutput).valueByXPath("/personName/person/personId").isEqualTo("2");
+		assertThat(xmlOutput).valueByXPath("/personName/prefix").isEqualTo("Mr.");
+		assertThat(xmlOutput).valueByXPath("/personName/givenName").isEqualTo("Horatio");
+		assertThat(xmlOutput).valueByXPath("/personName/middleName").isEqualTo("Test");
+		assertThat(xmlOutput).valueByXPath("/personName/familyName").isEqualTo("Hornblower");
+		assertThat(xmlOutput).valueByXPath("/personName/familyNameSuffix").isEqualTo("Esq.");
+		assertThat(xmlOutput).valueByXPath("/personName/dateCreated").isEqualTo(sdf.format(pn.getDateCreated()));
+		assertThat(xmlOutput).valueByXPath("/personName/@voided").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/personName/@uuid").isEqualTo("399e3a7b-6482-487d-94ce-c07bb3ca3cc7");
 	}
 	
 	/**

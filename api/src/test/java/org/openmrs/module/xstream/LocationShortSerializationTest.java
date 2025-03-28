@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Encounter;
 import org.openmrs.api.context.Context;
@@ -22,11 +21,13 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
+
 
 /**
  * Test class that test the short serialization and short deserialization of a location
  */
-public class LocationShortSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class LocationShortSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * generate the relative objects and make sure the short serialization can work
@@ -39,15 +40,15 @@ public class LocationShortSerialization1_9Test extends BaseModuleContextSensitiv
 		
 		//prepare the necessary data
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerialization1_9Test.xml");
+		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest.xml");
 		authenticate();
 		
 		Encounter e = Context.getEncounterService().getEncounter(4);
 		String xmlOutput = Context.getSerializationService().serialize(e, XStreamShortSerializer.class);
 		//should only serialize "uuid"
-		XMLAssert.assertXpathEvaluatesTo("dc5c1fcc-0459-4201-bf70-0b90535ba362", "/encounter/location/@uuid", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/encounter/location/@uuid").isEqualTo("dc5c1fcc-0459-4201-bf70-0b90535ba362");	
 		//with short serialization, the "location" element shouldn't contain any child element in the serialized xml
-		XMLAssert.assertXpathNotExists("/encounter/location/*", xmlOutput);
+		assertThat(xmlOutput).nodesByXPath("/encounter/location/*").doNotExist();
 	}
 	
 	/**
@@ -65,7 +66,7 @@ public class LocationShortSerialization1_9Test extends BaseModuleContextSensitiv
 		 * We also need to use the "EncounterTypeShortSerializationTest.xml" here 
 		 */
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerialization1_9Test.xml");
+		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest.xml");
 		authenticate();
 		
 		//prepare the necessary data

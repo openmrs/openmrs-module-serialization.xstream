@@ -41,7 +41,7 @@ public class ConceptComplexSerialization1_9Test extends BaseModuleContextSensiti
 	public void shouldSerializeConceptComplex() throws Exception {
 		//instantiate object
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/ConceptComplexSerialization1_9Test.xml");
+		executeDataSet("org/openmrs/module/xstream/include/ConceptComplexSerializationTest.xml");
 		authenticate();
 		
 		ConceptComplex cc = Context.getConceptService().getConceptComplex(3);

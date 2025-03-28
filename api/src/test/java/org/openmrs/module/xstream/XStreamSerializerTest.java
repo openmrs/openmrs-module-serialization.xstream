@@ -14,7 +14,6 @@
 package org.openmrs.module.xstream;
 
 import junit.framework.Assert;
-import org.custommonkey.xmlunit.XMLAssert;
 import org.hibernate.proxy.HibernateProxy;
 import org.junit.Rule;
 import org.junit.Test;
@@ -39,12 +38,13 @@ import java.util.List;
 import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that test the features of XStreamSerializer, such as cglib's serialization, build
  * reference for cglib and omit "log", etc
  */
-public class XStreamSerializer1_9Test extends BaseModuleContextSensitiveTest {
+public class XStreamSerializerTest extends BaseModuleContextSensitiveTest {
 	
 	@Rule
 	public ExpectedException expectedException = ExpectedException.none();
@@ -66,14 +66,13 @@ public class XStreamSerializer1_9Test extends BaseModuleContextSensitiveTest {
 		
 		String xmlOutput = Context.getSerializationService().serialize(pn, XStreamSerializer.class);
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss z");
-		
-		XMLAssert.assertXpathEvaluatesTo("da7f524f-27ce-4bb2-86d6-6d1d05312bd5", "/personName/person/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("2", "/personName/person/personId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("M", "/personName/person/gender", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(pn.getPerson().getBirthdate()), "/personName/person/birthdate",
-		    xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/personName/person/dead", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/personName/person/@voided", xmlOutput);
+
+		assertThat(xmlOutput).valueByXPath("/personName/person/@uuid").isEqualTo("da7f524f-27ce-4bb2-86d6-6d1d05312bd5");
+		assertThat(xmlOutput).valueByXPath("/personName/person/personId").isEqualTo("2");
+		assertThat(xmlOutput).valueByXPath("/personName/person/gender").isEqualTo("M");
+		assertThat(xmlOutput).valueByXPath("/personName/person/birthdate").isEqualTo(sdf.format(pn.getPerson().getBirthdate()));
+		assertThat(xmlOutput).valueByXPath("/personName/person/dead").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/personName/person/@voided").isEqualTo("false");
 	}
 	
 	/**
@@ -110,14 +109,12 @@ public class XStreamSerializer1_9Test extends BaseModuleContextSensitiveTest {
 		User user = Context.getUserService().getUser(1);
 		
 		String xmlOutput = Context.getSerializationService().serialize(user, XStreamSerializer.class);
-		
-		XMLAssert.assertXpathNotExists("/user/log", xmlOutput);
-		/*
+
+		assertThat(xmlOutput).nodesByXPath("/user/log").doNotExist();		/*
 		 * because we have omited "log" for all classes which are got through "XStreamSerializer.getAllSerializedClasses()",
 		 * in the serialized xml string shouldn't contain any element which's name is "log"
 		 */
-		XMLAssert.assertXpathNotExists("//log", xmlOutput);
-	}
+		assertThat(xmlOutput).nodesByXPath("//log").doNotExist();	}
 	
 	/**
 	 * Regression test #1945 (http://dev.openmrs.org/ticket/1945)

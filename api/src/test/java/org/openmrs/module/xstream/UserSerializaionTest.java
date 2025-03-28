@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
@@ -26,11 +25,12 @@ import java.text.SimpleDateFormat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a user
  */
-public class UserSerializaion1_9Test extends BaseModuleContextSensitiveTest {
+public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a user and make sure it can be serialized correctly
@@ -51,24 +51,24 @@ public class UserSerializaion1_9Test extends BaseModuleContextSensitiveTest {
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(user, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("55685062-1b48-11df-a5c7-001e378eb67e", "/user/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("true", "/user/@retired", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("501", "/user/person/personId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateCreated()), "/user/dateCreated", xmlOutput);
-		XMLAssert.assertXpathExists("/user/changedBy/@reference", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateChanged()), "/user/dateChanged", xmlOutput);
-		XMLAssert.assertXpathExists("/user/person/personVoidedBy/@reference", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateRetired()), "/user/dateRetired", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Test purposes", "/user/retireReason", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("501", "/user/person/personId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("F", "/user/person/gender", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/user/person/dead", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("501", "/user/userId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("2-6", "/user/systemId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("bruno", "/user/username", xmlOutput);
-		XMLAssert.assertXpathExists("/user/roles/role[role='Provider']", xmlOutput);
-		XMLAssert.assertXpathExists("/user/userProperties/entry[string='lockoutTimestamp']", xmlOutput);
-		XMLAssert.assertXpathExists("/user/userProperties/entry[string='loginAttempts']", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/user/@uuid").isEqualTo("55685062-1b48-11df-a5c7-001e378eb67e");
+		assertThat(xmlOutput).valueByXPath("/user/@retired").isEqualTo("true");
+		assertThat(xmlOutput).valueByXPath("/user/person/personId").isEqualTo("501");
+		assertThat(xmlOutput).valueByXPath("/user/dateCreated").isEqualTo(sdf.format(user.getDateCreated()));
+		assertThat(xmlOutput).nodesByXPath("/user/changedBy/@reference").exist();
+		assertThat(xmlOutput).valueByXPath("/user/dateChanged").isEqualTo(sdf.format(user.getDateChanged()));
+		assertThat(xmlOutput).nodesByXPath("/user/person/personVoidedBy/@reference").exist();
+		assertThat(xmlOutput).valueByXPath("/user/dateRetired").isEqualTo(sdf.format(user.getDateRetired()));
+		assertThat(xmlOutput).valueByXPath("/user/retireReason").isEqualTo("Test purposes");
+		assertThat(xmlOutput).valueByXPath("/user/person/personId").isEqualTo("501");
+		assertThat(xmlOutput).valueByXPath("/user/person/gender").isEqualTo("F");
+		assertThat(xmlOutput).valueByXPath("/user/person/dead").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/user/userId").isEqualTo("501");
+		assertThat(xmlOutput).valueByXPath("/user/systemId").isEqualTo("2-6");
+		assertThat(xmlOutput).valueByXPath("/user/username").isEqualTo("bruno");
+		assertThat(xmlOutput).nodesByXPath("/user/roles/role[role='Provider']").exist();
+		assertThat(xmlOutput).nodesByXPath("/user/userProperties/entry[string='lockoutTimestamp']").exist();
+		assertThat(xmlOutput).nodesByXPath("/user/userProperties/entry[string='loginAttempts']").exist();
 	}
 	
 	/**

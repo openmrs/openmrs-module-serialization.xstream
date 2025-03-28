@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Encounter;
 import org.openmrs.api.context.Context;
@@ -22,11 +21,12 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that test the short serialization and short deserialization of a encounterType
  */
-public class EncounterTypeShortSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class EncounterTypeShortSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * generate the relative objects and make sure the short serialization can work
@@ -39,17 +39,15 @@ public class EncounterTypeShortSerialization1_9Test extends BaseModuleContextSen
 		
 		//prepare the necessary data
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerialization1_9Test.xml");
+		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest.xml");
 		authenticate();
 		
 		Encounter e = Context.getEncounterService().getEncounter(4);
 		String xmlOutput = Context.getSerializationService().serialize(e, XStreamShortSerializer.class);
 		//should only serialize "uuid"
-		XMLAssert
-		        .assertXpathEvaluatesTo("61ae96f4-6afe-4351-b6f8-cd4fc383cce1", "/encounter/encounterType/@uuid", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/encounter/encounterType/@uuid").isEqualTo("61ae96f4-6afe-4351-b6f8-cd4fc383cce1");
 		//with short serialization, the "encounterType" element shouldn't contain any child element in the serialized xml
-		XMLAssert.assertXpathNotExists("/encounter/encounterType/*", xmlOutput);
-	}
+		assertThat(xmlOutput).valueByXPath("/encounter/encounterType/@uuid").isEqualTo("61ae96f4-6afe-4351-b6f8-cd4fc383cce1");	}
 	
 	/**
 	 * give a expected xml string and make sure it can be shortly deserialized
@@ -66,7 +64,7 @@ public class EncounterTypeShortSerialization1_9Test extends BaseModuleContextSen
 		 * We also need to use the "EncounterTypeShortSerializationTest.xml" here 
 		 */
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerialization1_9Test.xml");
+		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest.xml");
 		authenticate();
 		
 		//prepare the necessary data

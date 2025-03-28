@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.PersonAddress;
 import org.openmrs.api.context.Context;
@@ -22,11 +21,13 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
+
 
 /**
  * Test class that test the short serialization and short deserialization of a person
  */
-public class PersonShortSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class PersonShortSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * generate the relative objects and make sure the short serialization can work
@@ -44,9 +45,9 @@ public class PersonShortSerialization1_9Test extends BaseModuleContextSensitiveT
 		PersonAddress pa = Context.getPersonService().getPersonAddressByUuid("3350d0b5-821c-4e5e-ad1d-a9bce331e118");
 		String xmlOutput = Context.getSerializationService().serialize(pa, XStreamShortSerializer.class);
 		//should only serialize "uuid"
-		XMLAssert.assertXpathEvaluatesTo("da7f524f-27ce-4bb2-86d6-6d1d05312bd5", "/personAddress/person/@uuid", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/personAddress/person/@uuid").isEqualTo("da7f524f-27ce-4bb2-86d6-6d1d05312bd5");	
 		//with short serialization, the "person" element shouldn't contain any child element in the serialized xml
-		XMLAssert.assertXpathNotExists("/personAddress/person/*", xmlOutput);
+		assertThat(xmlOutput).nodesByXPath("/personAddress/person/*").doNotExist();	
 	}
 	
 	/**

@@ -39,7 +39,7 @@ public class LocationShortSerialization1_9Test extends BaseModuleContextSensitiv
 		
 		//prepare the necessary data
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerialization1_9Test.xml");
+		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest.xml");
 		authenticate();
 		
 		Encounter e = Context.getEncounterService().getEncounter(4);

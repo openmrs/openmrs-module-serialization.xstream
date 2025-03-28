@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
@@ -26,11 +25,12 @@ import java.text.SimpleDateFormat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a PersonAttributeType
  */
-public class PersonAttributeTypeSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class PersonAttributeTypeSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a person attribute type and make sure it can be serialized correctly
@@ -51,23 +51,20 @@ public class PersonAttributeTypeSerialization1_9Test extends BaseModuleContextSe
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(personAttributeType, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("1", "/personAttributeType/personAttributeTypeId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("true", "/personAttributeType/@retired", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1053", "/personAttributeType/foreignKey", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/personAttributeType/searchable", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("b3b6d540-a32e-44c7-91b3-292d97667518", "/personAttributeType/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Race", "/personAttributeType/name", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Group of persons related by common descent or heredity",
-		    "/personAttributeType/description", xmlOutput);
-		XMLAssert.assertXpathExists("/personAttributeType/creator", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(personAttributeType.getDateCreated()),
-		    "/personAttributeType/dateCreated", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(personAttributeType.getDateRetired()),
-		    "/personAttributeType/dateRetired", xmlOutput);
-		XMLAssert.assertXpathExists("/personAttributeType/retiredBy", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("test", "/personAttributeType/retireReason", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("java.lang.String", "/personAttributeType/format", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Delete Cohorts", "/personAttributeType/editPrivilege/privilege", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/personAttributeType/personAttributeTypeId").isEqualTo("1");
+		assertThat(xmlOutput).valueByXPath("/personAttributeType/@retired").isEqualTo("true");
+		assertThat(xmlOutput).valueByXPath("/personAttributeType/foreignKey").isEqualTo("1053");
+		assertThat(xmlOutput).valueByXPath("/personAttributeType/searchable").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/personAttributeType/@uuid").isEqualTo("b3b6d540-a32e-44c7-91b3-292d97667518");
+		assertThat(xmlOutput).valueByXPath("/personAttributeType/name").isEqualTo("Race");
+		assertThat(xmlOutput).valueByXPath("/personAttributeType/description").isEqualTo("Group of persons related by common descent or heredity");
+		assertThat(xmlOutput).nodesByXPath("/personAttributeType/creator").exist();
+		assertThat(xmlOutput).valueByXPath("/personAttributeType/dateCreated").isEqualTo(sdf.format(personAttributeType.getDateCreated()));
+		assertThat(xmlOutput).valueByXPath("/personAttributeType/dateRetired").isEqualTo(sdf.format(personAttributeType.getDateRetired()));
+		assertThat(xmlOutput).nodesByXPath("/personAttributeType/retiredBy").exist();
+		assertThat(xmlOutput).valueByXPath("/personAttributeType/retireReason").isEqualTo("test");
+		assertThat(xmlOutput).valueByXPath("/personAttributeType/format").isEqualTo("java.lang.String");
+		assertThat(xmlOutput).valueByXPath("/personAttributeType/editPrivilege/privilege").isEqualTo("Delete Cohorts");
 	}
 	
 	/**

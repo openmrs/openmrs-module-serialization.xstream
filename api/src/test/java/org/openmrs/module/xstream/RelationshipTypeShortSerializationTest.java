@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Relationship;
 import org.openmrs.api.context.Context;
@@ -22,11 +21,12 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that test the short serialization and short deserialization of a relationshipType
  */
-public class RelationshipTypeShortSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class RelationshipTypeShortSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * generate the relative objects and make sure the short serialization can work
@@ -45,10 +45,9 @@ public class RelationshipTypeShortSerialization1_9Test extends BaseModuleContext
 		Relationship r = Context.getPersonService().getRelationship(1);
 		String xmlOutput = Context.getSerializationService().serialize(r, XStreamShortSerializer.class);
 		//should only serialize "uuid"
-		XMLAssert.assertXpathEvaluatesTo("6d9002ea-a96b-4889-af78-82d48c57a110", "/relationship/relationshipType/@uuid",
-		    xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/relationship/relationshipType/@uuid").isEqualTo("6d9002ea-a96b-4889-af78-82d48c57a110");
 		//with short serialization, the "relationship" element shouldn't contain any child element in the serialized xml
-		XMLAssert.assertXpathNotExists("/relationship/relationshipType/*", xmlOutput);
+		assertThat(xmlOutput).nodesByXPath("/relationship/relationshipType/*").doNotExist();	
 	}
 	
 	/**

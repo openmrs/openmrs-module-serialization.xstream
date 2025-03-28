@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.ConceptMap;
 import org.openmrs.api.context.Context;
@@ -24,11 +23,12 @@ import org.openmrs.test.SkipBaseSetup;
 import java.text.SimpleDateFormat;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a conceptMap
  */
-public class ConceptMapSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class ConceptMapSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a conceptMap and make sure it can be serialized correctly
@@ -40,7 +40,7 @@ public class ConceptMapSerialization1_9Test extends BaseModuleContextSensitiveTe
 	public void shouldSerializeConceptMap() throws Exception {
 		//instantiate object
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/ConceptMapSerialization1_9Test.xml");
+		executeDataSet("org/openmrs/module/xstream/include/ConceptMapSerializationTest.xml");
 		authenticate();
 		
 		ConceptMap cm = Context.getConceptService().getConcept(3).getConceptMappings().iterator().next();
@@ -49,14 +49,14 @@ public class ConceptMapSerialization1_9Test extends BaseModuleContextSensitiveTe
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(cm, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("6c36f786-957d-4a14-a6ed-e66ced057066", "/conceptMap/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1", "/conceptMap/conceptMapId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("3", "/conceptMap/concept/conceptId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1", "/conceptMap/conceptMapType/conceptMapTypeId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1", "/conceptMap/conceptReferenceTerm/conceptReferenceTermId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1", "/conceptMap/conceptReferenceTerm/conceptSource/conceptSourceId", xmlOutput);
-		XMLAssert.assertXpathExists("/conceptMap/creator", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(cm.getDateCreated()), "/conceptMap/dateCreated", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/conceptMap/@uuid").isEqualTo("6c36f786-957d-4a14-a6ed-e66ced057066");
+		assertThat(xmlOutput).valueByXPath("/conceptMap/conceptMapId").isEqualTo("1");
+		assertThat(xmlOutput).valueByXPath("/conceptMap/concept/conceptId").isEqualTo("3");
+		assertThat(xmlOutput).valueByXPath("/conceptMap/conceptMapType/conceptMapTypeId").isEqualTo("1");
+		assertThat(xmlOutput).valueByXPath("/conceptMap/conceptReferenceTerm/conceptReferenceTermId").isEqualTo("1");
+		assertThat(xmlOutput).valueByXPath("/conceptMap/conceptReferenceTerm/conceptSource/conceptSourceId").isEqualTo("1");
+		assertThat(xmlOutput).nodesByXPath("/conceptMap/creator").exist();
+		assertThat(xmlOutput).valueByXPath("/conceptMap/dateCreated").isEqualTo(sdf.format(cm.getDateCreated()));
 	}
 	
 	/**
@@ -66,7 +66,7 @@ public class ConceptMapSerialization1_9Test extends BaseModuleContextSensitiveTe
 	 */
 	@Test
 	public void shouldDeserializeConceptMap() throws Exception {
-		String xml = Test1_9Util.getFileContents("org/openmrs/module/xstream/include/TestConceptMap.xml");
+		String xml = TestUtil.getFileContents("org/openmrs/module/xstream/include/TestConceptMap.xml");
 		ConceptMap cm = Context.getSerializationService().deserialize(xml, ConceptMap.class, XStreamSerializer.class);
 		assertEquals("6c36f786-957d-4a14-a6ed-e66ced057066", cm.getUuid());
 		assertEquals(1, cm.getConceptMapId().intValue());

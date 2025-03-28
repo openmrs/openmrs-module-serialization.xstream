@@ -19,7 +19,6 @@ import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
 import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
-import org.xmlunit.assertj.XmlAssert;
 
 import java.text.SimpleDateFormat;
 
@@ -56,7 +55,7 @@ public class DrugSerializationTest extends BaseModuleContextSensitiveTest {
 		assertThat(xmlOutput).valueByXPath("/drug/drugId").isEqualTo("2");
 		assertThat(xmlOutput).valueByXPath("/drug/@retired").isEqualTo("false");
 		assertThat(xmlOutput).valueByXPath("/drug/name").isEqualTo("Triomune-30");
-		assertThat(xmlOutput).nodeByXPath("/drug/creator").exists();
+		assertThat(xmlOutput).nodesByXPath("/drug/creator").exist();
 		assertThat(xmlOutput).valueByXPath("/drug/dateCreated").isEqualTo(sdf.format(drug.getDateCreated()));
 		assertThat(xmlOutput).valueByXPath("/drug/combination").isEqualTo("true");
 		assertThat(xmlOutput).valueByXPath("/drug/dosageForm/conceptId").isEqualTo("3");

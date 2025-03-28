@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.ConceptComplex;
 import org.openmrs.api.context.Context;
@@ -25,11 +24,13 @@ import java.text.SimpleDateFormat;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
+
 
 /**
  * Test class that tests the serialization and deserialization of a conceptComplex
  */
-public class ConceptComplexSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class ConceptComplexSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a conceptComplex and make sure it can be serialized correctly
@@ -41,7 +42,7 @@ public class ConceptComplexSerialization1_9Test extends BaseModuleContextSensiti
 	public void shouldSerializeConceptComplex() throws Exception {
 		//instantiate object
 		initializeInMemoryDatabase();
-		executeDataSet("org/openmrs/module/xstream/include/ConceptComplexSerialization1_9Test.xml");
+		executeDataSet("org/openmrs/module/xstream/include/ConceptComplexSerializationTest.xml");
 		authenticate();
 		
 		ConceptComplex cc = Context.getConceptService().getConceptComplex(3);
@@ -50,20 +51,20 @@ public class ConceptComplexSerialization1_9Test extends BaseModuleContextSensiti
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(cc, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("0cbe2ed3-cd5f-4f46-9459-26127c9265ab", "/conceptComplex/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("3", "/conceptComplex/conceptId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/conceptComplex/@retired", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("4", "/conceptComplex/datatype/conceptDatatypeId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("3", "/conceptComplex/conceptClass/conceptClassId", xmlOutput);
-		XMLAssert.assertXpathExists("/conceptComplex/creator", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/conceptComplex/set", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(cc.getDateCreated()), "/conceptComplex/dateCreated", xmlOutput);
-		XMLAssert.assertXpathExists("/conceptComplex/names/conceptName[conceptNameId=2456]", xmlOutput);
-		XMLAssert.assertXpathExists("/conceptComplex/answers/conceptAnswer[conceptAnswerId=762]", xmlOutput);
-		XMLAssert.assertXpathExists("/conceptComplex/conceptSets/conceptSet[conceptSetId=1]", xmlOutput);
-		XMLAssert.assertXpathExists("/conceptComplex/descriptions/conceptDescription[conceptDescriptionId=9]", xmlOutput);
-		XMLAssert.assertXpathExists("/conceptComplex/conceptMappings/conceptMap[conceptMapId=1]", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("test purpose", "/conceptComplex/handler", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/conceptComplex/@uuid").isEqualTo("0cbe2ed3-cd5f-4f46-9459-26127c9265ab");
+		assertThat(xmlOutput).valueByXPath("/conceptComplex/conceptId").isEqualTo("3");
+		assertThat(xmlOutput).valueByXPath("/conceptComplex/@retired").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/conceptComplex/datatype/@id").isEqualTo("4");
+		assertThat(xmlOutput).valueByXPath("/conceptComplex/conceptClass/conceptClassId").isEqualTo("3");
+		assertThat(xmlOutput).nodesByXPath("/conceptComplex/creator").exist();
+		assertThat(xmlOutput).valueByXPath("/conceptComplex/set").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/conceptComplex/dateCreated").isEqualTo(sdf.format(cc.getDateCreated()));
+		assertThat(xmlOutput).nodesByXPath("/conceptComplex/names/conceptName[conceptNameId='2456']").exist();
+		assertThat(xmlOutput).nodesByXPath("/conceptComplex/answers/conceptAnswer[conceptAnswerId='762']").exist();
+		assertThat(xmlOutput).nodesByXPath("/conceptComplex/conceptSets/conceptSet[conceptSetId='1']").exist();
+		assertThat(xmlOutput).nodesByXPath("/conceptComplex/descriptions/conceptDescription[conceptDescriptionId='9']").exist();
+		assertThat(xmlOutput).nodesByXPath("/conceptComplex/conceptMappings/conceptMap[conceptMapId='1']").exist();
+		assertThat(xmlOutput).valueByXPath("/conceptComplex/handler").isEqualTo("test purpose");
 	}
 	
 	/**
@@ -73,7 +74,7 @@ public class ConceptComplexSerialization1_9Test extends BaseModuleContextSensiti
 	 */
 	@Test
 	public void shouldDeserializeConceptComplex() throws Exception {
-		String xml = Test1_9Util.getFileContents("org/openmrs/module/xstream/include/TestConceptComplex.xml");
+		String xml = TestUtil.getFileContents("org/openmrs/module/xstream/include/TestConceptComplex.xml");
 		ConceptComplex cc = Context.getSerializationService()
 		        .deserialize(xml, ConceptComplex.class, XStreamSerializer.class);
 		assertEquals("0cbe2ed3-cd5f-4f46-9459-26127c9265ab", cc.getUuid());

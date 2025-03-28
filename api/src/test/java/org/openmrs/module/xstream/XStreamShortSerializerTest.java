@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.hibernate.proxy.HibernateProxy;
 import org.junit.Test;
 import org.openmrs.Patient;
@@ -33,7 +32,7 @@ import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 
 /**
@@ -47,7 +46,7 @@ import static org.junit.Assert.assertTrue;
  * (7) should shortly serialize a short-serialized object while it exist as the element of a Collection<br />
  * (8) should shortly serialize a short-serialized object while it exist as the key/value of a Map
  */
-public class XStreamShortSerializer1_9Test extends BaseModuleContextSensitiveTest{
+public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 	/**
 	 * 
 	 * should fully serialize a short-serialized object while it exists sole, not as a member of other object.
@@ -60,8 +59,8 @@ public class XStreamShortSerializer1_9Test extends BaseModuleContextSensitiveTes
 		assertTrue("current user shouldn't be a cglib proxy", User.class == user.getClass());
 		String xmlOutput = Context.getSerializationService().serialize(user, XStreamShortSerializer.class);
 		//test root node in "xmlOutput" should not contain only a uuid attribute.
-		XMLAssert.assertXpathEvaluatesTo("501", "/user/userId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("bruno", "/user/username", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/user/userId").isEqualTo("501");
+		assertThat(xmlOutput).valueByXPath("/user/username").isEqualTo("bruno");
 	}
 	
 	/**
@@ -76,8 +75,8 @@ public class XStreamShortSerializer1_9Test extends BaseModuleContextSensitiveTes
 		assertEquals("current patient should contain a creator whoes userId == 1", 1, patient.getCreator().getUserId().intValue());
 		String xmlOutput = Context.getSerializationService().serialize(patient, XStreamShortSerializer.class);
 		//test the node named as "creator" in "xmlOutput" should only contain a uuid attribute.
-		XMLAssert.assertXpathEvaluatesTo("1010d442-e134-11de-babe-001e378eb67e", "/patient/creator/@uuid", xmlOutput);
-		XMLAssert.assertXpathNotExists("/patient/creator/*", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/patient/creator/@uuid").isEqualTo("1010d442-e134-11de-babe-001e378eb67e");
+		assertThat(xmlOutput).nodesByXPath("/patient/creator/*").doNotExist();
 	}
 	
 	/**
@@ -92,8 +91,8 @@ public class XStreamShortSerializer1_9Test extends BaseModuleContextSensitiveTes
 		assertTrue("current person should be a cglib proxy", HibernateProxy.class.isAssignableFrom(person.getClass()));
 		String xmlOutput = Context.getSerializationService().serialize(person, XStreamShortSerializer.class);
 		//test root node in "xmlOutput" should not contain only a uuid attribute.
-		XMLAssert.assertXpathEvaluatesTo("501", "/person/personId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("F", "/person/gender", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/person/personId").isEqualTo("501");
+		assertThat(xmlOutput).valueByXPath("/person/gender").isEqualTo("F");
 	}
 	
 	/**
@@ -107,8 +106,8 @@ public class XStreamShortSerializer1_9Test extends BaseModuleContextSensitiveTes
 		PersonAddress pa = Context.getPersonService().getPersonAddressByUuid("3350d0b5-821c-4e5e-ad1d-a9bce331e118");
 		assertTrue("current personAddress should contain a person which is a cglib proxy", HibernateProxy.class.isAssignableFrom(pa.getPerson().getClass()));
 		String xmlOutput = Context.getSerializationService().serialize(pa, XStreamShortSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("da7f524f-27ce-4bb2-86d6-6d1d05312bd5", "/personAddress/person/@uuid", xmlOutput);
-		XMLAssert.assertXpathNotExists("/personAddress/person/*", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/personAddress/person/@uuid").isEqualTo("da7f524f-27ce-4bb2-86d6-6d1d05312bd5");
+		assertThat(xmlOutput).nodesByXPath("/personAddress/person/*").doNotExist();
 	}
 	
 	/**
@@ -180,10 +179,10 @@ public class XStreamShortSerializer1_9Test extends BaseModuleContextSensitiveTes
 		col.add(user1);
 		col.add(user2);
 		String xmlOutput = Context.getSerializationService().serialize(col, XStreamShortSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo(user1.getUuid(), "/list/user[1]/@uuid", xmlOutput);
-		XMLAssert.assertXpathNotExists("/list/user[1]/*", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(user2.getUuid(), "/list/user[2]/@uuid", xmlOutput);
-		XMLAssert.assertXpathNotExists("/list/user[2]/*", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/list/user[1]/@uuid").isEqualTo(user1.getUuid());
+		assertThat(xmlOutput).nodesByXPath("/list/user[1]/*").doNotExist();
+		assertThat(xmlOutput).valueByXPath("/list/user[2]/@uuid").isEqualTo(user2.getUuid());
+		assertThat(xmlOutput).nodesByXPath("/list/user[2]/*").doNotExist();
 	}
 	
 	/**
@@ -203,9 +202,9 @@ public class XStreamShortSerializer1_9Test extends BaseModuleContextSensitiveTes
 		map.put(user1, user1.getUsername());
 		map.put(user2, user2.getUsername());
 		String xmlOutput = Context.getSerializationService().serialize(map, XStreamShortSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo(user1.getUuid(), "/linked-hash-map/entry[1]/user/@uuid", xmlOutput);
-		XMLAssert.assertXpathNotExists("/linked-hash-map/entry[1]/user/*", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(user2.getUuid(), "/linked-hash-map/entry[2]/user/@uuid", xmlOutput);
-		XMLAssert.assertXpathNotExists("/linked-hash-map/entry[2]/user/*", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/linked-hash-map/entry[1]/user/@uuid").isEqualTo(user1.getUuid());
+		assertThat(xmlOutput).nodesByXPath("/linked-hash-map/entry[1]/user/*").doNotExist();
+		assertThat(xmlOutput).valueByXPath("/linked-hash-map/entry[2]/user/@uuid").isEqualTo(user2.getUuid());
+		assertThat(xmlOutput).nodesByXPath("/linked-hash-map/entry[2]/user/*").doNotExist();
 	}
 }

@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Field;
 import org.openmrs.api.context.Context;
@@ -22,11 +21,12 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that test the short serialization and short deserialization of a fieldType
  */
-public class FieldTypeShortSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class FieldTypeShortSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * generate the relative objects and make sure the short serialization can work
@@ -46,9 +46,9 @@ public class FieldTypeShortSerialization1_9Test extends BaseModuleContextSensiti
 		
 		String xmlOutput = Context.getSerializationService().serialize(f, XStreamShortSerializer.class);
 		//should only serialize "uuid"
-		XMLAssert.assertXpathEvaluatesTo("abf16b7d-39a5-4911-89da-0eefbfef7cb4", "/field/fieldType/@uuid", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/field/fieldType/@uuid").isEqualTo("abf16b7d-39a5-4911-89da-0eefbfef7cb4");
 		//with short serialization, the "fieldType" element shouldn't contain any child element in the serialized xml
-		XMLAssert.assertXpathNotExists("/field/fieldType/*", xmlOutput);
+		assertThat(xmlOutput).nodesByXPath("/field/fieldType/*").doNotExist();
 	}
 	
 	/**

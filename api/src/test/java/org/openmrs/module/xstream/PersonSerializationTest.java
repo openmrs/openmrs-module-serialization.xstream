@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
@@ -26,11 +25,12 @@ import java.text.SimpleDateFormat;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a person
  */
-public class PersonSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class PersonSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a person and make sure it can be serialized correctly
@@ -51,24 +51,24 @@ public class PersonSerialization1_9Test extends BaseModuleContextSensitiveTest {
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(person, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("04079813-4c9d-4f9d-b676-4c0502a5c1c3", "/person/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1000", "/person/personId", xmlOutput);
-		XMLAssert.assertXpathExists("/person/addresses/personAddress[personAddressId=1]", xmlOutput);
-		XMLAssert.assertXpathExists("/person/names/personName[personNameId=2]", xmlOutput);
-		XMLAssert.assertXpathExists("/person/attributes/personAttribute[personAttributeId=1]", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("M", "/person/gender", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(person.getBirthdate()), "/person/birthdate", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/person/birthdateEstimated", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("true", "/person/dead", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(person.getDeathDate()), "/person/deathDate", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("1088", "/person/causeOfDeath/conceptId", xmlOutput);
-		XMLAssert.assertXpathExists("/person/personCreator", xmlOutput);
-		XMLAssert.assertXpathExists("/person/personDateCreated/@reference", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("true", "/person/personVoided", xmlOutput);
-		XMLAssert.assertXpathExists("/person/personVoidedBy", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(person.getPersonDateVoided()), "/person/personDateVoided", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("test purpose", "/person/personVoidReason", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("false", "/person/isPatient", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/person/@uuid").isEqualTo("04079813-4c9d-4f9d-b676-4c0502a5c1c3");
+		assertThat(xmlOutput).valueByXPath("/person/personId").isEqualTo("1000");
+		assertThat(xmlOutput).nodesByXPath("/person/addresses/personAddress[personAddressId='1']").exist();
+		assertThat(xmlOutput).nodesByXPath("/person/names/personName[personNameId='2']").exist();
+		assertThat(xmlOutput).nodesByXPath("/person/attributes/personAttribute[personAttributeId='1']").exist();
+		assertThat(xmlOutput).valueByXPath("/person/gender").isEqualTo("M");
+		assertThat(xmlOutput).valueByXPath("/person/birthdate").isEqualTo(sdf.format(person.getBirthdate()));
+		assertThat(xmlOutput).valueByXPath("/person/birthdateEstimated").isEqualTo("false");
+		assertThat(xmlOutput).valueByXPath("/person/dead").isEqualTo("true");
+		assertThat(xmlOutput).valueByXPath("/person/deathDate").isEqualTo(sdf.format(person.getDeathDate()));
+		assertThat(xmlOutput).valueByXPath("/person/causeOfDeath/conceptId").isEqualTo("1088");
+		assertThat(xmlOutput).nodesByXPath("/person/personCreator").exist();
+		assertThat(xmlOutput).nodesByXPath("/person/personDateCreated/@reference").exist();
+		assertThat(xmlOutput).valueByXPath("/person/personVoided").isEqualTo("true");
+		assertThat(xmlOutput).nodesByXPath("/person/personVoidedBy").exist();
+		assertThat(xmlOutput).valueByXPath("/person/personDateVoided").isEqualTo(sdf.format(person.getPersonDateVoided()));
+		assertThat(xmlOutput).valueByXPath("/person/personVoidReason").isEqualTo("test purpose");
+		assertThat(xmlOutput).valueByXPath("/person/isPatient").isEqualTo("false");
 	}
 	
 	/**
@@ -251,7 +251,6 @@ public class PersonSerialization1_9Test extends BaseModuleContextSensitiveTest {
 		assertEquals(1, person.getPersonVoidedBy().getUserId().intValue());
 		assertEquals(sdf.parse("2006-09-18 00:00:00 CST"), person.getPersonDateVoided());
 		assertEquals("test purpose", person.getPersonVoidReason());
-		assertFalse("The isPatient shouldn't be " + person.isPatient(), person.isPatient());
-		assertFalse("The isUser shouldn't be " + person.isUser(), person.isUser());
+		assertFalse("The isPatient shouldn't be " + person.getIsPatient(), person.getIsPatient());
 	}
 }

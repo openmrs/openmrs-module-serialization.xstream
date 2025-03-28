@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.PatientIdentifier;
 import org.openmrs.api.context.Context;
@@ -22,11 +21,12 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that test the short serialization and short deserialization of a patientIdentifierType
  */
-public class PatientIdentifierTypeShortSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class PatientIdentifierTypeShortSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * generate the relative objects and make sure the short serialization can work
@@ -46,11 +46,9 @@ public class PatientIdentifierTypeShortSerialization1_9Test extends BaseModuleCo
 		        .getPatientIdentifierByUuid("8a9aac6e-3f9f-4ed2-8fb5-25215f8bb614");
 		String xmlOutput = Context.getSerializationService().serialize(pi, XStreamShortSerializer.class);
 		//should only serialize "uuid"
-		XMLAssert.assertXpathEvaluatesTo("1a339fe9-38bc-4ab3-b180-320988c0b968", "/patientIdentifier/identifierType/@uuid",
-		    xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/patientIdentifier/identifierType/@uuid").isEqualTo("1a339fe9-38bc-4ab3-b180-320988c0b968");
 		//with short serialization, the "identifierType" element shouldn't contain any child element in the serialized xml
-		XMLAssert.assertXpathNotExists("/patientIdentifier/identifierType/*", xmlOutput);
-	}
+		assertThat(xmlOutput).nodesByXPath("/patientIdentifier/identifierType/*").doNotExist();	}
 	
 	/**
 	 * give a expected xml string and make sure it can be shortly deserialized

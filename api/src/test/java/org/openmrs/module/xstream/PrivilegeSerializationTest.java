@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.xstream;
 
-import org.custommonkey.xmlunit.XMLAssert;
 import org.junit.Test;
 import org.openmrs.Privilege;
 import org.openmrs.api.context.Context;
@@ -22,11 +21,12 @@ import org.openmrs.test.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import static org.junit.Assert.assertEquals;
+import static org.xmlunit.assertj.XmlAssert.assertThat;
 
 /**
  * Test class that tests the serialization and deserialization of a privilege
  */
-public class PrivilegeSerialization1_9Test extends BaseModuleContextSensitiveTest {
+public class PrivilegeSerializationTest extends BaseModuleContextSensitiveTest {
 	
 	/**
 	 * create a privilege and make sure it can be serialized correctly
@@ -45,9 +45,9 @@ public class PrivilegeSerialization1_9Test extends BaseModuleContextSensitiveTes
 		
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(p, XStreamSerializer.class);
-		XMLAssert.assertXpathEvaluatesTo("Delete Cohorts", "/privilege/privilege", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("afc993ec-8b43-4af2-9974-54c7f98214ce", "/privilege/@uuid", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo("Able to add a cohort to the system", "/privilege/description", xmlOutput);
+		assertThat(xmlOutput).valueByXPath("/privilege/privilege").isEqualTo("Delete Cohorts");
+		assertThat(xmlOutput).valueByXPath("/privilege/@uuid").isEqualTo("afc993ec-8b43-4af2-9974-54c7f98214ce");
+		assertThat(xmlOutput).valueByXPath("/privilege/description").isEqualTo("Able to add a cohort to the system");
 	}
 	
 	/**
