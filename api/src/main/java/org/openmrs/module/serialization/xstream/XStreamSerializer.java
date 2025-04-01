@@ -152,7 +152,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		
 		// CustomReflectionConverter to avoid the exception thrown when xstream deserialize a unknown elment
 		xstream.registerConverter(new CustomReflectionConverter(xstream.getMapper(), xstream.getReflectionProvider()),
-		    xstream.PRIORITY_LOW);
+			XStream.PRIORITY_LOW);
 		
 		// register this converter, so that we can let xstream serialize User.user only as its uuid
 		xstream.registerConverter(new UserConverter(xstream));

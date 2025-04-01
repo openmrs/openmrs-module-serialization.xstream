@@ -52,7 +52,7 @@ public class ConceptDescriptionSerializationTest extends BaseModuleContextSensit
 		String xmlOutput = Context.getSerializationService().serialize(cd, XStreamSerializer.class);
 		assertThat(xmlOutput).valueByXPath("/conceptDescription/@uuid").isEqualTo("79a3efa7-3a43-4b38-ac5d-9b68aee086c6");
 		assertThat(xmlOutput).valueByXPath("/conceptDescription/conceptDescriptionId").isEqualTo("9");
-		assertThat(xmlOutput).valueByXPath("/conceptDescription/concept/conceptId").isEqualTo("3");
+		assertThat(xmlOutput).valueByXPath("/conceptDescription/concept/@id").isEqualTo("2");
 		assertThat(xmlOutput).valueByXPath("/conceptDescription/description").isEqualTo("This is used for coughs");
 		assertThat(xmlOutput).valueByXPath("/conceptDescription/locale").isEqualTo("en");
 		assertThat(xmlOutput).nodesByXPath("/conceptDescription/creator").exist();

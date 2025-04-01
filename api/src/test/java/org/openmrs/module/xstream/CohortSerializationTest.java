@@ -62,9 +62,9 @@ public class CohortSerializationTest extends BaseModuleContextSensitiveTest {
 		assertThat(xmlOutput).valueByXPath("/cohort/description")
 			.isEqualTo("This is a cohort in which every one's age is above 60");
 
-		assertThat(xmlOutput).nodesByXPath("/cohort/memberIds[int='6']").exist();
-		assertThat(xmlOutput).nodesByXPath("/cohort/memberIds[int='7']").exist();
-		assertThat(xmlOutput).nodesByXPath("/cohort/memberIds[int='8']").exist();
+		assertThat(xmlOutput).hasXPath("//cohortMemberId[text()='6']").exist();
+		assertThat(xmlOutput).nodesByXPath("//cohortMemberId[text()='7']").exist();
+		assertThat(xmlOutput).nodesByXPath("//cohortMemberId[text()='8']").exist();
 	}
 	
 	/**

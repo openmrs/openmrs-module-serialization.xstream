@@ -50,11 +50,10 @@ public class ConceptMapSerializationTest extends BaseModuleContextSensitiveTest 
 		//serialize and compare with a give string
 		String xmlOutput = Context.getSerializationService().serialize(cm, XStreamSerializer.class);
 		assertThat(xmlOutput).valueByXPath("/conceptMap/@uuid").isEqualTo("6c36f786-957d-4a14-a6ed-e66ced057066");
-		assertThat(xmlOutput).valueByXPath("/conceptMap/conceptMapId").isEqualTo("1");
+		assertThat(xmlOutput).valueByXPath("/conceptMap/@id").isEqualTo("1");
 		assertThat(xmlOutput).valueByXPath("/conceptMap/concept/conceptId").isEqualTo("3");
-		assertThat(xmlOutput).valueByXPath("/conceptMap/conceptMapType/conceptMapTypeId").isEqualTo("1");
-		assertThat(xmlOutput).valueByXPath("/conceptMap/conceptReferenceTerm/conceptReferenceTermId").isEqualTo("1");
-		assertThat(xmlOutput).valueByXPath("/conceptMap/conceptReferenceTerm/conceptSource/conceptSourceId").isEqualTo("1");
+		assertThat(xmlOutput).valueByXPath("/conceptMap/conceptMapType/@id").isEqualTo("2");
+		assertThat(xmlOutput).valueByXPath("/conceptMap/conceptReferenceTerm/@id").isEqualTo("28");
 		assertThat(xmlOutput).nodesByXPath("/conceptMap/creator").exist();
 		assertThat(xmlOutput).valueByXPath("/conceptMap/dateCreated").isEqualTo(sdf.format(cm.getDateCreated()));
 	}

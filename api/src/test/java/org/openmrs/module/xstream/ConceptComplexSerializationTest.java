@@ -54,8 +54,8 @@ public class ConceptComplexSerializationTest extends BaseModuleContextSensitiveT
 		assertThat(xmlOutput).valueByXPath("/conceptComplex/@uuid").isEqualTo("0cbe2ed3-cd5f-4f46-9459-26127c9265ab");
 		assertThat(xmlOutput).valueByXPath("/conceptComplex/conceptId").isEqualTo("3");
 		assertThat(xmlOutput).valueByXPath("/conceptComplex/@retired").isEqualTo("false");
-		assertThat(xmlOutput).valueByXPath("/conceptComplex/datatype/@id").isEqualTo("4");
-		assertThat(xmlOutput).valueByXPath("/conceptComplex/conceptClass/conceptClassId").isEqualTo("3");
+		assertThat(xmlOutput).valueByXPath("/conceptComplex/datatype/@id").isEqualTo("2");
+		assertThat(xmlOutput).valueByXPath("/conceptComplex/conceptClass/@id").isEqualTo("3");
 		assertThat(xmlOutput).nodesByXPath("/conceptComplex/creator").exist();
 		assertThat(xmlOutput).valueByXPath("/conceptComplex/set").isEqualTo("false");
 		assertThat(xmlOutput).valueByXPath("/conceptComplex/dateCreated").isEqualTo(sdf.format(cc.getDateCreated()));
