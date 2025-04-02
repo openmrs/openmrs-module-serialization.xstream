@@ -58,11 +58,7 @@ public class UserConverter implements Converter {
 			User user = (User) obj;
 			writer.addAttribute("uuid", user.getUuid());
 		}else{
-			if(isCGLibProxy(obj.getClass())){
-				CustomCGLIBEnhancedConverter converter = new CustomCGLIBEnhancedConverter(xstream.getMapper(), xstream.getConverterLookup());
-				converter.marshal(obj, writer, context);
-			}
-			else if (isJavassistProxy(obj.getClass())) {
+			if (isJavassistProxy(obj.getClass())) {
 				CustomJavassistEnhancedConverter converter = new CustomJavassistEnhancedConverter(xstream.getMapper(), xstream.getConverterLookup());
 				converter.marshal(obj, writer, context);
 			}
@@ -86,16 +82,6 @@ public class UserConverter implements Converter {
 		return user;
 	}
 	
-	/**
-	 * judge whether current type is a type of CGLib proxy
-	 * 
-	 * @param type - the type to be judged
-	 * @return whether type is a type of CGLib proxy
-	 */
-	protected boolean isCGLibProxy(Class type) {
-		return (Enhancer.isEnhanced(type) && type.getName().indexOf(CGLibMapper.marker) > 0)
-		        || type == CGLIBMapper.Marker.class;
-	}
 	
 	/**
 	 * judge whether current type is a type of Javassist proxy
