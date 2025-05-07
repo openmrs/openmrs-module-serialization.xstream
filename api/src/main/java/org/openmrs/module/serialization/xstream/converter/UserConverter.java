@@ -2,7 +2,6 @@ package org.openmrs.module.serialization.xstream.converter;
 
 import java.util.List;
 
-import net.sf.cglib.proxy.Enhancer;
 
 import org.openmrs.User;
 import org.openmrs.module.serialization.xstream.mapper.CGLibMapper;
@@ -16,6 +15,7 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.CGLIBMapper;
+import org.springframework.cglib.proxy.Enhancer;
 
 /**
  * This class is related to ticket#1701. <br/>
