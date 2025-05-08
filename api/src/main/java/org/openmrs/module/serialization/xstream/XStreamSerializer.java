@@ -31,6 +31,8 @@ import org.openmrs.BaseOpenmrsObject;
 import org.openmrs.Concept;
 import org.openmrs.ConceptName;
 import org.openmrs.ConceptNameTag;
+import org.openmrs.Person;
+import org.openmrs.User;
 import org.openmrs.api.APIAuthenticationException;
 import org.openmrs.api.SerializationService;
 import org.openmrs.api.context.Context;
@@ -138,6 +140,10 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		xstream.useAttributeFor(ConceptName.class, "voided");
 		xstream.useAttributeFor(ConceptNameTag.class, "voided");
 		//xstream.useAttributeFor(ConceptSource.class, "retired");
+
+		// In 2.x, the 'log' field in Person and User was made protected,
+		xstream.omitField(Person.class, "log");
+		xstream.omitField(User.class, "log");
 		
 		/*
 		 * alias className for all classses current need to serialize

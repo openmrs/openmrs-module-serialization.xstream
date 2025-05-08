@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <dataset>
-    <orders order_id="1" order_type_id="2" concept_id="88" orderer="1" urgency="ROUTINE" instructions="" start_date="2008-08-08 00:00:00.0" discontinued="true" discontinued_date="2008-08-15 00:00:00.0" discontinued_by="1" creator="1" date_created="2008-08-19 12:20:22.0" voided="false" patient_id="7" uuid="921de0a3-05c4-444a-be03-e01b4c4b9142"/>
-    <order_type order_type_id="2" name="Lab test" description="An order by a clinician for a laboratory test" creator="1" date_created="2008-08-15 13:50:14.0" retired="false" uuid="f149b5e1-4314-4d0d-a95f-1c4f8031161d"/>
-    <concept concept_id="88" retired="false" datatype_id="4" class_id="3" is_set="false" creator="1" date_created="2004-01-01 00:00:00.0" version="" changed_by="1" date_changed="2008-08-15 14:04:20.0" uuid="15f83cd6-64e9-4e06-a5f9-364d3b14a43d"/>
-    <concept_class concept_class_id="3" name="Drug" description="Drug" creator="1" date_created="2004-02-02 00:00:00.0" retired="false" uuid="3d065ed4-b0b9-4710-9a17-6d8c4fd259b7"/>
-    <concept_datatype concept_datatype_id="4" name="N/A" hl7_abbreviation="ZZ" description="Not associated with a datatype (e.g., term answers, sets)" creator="1" date_created="2004-02-02 00:00:00.0" retired="false" uuid="bf51481d-9b76-4a88-8ca4-88dd082ddf90"/>
-    <patient patient_id="7" creator="1" date_created="2006-01-18 00:00:00.0" changed_by="1" date_changed="2008-08-18 12:25:57.0" voided="false" void_reason=""/>
-    <person person_id="7" gender="F" birthdate="1976-08-25 00:00:00.0" dead="false" creator="1" date_created="2006-01-18 00:00:00.0" voided="false" uuid="5946f880-b197-400b-9caa-a3c661d23041"/>
+	<location location_id="1" name="Unknown Location" description="The default location used when limited information is known" creator="1" date_created="2005-09-22 00:00:00.0" retired="false" uuid="dc5c1fcc-0459-4201-bf70-0b90535ba362"/>
+	<concept_datatype concept_datatype_id="4" name="N/A" hl7_abbreviation="ZZ" description="Not associated with a datatype (e.g., term answers, sets)" creator="1" date_created="2004-02-02 00:00:00.0" retired="false" uuid="bf51481d-9b76-4a88-8ca4-88dd082ddf90"/>
+	<concept_class concept_class_id="3" name="Drug" description="Drug" creator="1" date_created="2004-02-02 00:00:00.0" retired="false" uuid="3d065ed4-b0b9-4710-9a17-6d8c4fd259b7"/>
+	<concept concept_id="88" retired="false" datatype_id="4" class_id="3" is_set="false" creator="1" date_created="2004-01-01 00:00:00.0" version="" changed_by="1" date_changed="2008-08-15 14:04:20.0" uuid="15f83cd6-64e9-4e06-a5f9-364d3b14a43d"/>
+	<order_type order_type_id="2" name="Lab test" description="An order by a clinician for a laboratory test" java_class_name="org.openmrs.TestOrder" creator="1" date_created="2008-08-15 13:50:14.0" retired="false" uuid="f149b5e1-4314-4d0d-a95f-1c4f8031161d"/>
+	<care_setting care_setting_id="1" name="INPATIENT" description="InPatient" care_setting_type="INPATIENT" creator="1" date_created="2008-08-19 12:35:30.0" retired="false" uuid="c365e560-c3ec-11e3-9c1a-0800200c9a66"/>
+	<person person_id="7" gender="F" birthdate="1976-08-25 00:00:00.0" dead="false" creator="1" date_created="2006-01-18 00:00:00.0" voided="false" uuid="5946f880-b197-400b-9caa-a3c661d23041"/>
+	<person person_id="8" gender="F" birthdate="1976-08-25 00:00:00.0" dead="false" creator="1" date_created="2006-01-18 00:00:00.0" voided="false" uuid="5946f880-b197-400b-9caa-a3c661d23042"/>
+	<patient patient_id="7" creator="1" date_created="2006-01-18 00:00:00.0" changed_by="1" date_changed="2008-08-18 12:25:57.0" voided="false" void_reason=""/>
+	<form form_id="1" name="Basic Form" version="0.1" build="0" published="0" description="Test form" creator="1" date_created="2005-08-07 00:00:00.0" changed_by="1" date_changed="2007-10-24 14:51:53.0" retired="false" uuid="d9218f76-6c39-45f4-8efa-4c5c6c199f50"/>
+	<encounter_type encounter_type_id="1" name="Scheduled" description="Scheduled Visit" creator="1" date_created="2005-02-24 00:00:00.0" retired="false" uuid="61ae96f4-6afe-4351-b6f8-cd4fc383cce1"/>
+	<encounter encounter_id="1" encounter_type="1" patient_id="7" location_id="1" form_id="1" encounter_datetime="2008-08-15 00:00:00.0" creator="1" date_created="2008-08-18 14:22:17.0" voided="false" uuid="eec646cb-c847-45a7-98bc-91c8c4f70add"/>
+	<provider provider_id="1" person_id="8" identifier="Test" creator="1" date_created="2005-01-01 00:00:00.0" retired="0" uuid="t5299800-cca9-66e0-9572-0800200c9a66"/>
+	<orders order_id="1" order_number="1" order_type_id="2" concept_id="88" orderer="1" urgency="ROUTINE" instructions="" date_activated="2008-08-08 00:00:00.0" date_stopped="2008-08-15 00:00:00.0" creator="1" date_created="2008-08-19 12:20:22.0" voided="false" patient_id="7" uuid="921de0a3-05c4-444a-be03-e01b4c4b9142" order_action="DISCONTINUE" care_setting="1" encounter_id="1"/>
 </dataset>
