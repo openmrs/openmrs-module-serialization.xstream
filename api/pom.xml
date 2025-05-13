@@ -41,11 +41,6 @@
             <groupId>xpp3</groupId>
             <artifactId>xpp3_min</artifactId>
         </dependency>
-        <dependency>
- 			<groupId>cglib</groupId>
- 			<artifactId>cglib-nodep</artifactId>
- 			<version>2.2</version>
- 		</dependency>
 	</dependencies>
 
 
