@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.serialization.xstream.converter;
 
-import net.sf.cglib.proxy.Enhancer;
 
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
@@ -27,6 +26,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.CGLIBMapper;
 import com.thoughtworks.xstream.mapper.Mapper;
+import org.springframework.cglib.proxy.Enhancer;
 
 /**
  * Converter which deals with CGLIB proxy's serialization/deserialization. While serializing, it

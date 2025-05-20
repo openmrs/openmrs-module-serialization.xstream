@@ -13,7 +13,6 @@
  */
 package org.openmrs.module.serialization.xstream.converter;
 
-import net.sf.cglib.proxy.Enhancer;
 
 import org.openmrs.OpenmrsObject;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
@@ -29,6 +28,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.CGLIBMapper;
 import com.thoughtworks.xstream.mapper.Mapper;
+import org.springframework.cglib.proxy.Enhancer;
 
 /**
  * The base converter of all short converters
