@@ -14,8 +14,9 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
+import org.hibernate.SessionFactory;
 import org.hibernate.proxy.HibernateProxy;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Patient;
 import org.openmrs.Person;
 import org.openmrs.PersonAddress;
@@ -24,15 +25,16 @@ import org.openmrs.PersonAttributeType;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 
 
@@ -48,6 +50,10 @@ import static org.junit.Assert.assertTrue;
  * (8) should shortly serialize a short-serialized object while it exist as the key/value of a Map
  */
 public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
+	
+	@Autowired
+	private SessionFactory sessionFactory;
+	
 	/**
 	 * 
 	 * should fully serialize a short-serialized object while it exists sole, not as a member of other object.
@@ -57,7 +63,7 @@ public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 	@Test
 	public void shouldFullySerializeObject() throws Exception{
 		User user = Context.getUserService().getUser(501);
-		assertTrue("current user shouldn't be a cglib proxy", User.class == user.getClass());
+		assertTrue(User.class == user.getClass(), "current user shouldn't be a cglib proxy");
 		String xmlOutput = Context.getSerializationService().serialize(user, XStreamShortSerializer.class);
 		//test root node in "xmlOutput" should not contain only a uuid attribute.
 		XMLAssert.assertXpathEvaluatesTo("501", "/user/userId", xmlOutput);
@@ -73,7 +79,7 @@ public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 	@Test
 	public void shouldShortlySerializeObject() throws Exception{
 		Patient patient = Context.getPatientService().getPatient(999);
-		assertEquals("current patient should contain a creator whoes userId == 1", 1, patient.getCreator().getUserId().intValue());
+		assertEquals(1, patient.getCreator().getUserId().intValue(), "current patient should contain a creator whoes userId == 1");
 		String xmlOutput = Context.getSerializationService().serialize(patient, XStreamShortSerializer.class);
 		//test the node named as "creator" in "xmlOutput" should only contain a uuid attribute.
 		XMLAssert.assertXpathEvaluatesTo("1010d442-e134-11de-babe-001e378eb67e", "/patient/creator/@uuid", xmlOutput);
@@ -88,8 +94,9 @@ public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 	 */
 	@Test
 	public void shouldFullySerializeCGLibProxy() throws Exception{
-		Person person = Context.getPersonService().getPersonAttribute(1).getPerson();
-		assertTrue("current person should be a cglib proxy", HibernateProxy.class.isAssignableFrom(person.getClass()));
+		// PersonAttribute.person is eagerly fetched since 3.0, so get the lazy proxy from the session directly
+		Person person = sessionFactory.getCurrentSession().getReference(Person.class, 501);
+		assertTrue(HibernateProxy.class.isAssignableFrom(person.getClass()), "current person should be a cglib proxy");
 		String xmlOutput = Context.getSerializationService().serialize(person, XStreamShortSerializer.class);
 		//test root node in "xmlOutput" should not contain only a uuid attribute.
 		XMLAssert.assertXpathEvaluatesTo("501", "/person/personId", xmlOutput);
@@ -105,7 +112,7 @@ public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 	@Test
 	public void shouldShortlySerializeCGLibProxy() throws Exception{
 		PersonAddress pa = Context.getPersonService().getPersonAddressByUuid("3350d0b5-821c-4e5e-ad1d-a9bce331e118");
-		assertTrue("current personAddress should contain a person which is a cglib proxy", HibernateProxy.class.isAssignableFrom(pa.getPerson().getClass()));
+		assertTrue(HibernateProxy.class.isAssignableFrom(pa.getPerson().getClass()), "current personAddress should contain a person which is a cglib proxy");
 		String xmlOutput = Context.getSerializationService().serialize(pa, XStreamShortSerializer.class);
 		XMLAssert.assertXpathEvaluatesTo("da7f524f-27ce-4bb2-86d6-6d1d05312bd5", "/personAddress/person/@uuid", xmlOutput);
 		XMLAssert.assertXpathNotExists("/personAddress/person/*", xmlOutput);

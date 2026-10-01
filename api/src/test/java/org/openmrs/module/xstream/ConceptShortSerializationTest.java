@@ -14,14 +14,14 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.ConceptDescription;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test class that test the short serialization and short deserialization of a concept
@@ -38,8 +38,12 @@ public class ConceptShortSerializationTest extends BaseModuleContextSensitiveTes
 	public void shouldPatientShortSerialization() throws Exception {
 		
 		//prepare the necessary data
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/ConceptShortSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		ConceptDescription cd = (ConceptDescription) Context.getConceptService().getConceptDescriptionByUuid("79a3efa7-3a43-4b38-ac5d-9b68aee086c6");
@@ -65,8 +69,12 @@ public class ConceptShortSerializationTest extends BaseModuleContextSensitiveTes
 		 * Because "XXXShortConverter.unmarshal(HierarchicalStreamReader, UnmarshallingContext)" has operations accessing data in database,
 		 * We also need to use the "ConceptShortSerializationTest.xml" here 
 		 */
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/ConceptShortSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		//prepare the necessary data

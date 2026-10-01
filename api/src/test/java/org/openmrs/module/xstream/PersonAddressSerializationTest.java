@@ -14,17 +14,17 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.PersonAddress;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Test class that tests the serialization and deserialization of a PersonAddress
@@ -41,8 +41,12 @@ public class PersonAddressSerializationTest extends BaseModuleContextSensitiveTe
 	public void shouldSerializePersonAddress() throws Exception {
 		
 		//instantiate object
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PersonAddressSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		PersonAddress pa = Context.getPersonService().getPersonAddressByUuid("921c0e23-d941-4bac-8ce4-ab0d0f7d8123");
 		
@@ -140,8 +144,8 @@ public class PersonAddressSerializationTest extends BaseModuleContextSensitiveTe
 		    XStreamSerializer.class);
 		assertEquals(1, pa.getPersonAddressId().intValue());
 		assertEquals("921c0e23-d941-4bac-8ce4-ab0d0f7d8123", pa.getUuid());
-		assertFalse("The voided shouldn't be " + pa.getVoided(), pa.getVoided());
-		assertFalse("The preferred shouldn't be " + pa.getPreferred(), pa.getPreferred());
+		assertFalse(pa.getVoided(), "The voided shouldn't be " + pa.getVoided());
+		assertFalse(pa.getPreferred(), "The preferred shouldn't be " + pa.getPreferred());
 		assertEquals(1, pa.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2006-01-18 00:00:00 CST"), pa.getDateCreated());
 		assertEquals(1, pa.getPerson().getPersonId().intValue());

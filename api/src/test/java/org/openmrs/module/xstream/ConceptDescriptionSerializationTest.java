@@ -14,16 +14,16 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.ConceptDescription;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test class that tests the serialization and deserialization of a conceptDescription
@@ -39,8 +39,12 @@ public class ConceptDescriptionSerializationTest extends BaseModuleContextSensit
 	@SkipBaseSetup
 	public void shouldDeserializeConceptscription() throws Exception {
 		//instantiate object
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/ConceptDescriptionSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		ConceptDescription cd = (ConceptDescription) Context.getConceptService().getConceptDescriptionByUuid(

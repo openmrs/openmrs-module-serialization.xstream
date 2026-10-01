@@ -14,18 +14,18 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test class that tests the serialization and deserialization of a user
@@ -41,8 +41,12 @@ public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 	@SkipBaseSetup
 	public void shouldSerializeUser() throws Exception {
 		//instantiate object
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/UserSerializaionTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		User user = Context.getUserService().getUser(501);
@@ -54,11 +58,16 @@ public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 		XMLAssert.assertXpathEvaluatesTo("55685062-1b48-11df-a5c7-001e378eb67e", "/user/@uuid", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("true", "/user/@retired", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("501", "/user/person/personId", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateCreated()), "/user/dateCreated", xmlOutput);
+		// since 3.0 User declares its own audit fields, which are written after the person, so its dates that are
+		// equal to the person's ones are written as references to the person's elements
+		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateCreated()), "//*[@id=/user/dateCreated/@reference]",
+		    xmlOutput);
 		XMLAssert.assertXpathExists("/user/changedBy/@reference", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateChanged()), "/user/dateChanged", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateChanged()), "//*[@id=/user/dateChanged/@reference]",
+		    xmlOutput);
 		XMLAssert.assertXpathExists("/user/person/personVoidedBy/@reference", xmlOutput);
-		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateRetired()), "/user/dateRetired", xmlOutput);
+		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateRetired()), "//*[@id=/user/dateRetired/@reference]",
+		    xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("Test purposes", "/user/retireReason", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("501", "/user/person/personId", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("F", "/user/person/gender", xmlOutput);
@@ -172,7 +181,7 @@ public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 		User user = Context.getSerializationService()
 		        .deserialize(xmlBuilder.toString(), User.class, XStreamSerializer.class);
 		assertEquals("df8ae447-6745-45be-b859-403241d9913c", user.getUuid());
-		assertTrue("The retired shouldn't be " + user.getRetired(), user.getRetired());
+		assertTrue(user.getRetired(), "The retired shouldn't be " + user.getRetired());
 		assertEquals(1, user.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2008-08-15 15:46:47 CST"), user.getDateCreated());
 		assertEquals(1, user.getChangedBy().getUserId().intValue());
@@ -182,7 +191,7 @@ public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 		assertEquals("Test purposes", user.getRetireReason());
 		assertEquals(501, user.getPerson().getPersonId().intValue());
 		assertEquals("F", user.getPerson().getGender());
-		assertFalse("The dead shouldn't be " + user.getPerson().getDead(), user.getPerson().getDead());
+		assertFalse(user.getPerson().getDead(), "The dead shouldn't be " + user.getPerson().getDead());
 		assertEquals(501, user.getUserId().intValue());
 		assertEquals("2-6", user.getSystemId());
 		assertEquals("bruno", user.getUsername());

@@ -14,18 +14,18 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Person;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test class that tests the serialization and deserialization of a person
@@ -41,8 +41,12 @@ public class PersonSerializationTest extends BaseModuleContextSensitiveTest {
 	@SkipBaseSetup
 	public void shouldSerializePerson() throws Exception {
 		//instantiate object
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PersonSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		Person person = Context.getPersonService().getPerson(1000);
@@ -240,16 +244,16 @@ public class PersonSerializationTest extends BaseModuleContextSensitiveTest {
 		assertEquals(1, person.getAttributes().size());
 		assertEquals("M", person.getGender());
 		assertEquals(sdf.parse("1945-12-30 00:00:00 CST"), person.getBirthdate());
-		assertFalse("The birthdateEstimated shouldn't be " + person.getBirthdateEstimated(), person.getBirthdateEstimated());
-		assertTrue("The dead shouldn't be " + person.getDead(), person.getDead());
+		assertFalse(person.getBirthdateEstimated(), "The birthdateEstimated shouldn't be " + person.getBirthdateEstimated());
+		assertTrue(person.getDead(), "The dead shouldn't be " + person.getDead());
 		assertEquals(sdf.parse("2005-02-10 15:30:00 CST"), person.getDeathDate());
 		assertEquals(1088, person.getCauseOfDeath().getConceptId().intValue());
 		assertEquals(1, person.getPersonCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2006-01-18 00:00:00 CST"), person.getPersonDateCreated());
-		assertTrue("The personVoided shouldn't be " + person.getPersonVoided(), person.getPersonVoided());
+		assertTrue(person.getPersonVoided(), "The personVoided shouldn't be " + person.getPersonVoided());
 		assertEquals(1, person.getPersonVoidedBy().getUserId().intValue());
 		assertEquals(sdf.parse("2006-09-18 00:00:00 CST"), person.getPersonDateVoided());
 		assertEquals("test purpose", person.getPersonVoidReason());
-		assertFalse("The isPatient shouldn't be " + person.isPatient(), person.isPatient());
+		assertFalse(person.isPatient(), "The isPatient shouldn't be " + person.isPatient());
 	}
 }

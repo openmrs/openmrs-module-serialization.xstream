@@ -14,17 +14,17 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.PersonAttribute;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Test class that tests the serialization and deserialization of a PersonAttribute
@@ -40,8 +40,12 @@ public class PersonAttributeSerializationTest extends BaseModuleContextSensitive
 	@SkipBaseSetup
 	public void shouldSerializePersonAttribute() throws Exception {
 		//instantiate object
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PersonAttributeSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		PersonAttribute pa = Context.getPersonService().getPersonAttribute(1);
 		
@@ -139,6 +143,6 @@ public class PersonAttributeSerializationTest extends BaseModuleContextSensitive
 		assertEquals(sdf.parse("2008-08-15 15:46:47 CST"), pa.getDateCreated());
 		assertEquals(1, pa.getPerson().getPersonId().intValue());
 		assertEquals(1, pa.getAttributeType().getPersonAttributeTypeId().intValue());
-		assertFalse("The voided shouldn't be " + pa.getVoided(), pa.getVoided());
+		assertFalse(pa.getVoided(), "The voided shouldn't be " + pa.getVoided());
 	}
 }

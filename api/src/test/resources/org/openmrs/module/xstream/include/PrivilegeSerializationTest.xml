@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <dataset>
-	<privilege privilege="Delete Cohorts" description="Able to add a cohort to the system" uuid="afc993ec-8b43-4af2-9974-54c7f98214ce"/>
+	<privilege privilege="Delete Cohorts" description="Able to add a cohort to the system" uuid="afc993ec-8b43-4af2-9974-54c7f98214ce" creator="1" date_created="2005-01-01 00:00:00.0" retired="false"/>
 </dataset>

@@ -14,18 +14,18 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Drug;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test class that tests the serialization and deserialization of a drug
@@ -41,8 +41,12 @@ public class DrugSerializationTest extends BaseModuleContextSensitiveTest {
 	@SkipBaseSetup
 	public void shouldSerializeDrug() throws Exception {
 		//instantiate object
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/DrugSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		Drug drug = Context.getConceptService().getDrug(2);
@@ -187,11 +191,11 @@ public class DrugSerializationTest extends BaseModuleContextSensitiveTest {
 		        .deserialize(xmlBuilder.toString(), Drug.class, XStreamSerializer.class);
 		assertEquals("3cfcf118-931c-46f7-8ff6-7b876f0d4202", drug.getUuid());
 		assertEquals(2, drug.getDrugId().intValue());
-		assertFalse("The retired shouldn't be " + drug.getRetired(), drug.getRetired());
+		assertFalse(drug.getRetired(), "The retired shouldn't be " + drug.getRetired());
 		assertEquals("Triomune-30", drug.getName());
 		assertEquals(1, drug.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2005-02-24 00:00:00 CST"), drug.getDateCreated());
-		assertTrue("The combination shouldn't be " + drug.getCombination(), drug.getCombination());
+		assertTrue(drug.getCombination(), "The combination shouldn't be " + drug.getCombination());
 		assertEquals(3, drug.getDosageForm().getConceptId().intValue());
 		assertEquals(4, drug.getConcept().getConceptId().intValue());
 	}

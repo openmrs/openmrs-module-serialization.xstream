@@ -14,17 +14,17 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Concept;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Test class that tests the serialization and deserialization of a concept
@@ -40,8 +40,15 @@ public class ConceptSerializationTest extends BaseModuleContextSensitiveTest {
 	@SkipBaseSetup
 	public void shouldSerializeConcept() throws Exception {
 		//instantiate object
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/ConceptSerializationTest.xml");
+		// concept_name_tag_map has no primary key in the test schema, which dbunit needs to load it from the dataset
+		getConnection().createStatement().executeUpdate(
+		    "insert into concept_name_tag_map (concept_name_id, concept_name_tag_id) values (2456, 4)");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		Concept concept = Context.getConceptService().getConcept(3);
@@ -258,11 +265,11 @@ public class ConceptSerializationTest extends BaseModuleContextSensitiveTest {
 		    XStreamSerializer.class);
 		assertEquals("0cbe2ed3-cd5f-4f46-9459-26127c9265ab", concept.getUuid());
 		assertEquals(3, concept.getConceptId().intValue());
-		assertFalse("The retired shouldn't be " + concept.isRetired(), concept.isRetired());
+		assertFalse(concept.isRetired(), "The retired shouldn't be " + concept.isRetired());
 		assertEquals(4, concept.getDatatype().getConceptDatatypeId().intValue());
 		assertEquals(3, concept.getConceptClass().getConceptClassId().intValue());
 		assertEquals(1, concept.getCreator().getUserId().intValue());
-		assertFalse("The set shouldn't be " + concept.getSet(), concept.getSet());
+		assertFalse(concept.getSet(), "The set shouldn't be " + concept.getSet());
 		assertEquals(sdf.parse("2008-08-15 15:27:51 CST"), concept.getDateCreated());
 		assertEquals(1, concept.getNames().size());
 		assertEquals(1, concept.getAnswers().size());

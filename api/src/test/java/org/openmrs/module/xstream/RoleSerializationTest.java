@@ -14,15 +14,15 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Role;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Test class that tests the serialization and deserialization of a role
@@ -38,8 +38,12 @@ public class RoleSerializationTest extends BaseModuleContextSensitiveTest {
 	@SkipBaseSetup
 	public void shouldSerializeRole() throws Exception {
 		//instantiate object
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/RoleSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		Role role = Context.getUserService().getRole("Data Manager");
 		//serialize and compare with a given string
@@ -112,7 +116,7 @@ public class RoleSerializationTest extends BaseModuleContextSensitiveTest {
 		Role role = Context.getSerializationService()
 		        .deserialize(xmlBuilder.toString(), Role.class, XStreamSerializer.class);
 		assertEquals("00eb3992-92b2-102c-adee-6014420f8468", role.getUuid());
-		assertFalse("The retired shouldn't be " + role.getRetired(), role.getRetired());
+		assertFalse(role.getRetired(), "The retired shouldn't be " + role.getRetired());
 		assertEquals("Data Manager", role.getRole());
 		assertEquals("User who maintains clinical data stored within the OpenMRS repository.", role.getDescription());
 		assertEquals(4, role.getPrivileges().size());

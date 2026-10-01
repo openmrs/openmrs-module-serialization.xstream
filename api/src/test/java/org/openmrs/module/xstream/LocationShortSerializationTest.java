@@ -14,14 +14,14 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Encounter;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test class that test the short serialization and short deserialization of a location
@@ -38,8 +38,12 @@ public class LocationShortSerializationTest extends BaseModuleContextSensitiveTe
 	public void shouldLocationShortSerialization() throws Exception {
 		
 		//prepare the necessary data
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		Encounter e = Context.getEncounterService().getEncounter(4);
@@ -64,8 +68,12 @@ public class LocationShortSerializationTest extends BaseModuleContextSensitiveTe
 		 * Because "XXXShortConverter.unmarshal(HierarchicalStreamReader, UnmarshallingContext)" has operations accessing data in database,
 		 * We also need to use the "EncounterTypeShortSerializationTest.xml" here 
 		 */
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/EncounterTypeShortSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		//prepare the necessary data
@@ -77,7 +85,6 @@ public class LocationShortSerializationTest extends BaseModuleContextSensitiveTe
 		xmlBuilder
 		        .append("  <encounterDatetime class=\"sql-timestamp\" id=\"4\">2008-08-15 00:00:00 CST</encounterDatetime>\n");
 		xmlBuilder.append("  <patient id=\"5\" uuid=\"5946f880-b197-400b-9caa-a3c661d23041\"/>\n");
-		xmlBuilder.append("  <patientId>7</patientId>\n");
 		xmlBuilder.append("  <location id=\"6\" uuid=\"dc5c1fcc-0459-4201-bf70-0b90535ba362\" retired=\"false\"/>\n");
 		xmlBuilder.append("  <form id=\"10\" uuid=\"d9218f76-6c39-45f4-8efa-4c5c6c199f50\" retired=\"false\">\n");
 		xmlBuilder.append("    <name>Basic Form</name>\n");

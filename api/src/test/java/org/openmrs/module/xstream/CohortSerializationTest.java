@@ -14,12 +14,12 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Cohort;
 import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
@@ -38,8 +38,12 @@ public class CohortSerializationTest extends BaseModuleContextSensitiveTest {
 	@SkipBaseSetup
 	public void shouldSerializeCohort() throws Exception {
 		//instantiate object
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/CohortSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		Cohort cohort = Context.getCohortService().getCohort(1);
@@ -60,9 +64,9 @@ public class CohortSerializationTest extends BaseModuleContextSensitiveTest {
 		XMLAssert.assertXpathEvaluatesTo("old cohorts", "/cohort/name", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("This is a cohort in which every one's age is above 60", "/cohort/description",
 		    xmlOutput);
-		XMLAssert.assertXpathExists("/cohort/memberIds[int=6]", xmlOutput);
-		XMLAssert.assertXpathExists("/cohort/memberIds[int=7]", xmlOutput);
-		XMLAssert.assertXpathExists("/cohort/memberIds[int=8]", xmlOutput);
+		XMLAssert.assertXpathExists("/cohort/memberships/cohortMembership[patientId=6]", xmlOutput);
+		XMLAssert.assertXpathExists("/cohort/memberships/cohortMembership[patientId=7]", xmlOutput);
+		XMLAssert.assertXpathExists("/cohort/memberships/cohortMembership[patientId=8]", xmlOutput);
 	}
 	
 	/**

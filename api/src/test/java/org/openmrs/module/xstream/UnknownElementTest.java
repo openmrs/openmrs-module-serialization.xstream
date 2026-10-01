@@ -14,13 +14,13 @@
 package org.openmrs.module.xstream;
 
 import com.thoughtworks.xstream.converters.ConversionException;
-import junit.framework.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.openmrs.EncounterType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
 import org.openmrs.serialization.OpenmrsSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 
 /**
  * Test class that tests how serialization handles unknown elements
@@ -33,16 +33,18 @@ public class UnknownElementTest extends BaseModuleContextSensitiveTest {
 	 * to deserialize, rather than silently ignoring unknown elements
 	 * @throws Exception
 	 */
-	@Test(expected=ConversionException.class)
+	@Test
 	public void shouldThrowExceptionIfUnknownElementExists() throws Exception {
 		OpenmrsSerializer serializer = Context.getSerializationService().getSerializer(XStreamShortSerializer.class);
 		
 		EncounterType original = Context.getEncounterService().getEncounterType(1);
 		String xml = serializer.serialize(original);
-		Assert.assertTrue(xml.contains("<description>"));
+		Assertions.assertTrue(xml.contains("<description>"));
 		
 		// Test unknown element names
 		xml = xml.replace("description>", "descr>");
-		serializer.deserialize(xml, EncounterType.class);
+		String unknownElementXml = xml;
+		Assertions.assertThrows(ConversionException.class,
+		    () -> serializer.deserialize(unknownElementXml, EncounterType.class));
 	}
 }

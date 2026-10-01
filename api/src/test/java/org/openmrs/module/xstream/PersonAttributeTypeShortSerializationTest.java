@@ -14,14 +14,14 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.PersonAttribute;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test class that test the short serialization and short deserialization of a personAttributeType
@@ -37,8 +37,12 @@ public class PersonAttributeTypeShortSerializationTest extends BaseModuleContext
 	@SkipBaseSetup
 	public void shouldPersonShortSerialization() throws Exception {
 		//prepare the necessary data
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PersonAttributeTypeShortSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		PersonAttribute pa = Context.getPersonService().getPersonAttributeByUuid("0768f3da-b692-44b7-a33f-abf2c450474e");
@@ -64,8 +68,12 @@ public class PersonAttributeTypeShortSerializationTest extends BaseModuleContext
 		 * Because "XXXShortConverter.unmarshal(HierarchicalStreamReader, UnmarshallingContext)" has operations accessing data in database,
 		 * We also need to use the "PersonAttributeTypeShortSerializationTest.xml" here 
 		 */
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PersonAttributeTypeShortSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		//prepare the necessary data

@@ -14,14 +14,14 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Field;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test class that test the short serialization and short deserialization of a fieldType
@@ -38,8 +38,12 @@ public class FieldTypeShortSerializationTest extends BaseModuleContextSensitiveT
 	public void shouldFieldTypeShortSerialization() throws Exception {
 		
 		//prepare the necessary data
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/FieldTypeShortSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		Field f = Context.getFormService().getField(1);
@@ -65,8 +69,12 @@ public class FieldTypeShortSerializationTest extends BaseModuleContextSensitiveT
 		 * Because "XXXShortConverter.unmarshal(HierarchicalStreamReader, UnmarshallingContext)" has operations accessing data in database,
 		 * We also need to use the "FieldTypeShortSerializationTest.xml" here 
 		 */
+		// data committed by a previous test would otherwise collide with this test's dataset
+		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/FieldTypeShortSerializationTest.xml");
+		// the role privilege cache loads roles in its own transaction, so the test data must be committed
+		getConnection().commit();
 		authenticate();
 		
 		//prepare the necessary data
@@ -82,7 +90,6 @@ public class FieldTypeShortSerializationTest extends BaseModuleContextSensitiveT
 		xmlBuilder.append("  <tableName></tableName>\n");
 		xmlBuilder.append("  <defaultValue></defaultValue>\n");
 		xmlBuilder.append("  <selectMultiple>false</selectMultiple>\n");
-		xmlBuilder.append("  <answers id=\"6\"/>\n");
 		xmlBuilder.append("</field>\n");
 		
 		Field f = Context.getSerializationService().deserialize(xmlBuilder.toString(), Field.class,
