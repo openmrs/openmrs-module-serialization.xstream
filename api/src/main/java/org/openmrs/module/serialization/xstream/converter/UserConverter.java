@@ -15,7 +15,6 @@ import com.thoughtworks.xstream.converters.UnmarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.CGLIBMapper;
-import org.hibernate.proxy.HibernateProxy;
 import org.springframework.cglib.proxy.Enhancer;
 
 /**
@@ -106,7 +105,6 @@ public class UserConverter implements Converter {
 	 */
 	protected boolean isJavassistProxy(Class type) {
         return type.getName().indexOf(JavassistMapper.OLD_NAMING_MARKER) > 0
-                || type.getName().indexOf(JavassistMapper.NEW_NAMING_MARKER) > 0
-                || HibernateProxy.class.isAssignableFrom(type);
+                || type.getName().indexOf(JavassistMapper.NEW_NAMING_MARKER) > 0;
 	}
 }
