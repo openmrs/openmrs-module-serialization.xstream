@@ -38,12 +38,8 @@ public class OrderTypeShortSerializationTest extends BaseModuleContextSensitiveT
 	public void shouldOrderTypeShortSerialization() throws Exception {
 		
 		//prepare the necessary data
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/OrderTypeShortSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		Order o = Context.getOrderService().getOrderByUuid("921de0a3-05c4-444a-be03-e01b4c4b9142");
@@ -69,12 +65,8 @@ public class OrderTypeShortSerializationTest extends BaseModuleContextSensitiveT
 		 * Because "XXXShortConverter.unmarshal(HierarchicalStreamReader, UnmarshallingContext)" has operations accessing data in database,
 		 * We also need to use the "OrderTypeShortSerializationTest.xml" here 
 		 */
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/OrderTypeShortSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		//prepare the necessary data

@@ -38,12 +38,8 @@ public class RelationshipTypeShortSerializationTest extends BaseModuleContextSen
 	public void shouldRelationshipTypeShortSerialization() throws Exception {
 		
 		//prepare the necessary data
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/RelationshipTypeShortSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		Relationship r = Context.getPersonService().getRelationship(1);
@@ -69,12 +65,8 @@ public class RelationshipTypeShortSerializationTest extends BaseModuleContextSen
 		 * Because "XXXShortConverter.unmarshal(HierarchicalStreamReader, UnmarshallingContext)" has operations accessing data in database,
 		 * We also need to use the "RelationshipTypeShortSerializationTest.xml" here 
 		 */
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/RelationshipTypeShortSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		//prepare the necessary data

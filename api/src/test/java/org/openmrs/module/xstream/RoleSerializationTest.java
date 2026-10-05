@@ -38,12 +38,8 @@ public class RoleSerializationTest extends BaseModuleContextSensitiveTest {
 	@SkipBaseSetup
 	public void shouldSerializeRole() throws Exception {
 		//instantiate object
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/RoleSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		Role role = Context.getUserService().getRole("Data Manager");
 		//serialize and compare with a given string

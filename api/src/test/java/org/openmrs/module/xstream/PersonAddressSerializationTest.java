@@ -41,12 +41,8 @@ public class PersonAddressSerializationTest extends BaseModuleContextSensitiveTe
 	public void shouldSerializePersonAddress() throws Exception {
 		
 		//instantiate object
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PersonAddressSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		PersonAddress pa = Context.getPersonService().getPersonAddressByUuid("921c0e23-d941-4bac-8ce4-ab0d0f7d8123");
 		

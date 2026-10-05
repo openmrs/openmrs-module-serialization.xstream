@@ -38,12 +38,8 @@ public class PatientShortSerializationTest extends BaseModuleContextSensitiveTes
 	public void shouldPatientShortSerialization() throws Exception {
 		
 		//prepare the necessary data
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PatientShortSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		PatientIdentifier pi = Context.getPatientService()
@@ -70,12 +66,8 @@ public class PatientShortSerializationTest extends BaseModuleContextSensitiveTes
 		 * Because "XXXShortConverter.unmarshal(HierarchicalStreamReader, UnmarshallingContext)" has operations accessing data in database,
 		 * We also need to use the "PatientShortSerializationTest.xml" here 
 		 */
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PatientShortSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		//prepare the necessary data

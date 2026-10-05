@@ -37,12 +37,8 @@ public class PrivilegeSerializationTest extends BaseModuleContextSensitiveTest {
 	@SkipBaseSetup
 	public void shouldSerializePrivilege() throws Exception {
 		//instantiate object
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PrivilegeSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		Privilege p = Context.getUserService().getPrivilege("Delete Cohorts");

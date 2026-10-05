@@ -39,12 +39,8 @@ public class ConceptDescriptionSerializationTest extends BaseModuleContextSensit
 	@SkipBaseSetup
 	public void shouldDeserializeConceptscription() throws Exception {
 		//instantiate object
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/ConceptDescriptionSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		ConceptDescription cd = (ConceptDescription) Context.getConceptService().getConceptDescriptionByUuid(

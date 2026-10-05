@@ -40,15 +40,11 @@ public class ConceptComplexSerializationTest extends BaseModuleContextSensitiveT
 	@SkipBaseSetup
 	public void shouldSerializeConceptComplex() throws Exception {
 		//instantiate object
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/ConceptComplexSerializationTest.xml");
 		// concept_name_tag_map has no primary key in the test schema, which dbunit needs to load it from the dataset
 		getConnection().createStatement().executeUpdate(
 		    "insert into concept_name_tag_map (concept_name_id, concept_name_tag_id) values (2456, 4)");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		ConceptComplex cc = Context.getConceptService().getConceptComplex(3);

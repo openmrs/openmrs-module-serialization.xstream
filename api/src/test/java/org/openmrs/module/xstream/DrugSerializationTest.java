@@ -41,12 +41,8 @@ public class DrugSerializationTest extends BaseModuleContextSensitiveTest {
 	@SkipBaseSetup
 	public void shouldSerializeDrug() throws Exception {
 		//instantiate object
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/DrugSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		Drug drug = Context.getConceptService().getDrug(2);

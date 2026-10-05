@@ -41,12 +41,8 @@ public class PersonAttributeTypeSerializationTest extends BaseModuleContextSensi
 	@SkipBaseSetup
 	public void shouldSerializePersonAttributeType() throws Exception {
 		//instantiate object
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PersonAttributeTypeSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		PersonAttributeType personAttributeType = Context.getPersonService().getPersonAttributeType(1);

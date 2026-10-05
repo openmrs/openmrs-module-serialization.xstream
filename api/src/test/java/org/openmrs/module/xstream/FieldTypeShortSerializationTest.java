@@ -38,12 +38,8 @@ public class FieldTypeShortSerializationTest extends BaseModuleContextSensitiveT
 	public void shouldFieldTypeShortSerialization() throws Exception {
 		
 		//prepare the necessary data
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/FieldTypeShortSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		Field f = Context.getFormService().getField(1);
@@ -69,12 +65,8 @@ public class FieldTypeShortSerializationTest extends BaseModuleContextSensitiveT
 		 * Because "XXXShortConverter.unmarshal(HierarchicalStreamReader, UnmarshallingContext)" has operations accessing data in database,
 		 * We also need to use the "FieldTypeShortSerializationTest.xml" here 
 		 */
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/FieldTypeShortSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		//prepare the necessary data

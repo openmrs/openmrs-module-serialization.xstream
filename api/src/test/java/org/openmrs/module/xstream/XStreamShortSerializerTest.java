@@ -14,7 +14,6 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.hibernate.SessionFactory;
 import org.hibernate.proxy.HibernateProxy;
 import org.junit.jupiter.api.Test;
 import org.openmrs.Patient;
@@ -26,7 +25,6 @@ import org.openmrs.User;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
 import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -50,10 +48,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * (8) should shortly serialize a short-serialized object while it exist as the key/value of a Map
  */
 public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
-	
-	@Autowired
-	private SessionFactory sessionFactory;
-	
 	/**
 	 * 
 	 * should fully serialize a short-serialized object while it exists sole, not as a member of other object.
@@ -94,8 +88,7 @@ public class XStreamShortSerializerTest extends BaseModuleContextSensitiveTest{
 	 */
 	@Test
 	public void shouldFullySerializeCGLibProxy() throws Exception{
-		// PersonAttribute.person is eagerly fetched since 3.0, so get the lazy proxy from the session directly
-		Person person = sessionFactory.getCurrentSession().getReference(Person.class, 501);
+		Person person = Context.getPersonService().getPersonAttribute(1).getPerson();
 		assertTrue(HibernateProxy.class.isAssignableFrom(person.getClass()), "current person should be a cglib proxy");
 		String xmlOutput = Context.getSerializationService().serialize(person, XStreamShortSerializer.class);
 		//test root node in "xmlOutput" should not contain only a uuid attribute.

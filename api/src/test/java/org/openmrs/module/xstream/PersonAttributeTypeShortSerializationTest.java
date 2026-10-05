@@ -37,12 +37,8 @@ public class PersonAttributeTypeShortSerializationTest extends BaseModuleContext
 	@SkipBaseSetup
 	public void shouldPersonShortSerialization() throws Exception {
 		//prepare the necessary data
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PersonAttributeTypeShortSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		PersonAttribute pa = Context.getPersonService().getPersonAttributeByUuid("0768f3da-b692-44b7-a33f-abf2c450474e");
@@ -68,12 +64,8 @@ public class PersonAttributeTypeShortSerializationTest extends BaseModuleContext
 		 * Because "XXXShortConverter.unmarshal(HierarchicalStreamReader, UnmarshallingContext)" has operations accessing data in database,
 		 * We also need to use the "PersonAttributeTypeShortSerializationTest.xml" here 
 		 */
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PersonAttributeTypeShortSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		//prepare the necessary data

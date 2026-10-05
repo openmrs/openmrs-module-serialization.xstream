@@ -40,12 +40,8 @@ public class ConceptSourceSerializationTest extends BaseModuleContextSensitiveTe
 	@SkipBaseSetup
 	public void shouldSerializeConceptSource() throws Exception {
 		//instantiate object
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/ConceptSourceSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		
 		ConceptSource cs = Context.getConceptService().getConceptSource(1);

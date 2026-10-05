@@ -41,12 +41,8 @@ public class PersonNameSerializationTest extends BaseModuleContextSensitiveTest 
 	@SkipBaseSetup
 	public void shouldSerializePersonName() throws Exception {
 		//instantiate necessary objects
-		// data committed by a previous test would otherwise collide with this test's dataset
-		deleteAllData();
 		initializeInMemoryDatabase();
 		executeDataSet("org/openmrs/module/xstream/include/PersonNameSerializationTest.xml");
-		// the role privilege cache loads roles in its own transaction, so the test data must be committed
-		getConnection().commit();
 		authenticate();
 		PersonName pn = Context.getPersonService().getPersonNameByUuid("399e3a7b-6482-487d-94ce-c07bb3ca3cc7");
 		
