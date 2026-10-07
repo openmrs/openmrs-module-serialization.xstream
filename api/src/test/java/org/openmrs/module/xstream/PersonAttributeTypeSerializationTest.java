@@ -14,18 +14,18 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.PersonAttributeType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test class that tests the serialization and deserialization of a PersonAttributeType
@@ -145,9 +145,9 @@ public class PersonAttributeTypeSerializationTest extends BaseModuleContextSensi
 		PersonAttributeType personAttributeType = Context.getSerializationService().deserialize(xmlBuilder.toString(),
 		    PersonAttributeType.class, XStreamSerializer.class);
 		assertEquals(1, personAttributeType.getPersonAttributeTypeId().intValue());
-		assertTrue("The retired shouldn't be " + personAttributeType.getRetired(), personAttributeType.getRetired());
-		assertFalse("The searchable shouldn't be " + personAttributeType.getSearchable(), personAttributeType
-		        .getSearchable());
+		assertTrue(personAttributeType.getRetired(), "The retired shouldn't be " + personAttributeType.getRetired());
+		assertFalse(personAttributeType.getSearchable(), "The searchable shouldn't be "
+		        + personAttributeType.getSearchable());
 		assertEquals(1053, personAttributeType.getForeignKey().intValue());
 		assertEquals("b3b6d540-a32e-44c7-91b3-292d97667518", personAttributeType.getUuid());
 		assertEquals("Race", personAttributeType.getName());

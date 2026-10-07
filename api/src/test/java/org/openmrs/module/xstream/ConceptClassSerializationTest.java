@@ -14,17 +14,17 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.ConceptClass;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test class that tests the serialization and deserialization of a conceptClass
@@ -138,7 +138,7 @@ public class ConceptClassSerializationTest extends BaseModuleContextSensitiveTes
 		assertEquals("Conclusion drawn through findings", cc.getDescription());
 		assertEquals(1, cc.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2004-02-02 00:00:00 CST"), cc.getDateCreated());
-		assertTrue("The retired shouldn't be " + cc.getRetired(), cc.getRetired());
+		assertTrue(cc.getRetired(), "The retired shouldn't be " + cc.getRetired());
 		assertEquals(sdf.parse("2006-02-02 00:00:00 CST"), cc.getDateRetired());
 		assertEquals(1, cc.getRetiredBy().getUserId().intValue());
 		assertEquals("we don't want to use it", cc.getRetireReason());

@@ -49,6 +49,7 @@ import org.openmrs.module.serialization.xstream.mapper.NullValueMapper;
 import org.openmrs.module.serialization.xstream.strategy.CustomReferenceByIdMarshallingStrategy;
 import org.openmrs.serialization.OpenmrsSerializer;
 import org.openmrs.serialization.SerializationException;
+import org.openmrs.serialization.SimpleXStreamSerializer;
 import org.openmrs.util.OpenmrsClassLoader;
 
 import com.thoughtworks.xstream.XStream;
@@ -63,7 +64,7 @@ import com.thoughtworks.xstream.mapper.MapperWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 
 /**
  * Provides serialization using XStream. <br/>
@@ -82,6 +83,8 @@ import javax.annotation.PostConstruct;
 public class XStreamSerializer implements OpenmrsSerializer {
 	
 	public XStream xstream = null;
+
+	private volatile boolean xstreamSecurityInitialized = false;
 
     @Autowired
     private HibernateCollectionConverter collectionConverter;
@@ -139,6 +142,8 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		xstream.useAttributeFor(Concept.class, "retired");
 		xstream.useAttributeFor(ConceptName.class, "voided");
 		xstream.useAttributeFor(ConceptNameTag.class, "voided");
+		// since 2.4 User no longer extends BaseOpenmrsMetadata and declares its own retired field
+		xstream.useAttributeFor(User.class, "retired");
 		//xstream.useAttributeFor(ConceptSource.class, "retired");
 
 		// In 2.x, the 'log' field in Person and User was made protected,
@@ -338,7 +343,24 @@ public class XStreamSerializer implements OpenmrsSerializer {
         if (!Context.isAuthenticated()) {
             throw new APIAuthenticationException("Authentication is required");
         }
+        initXStreamSecurity();
         return (T) xstream.fromXML(serializedObject);
+	}
+	
+	/**
+	 * Applies the core type whitelist (including the types allowed via global properties) to the
+	 * xstream instance. This is done lazily on first deserialization so that global properties are
+	 * available, since XStream denies every type that is not explicitly allowed.
+	 */
+	private void initXStreamSecurity() {
+		if (!xstreamSecurityInitialized) {
+			synchronized (this) {
+				if (!xstreamSecurityInitialized) {
+					SimpleXStreamSerializer.setupXStreamSecurity(xstream, Context.getAdministrationService());
+					xstreamSecurityInitialized = true;
+				}
+			}
+		}
 	}
 	
 	/**

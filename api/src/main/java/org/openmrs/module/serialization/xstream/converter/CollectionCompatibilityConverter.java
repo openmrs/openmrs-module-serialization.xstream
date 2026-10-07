@@ -16,11 +16,12 @@ package org.openmrs.module.serialization.xstream.converter;
 import com.thoughtworks.xstream.converters.ConverterLookup;
 import com.thoughtworks.xstream.converters.MarshallingContext;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
-import org.hibernate.collection.internal.PersistentList;
-import org.hibernate.collection.internal.PersistentMap;
-import org.hibernate.collection.internal.PersistentSet;
-import org.hibernate.collection.internal.PersistentSortedMap;
-import org.hibernate.collection.internal.PersistentSortedSet;
+import org.hibernate.collection.spi.PersistentBag;
+import org.hibernate.collection.spi.PersistentList;
+import org.hibernate.collection.spi.PersistentMap;
+import org.hibernate.collection.spi.PersistentSet;
+import org.hibernate.collection.spi.PersistentSortedMap;
+import org.hibernate.collection.spi.PersistentSortedSet;
 import org.hibernate.collection.spi.PersistentCollection;
 import org.openmrs.annotation.OpenmrsProfile;
 
@@ -35,7 +36,7 @@ import java.util.SortedSet;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
-@OpenmrsProfile(openmrsPlatformVersion = "2.*")
+@OpenmrsProfile(openmrsPlatformVersion = "3.*")
 public class CollectionCompatibilityConverter implements CollectionCompatibility {
 
 	@Override
@@ -47,7 +48,8 @@ public class CollectionCompatibilityConverter implements CollectionCompatibility
 	public void marshal(Object source, HierarchicalStreamWriter writer,
 			MarshallingContext context, ConverterLookup converterLookup) {
 		
-		if (source instanceof PersistentList) {
+		if (source instanceof PersistentList || source instanceof PersistentBag) {
+			// collections mapped as java.util.Collection (e.g. ConceptName.tags) are PersistentBags in Hibernate 7
 			source = new ArrayList((Collection) source);
 		} else if (source instanceof PersistentMap) {
 			source = new HashMap((Map) source);

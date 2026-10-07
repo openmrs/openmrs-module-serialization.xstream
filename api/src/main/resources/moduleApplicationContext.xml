@@ -6,11 +6,16 @@
 	<!-- Beans to add to the current Application context definition -->
 
 	<!-- Config Serialization Service to be supported by XStream library -->
-	<bean parent="serializationServiceTarget">
-		<property name="serializers">
+	<!-- Platform 3.0 removed the serializationServiceTarget bean, so the serializers are added to the serializationService directly -->
+	<bean class="org.springframework.beans.factory.config.MethodInvokingBean">
+		<property name="targetObject" ref="serializationService"/>
+		<property name="targetMethod" value="setSerializers"/>
+		<property name="arguments">
 			<list>
-				<ref bean="xstreamSerializer"/>
-				<ref bean="xstreamShortSerializer"/>
+				<list>
+					<ref bean="xstreamSerializer"/>
+					<ref bean="xstreamShortSerializer"/>
+				</list>
 			</list>
 		</property>
 	</bean>

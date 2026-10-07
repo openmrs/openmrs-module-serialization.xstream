@@ -14,18 +14,18 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.PersonName;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test class that tests the serialization and deserialization of a PersonName
@@ -74,7 +74,7 @@ public class PersonNameSerializationTest extends BaseModuleContextSensitiveTest 
 	public void shouldDeserializePersonName() throws Exception {
 		//construct the deserialized xml string
 		StringBuilder xmlBuilder = new StringBuilder();
-		xmlBuilder.append("<personName id=\"1\" uuid=\"399e3a7b-6482-487d-94ce-c07bb3ca3cc7\" retired=\"false\">\n");
+		xmlBuilder.append("<personName id=\"1\" uuid=\"399e3a7b-6482-487d-94ce-c07bb3ca3cc7\" voided=\"false\">\n");
 		xmlBuilder.append("  <creator id=\"2\" uuid=\"6adb7c42-cfd2-4301-b53b-ff17c5654ff7\" voided=\"false\">\n");
 		xmlBuilder.append("    <creator reference=\"2\"/>\n");
 		xmlBuilder.append("    <dateCreated class=\"sql-timestamp\" id=\"3\">2005-01-01 00:00:00 CST</dateCreated>\n");
@@ -155,7 +155,6 @@ public class PersonNameSerializationTest extends BaseModuleContextSensitiveTest 
 		xmlBuilder.append("  <middleName>Test</middleName>\n");
 		xmlBuilder.append("  <familyName>Hornblower</familyName>\n");
 		xmlBuilder.append("  <familyNameSuffix>Esq.</familyNameSuffix>\n");
-		xmlBuilder.append("  <voided>false</voided>\n");
 		xmlBuilder.append("  <voidReason></voidReason>\n");
 		xmlBuilder.append("</personName>\n");
 		
@@ -169,8 +168,8 @@ public class PersonNameSerializationTest extends BaseModuleContextSensitiveTest 
 		assertEquals(1, pn.getCreator().getUserId().intValue());
 		assertEquals(2, pn.getPerson().getPersonId().intValue());
 		assertEquals(sdf.parse("2005-09-22 00:00:00 CST"), pn.getDateCreated());
-		assertFalse("The voided shouldn't be " + pn.getVoided(), pn.getVoided());
-		assertTrue("The preferred shouldn't be " + pn.getPreferred(), pn.getPreferred());
+		assertFalse(pn.getVoided(), "The voided shouldn't be " + pn.getVoided());
+		assertTrue(pn.getPreferred(), "The preferred shouldn't be " + pn.getPreferred());
 		assertEquals("Mr.", pn.getPrefix());
 		assertEquals("Horatio", pn.getGivenName());
 		assertEquals("Test", pn.getMiddleName());

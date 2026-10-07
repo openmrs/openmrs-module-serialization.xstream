@@ -14,14 +14,14 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.PatientIdentifierType;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamShortSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * Test class that test the short serialization and short deserialization of a user
@@ -79,7 +79,6 @@ public class UserShortSerializationTest extends BaseModuleContextSensitiveTest {
 		xmlBuilder.append("  <dateCreated class=\"sql-timestamp\" id=\"3\">2005-09-22 00:00:00 CST</dateCreated>\n");
 		xmlBuilder.append("  <patientIdentifierTypeId>1</patientIdentifierTypeId>\n");
 		xmlBuilder.append("  <required>false</required>\n");
-		xmlBuilder.append("  <checkDigit>true</checkDigit>\n");
 		xmlBuilder.append("  <validator>org.openmrs.patient.impl.LuhnIdentifierValidator</validator>\n");
 		xmlBuilder.append("</patientIdentifierType>\n");
 		

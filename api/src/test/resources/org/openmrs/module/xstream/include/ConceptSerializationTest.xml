@@ -9,7 +9,6 @@
 	<concept concept_id="23" retired="false" datatype_id="4" class_id="10" is_set="true" creator="1" date_created="2008-08-18 12:38:58.0" version="" uuid="0f97e14e-cdc2-49ac-9255-b5126f8a5147"/>
 	<concept_name concept_id="3" name="COUGH SYRUP" locale="en" locale_preferred="true" creator="1" date_created="2008-08-15 15:27:51.0" concept_name_id="2456" voided="false" uuid="b8159118-c97b-4d5a-a63e-d4aa4be0c4d3"/>
 	<concept_name_tag concept_name_tag_id="4" tag="preferred" description="preferred name in English" creator="1" date_created="2007-05-01 00:00:00.0" voided="false" uuid="73e8f75b-9133-426e-ac3f-40a903ceb0bf"/>
-	<concept_name_tag_map concept_name_id="2456" concept_name_tag_id="4"/>
 	<concept_description concept_description_id="9" concept_id="3" description="This is used for coughs" locale="en" creator="1" date_created="2008-08-15 15:27:51.0" uuid="79a3efa7-3a43-4b38-ac5d-9b68aee086c6"/>
 	<concept_answer concept_answer_id="762" concept_id="3" answer_concept="796" answer_drug="10" creator="1" date_created="2006-02-14 14:22:55.0" uuid="0038bcf6-92b2-102c-adee-6014420f8468"/>
 	<concept_set concept_set_id="1" concept_id="23" concept_set="3" sort_weight="0.0" creator="1" date_created="2008-08-18 12:38:58.0" uuid="1a111827-639f-4cb4-961f-1e025bf88d90"/>

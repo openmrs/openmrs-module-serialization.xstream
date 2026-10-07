@@ -14,18 +14,18 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.Patient;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * Test class that tests the serialization and deserialization of a patient
@@ -165,7 +165,6 @@ public class PatientSerializationTest extends BaseModuleContextSensitiveTest {
 		xmlBuilder.append("        <patientIdentifierTypeId>2</patientIdentifierTypeId>\n");
 		xmlBuilder.append("        <format></format>\n");
 		xmlBuilder.append("        <required>false</required>\n");
-		xmlBuilder.append("        <checkDigit>false</checkDigit>\n");
 		xmlBuilder.append("      </identifierType>\n");
 		xmlBuilder.append("      <location id=\"28\" uuid=\"dc5c1fcc-0459-4201-bf70-0b90535ba362\" retired=\"false\">\n");
 		xmlBuilder.append("        <name>Unknown Location</name>\n");
@@ -195,7 +194,7 @@ public class PatientSerializationTest extends BaseModuleContextSensitiveTest {
 		    XStreamSerializer.class);
 		
 		assertEquals("86526ed6-3c11-11de-a0ba-001e378eb67e", patient.getUuid());
-		assertTrue("The voided shouldn't be " + patient.getVoided(), patient.getVoided());
+		assertTrue(patient.getVoided(), "The voided shouldn't be " + patient.getVoided());
 		assertEquals(1, patient.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2006-01-18 00:00:00 CST"), patient.getDateCreated());
 		assertEquals(1, patient.getChangedBy().getUserId().intValue());
@@ -203,8 +202,8 @@ public class PatientSerializationTest extends BaseModuleContextSensitiveTest {
 		assertEquals("For test purposes", patient.getVoidReason());
 		assertEquals(999, patient.getPersonId().intValue());
 		assertEquals("M", patient.getGender());
-		assertFalse("The dead shouldn't be " + patient.getDead(), patient.getDead());
-		assertTrue("The isPatient shouldn't be " + patient.isPatient(), patient.isPatient());
+		assertFalse(patient.getDead(), "The dead shouldn't be " + patient.getDead());
+		assertTrue(patient.isPatient(), "The isPatient shouldn't be " + patient.isPatient());
 		assertEquals(999, patient.getPatientId().intValue());
 		assertEquals(1, patient.getIdentifiers().size());
 	}

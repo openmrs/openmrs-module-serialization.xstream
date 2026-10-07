@@ -16,10 +16,9 @@ package org.openmrs.module.xstream;
 import java.lang.reflect.Field;
 import java.util.List;
 
-import junit.framework.Assert;
+import org.junit.jupiter.api.Assertions;
 
 import org.apache.commons.io.IOUtils;
-import org.junit.Ignore;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
 import org.openmrs.util.OpenmrsClassLoader;
@@ -29,7 +28,6 @@ import org.openmrs.util.Reflect;
  * Utility methods used during unit testing
  *
  */
-@Ignore
 public class TestUtil {
 
 	/**
@@ -44,7 +42,7 @@ public class TestUtil {
 		
 		List<Field> fields = Reflect.getAllFields(object.getClass());
 		for (Field field : fields) {
-			Assert.assertEquals(field.get(object), field.get(deserializedObject));
+			Assertions.assertEquals(field.get(object), field.get(deserializedObject));
 		}
 	}
 

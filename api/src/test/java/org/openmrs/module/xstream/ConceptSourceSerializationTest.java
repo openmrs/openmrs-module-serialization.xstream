@@ -14,17 +14,17 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.ConceptSource;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Test class that tests the serialization and deserialization of a conceptSource
@@ -136,6 +136,6 @@ public class ConceptSourceSerializationTest extends BaseModuleContextSensitiveTe
 		assertEquals("test", cs.getHl7Code());
 		assertEquals(1, cs.getCreator().getUserId().intValue());
 		assertEquals(sdf.parse("2006-01-20 00:00:00 CST"), cs.getDateCreated());
-		assertFalse("The retired shouldn't be " + cs.isRetired(), cs.isRetired());
+		assertFalse(cs.isRetired(), "The retired shouldn't be " + cs.isRetired());
 	}
 }

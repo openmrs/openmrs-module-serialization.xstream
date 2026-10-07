@@ -28,6 +28,7 @@ import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.CGLIBMapper;
 import com.thoughtworks.xstream.mapper.Mapper;
+import org.hibernate.proxy.HibernateProxy;
 import org.springframework.cglib.proxy.Enhancer;
 
 /**
@@ -90,7 +91,8 @@ public abstract class BaseShortConverter implements Converter {
 	 */
 	protected boolean isJavassistProxy(Class<?> type) {
         return type.getName().indexOf(JavassistMapper.OLD_NAMING_MARKER) > 0
-                || type.getName().indexOf(JavassistMapper.NEW_NAMING_MARKER) > 0;
+                || type.getName().indexOf(JavassistMapper.NEW_NAMING_MARKER) > 0
+                || HibernateProxy.class.isAssignableFrom(type);
 	}
 	
 	/**

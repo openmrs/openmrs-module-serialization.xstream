@@ -14,17 +14,17 @@
 package org.openmrs.module.xstream;
 
 import org.custommonkey.xmlunit.XMLAssert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.openmrs.PersonAttribute;
 import org.openmrs.api.context.Context;
 import org.openmrs.module.serialization.xstream.XStreamSerializer;
-import org.openmrs.test.BaseModuleContextSensitiveTest;
+import org.openmrs.test.jupiter.BaseModuleContextSensitiveTest;
 import org.openmrs.test.SkipBaseSetup;
 
 import java.text.SimpleDateFormat;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 /**
  * Test class that tests the serialization and deserialization of a PersonAttribute
@@ -139,6 +139,6 @@ public class PersonAttributeSerializationTest extends BaseModuleContextSensitive
 		assertEquals(sdf.parse("2008-08-15 15:46:47 CST"), pa.getDateCreated());
 		assertEquals(1, pa.getPerson().getPersonId().intValue());
 		assertEquals(1, pa.getAttributeType().getPersonAttributeTypeId().intValue());
-		assertFalse("The voided shouldn't be " + pa.getVoided(), pa.getVoided());
+		assertFalse(pa.getVoided(), "The voided shouldn't be " + pa.getVoided());
 	}
 }

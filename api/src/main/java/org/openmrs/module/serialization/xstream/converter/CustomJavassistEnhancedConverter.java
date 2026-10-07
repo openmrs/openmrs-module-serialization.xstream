@@ -24,6 +24,7 @@ import com.thoughtworks.xstream.converters.reflection.SerializationMethodInvoker
 import com.thoughtworks.xstream.io.HierarchicalStreamReader;
 import com.thoughtworks.xstream.io.HierarchicalStreamWriter;
 import com.thoughtworks.xstream.mapper.Mapper;
+import org.hibernate.proxy.HibernateProxy;
 import org.openmrs.module.serialization.xstream.mapper.JavassistMapper;
 
 /**
@@ -102,7 +103,9 @@ public class CustomJavassistEnhancedConverter implements Converter {
 	 */
 	public boolean canConvert(Class type) {
 		return type.getName().indexOf(JavassistMapper.OLD_NAMING_MARKER) > 0
-        || type.getName().indexOf(JavassistMapper.NEW_NAMING_MARKER) > 0;
+        || type.getName().indexOf(JavassistMapper.NEW_NAMING_MARKER) > 0
+        // Hibernate 6+ only generates ByteBuddy proxies, which are unwrapped the same way
+        || HibernateProxy.class.isAssignableFrom(type);
 	}
 	
 }
