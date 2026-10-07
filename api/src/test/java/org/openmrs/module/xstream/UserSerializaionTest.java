@@ -54,7 +54,7 @@ public class UserSerializaionTest extends BaseModuleContextSensitiveTest {
 		XMLAssert.assertXpathEvaluatesTo("55685062-1b48-11df-a5c7-001e378eb67e", "/user/@uuid", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("true", "/user/@retired", xmlOutput);
 		XMLAssert.assertXpathEvaluatesTo("501", "/user/person/personId", xmlOutput);
-		// since 3.0 User declares its own audit fields, which are written after the person, so its dates that are
+		// since 2.4 User declares its own audit fields, which are written after the person, so its dates that are
 		// equal to the person's ones are written as references to the person's elements
 		XMLAssert.assertXpathEvaluatesTo(sdf.format(user.getDateCreated()), "//*[@id=/user/dateCreated/@reference]",
 		    xmlOutput);

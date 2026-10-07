@@ -142,7 +142,7 @@ public class XStreamSerializer implements OpenmrsSerializer {
 		xstream.useAttributeFor(Concept.class, "retired");
 		xstream.useAttributeFor(ConceptName.class, "voided");
 		xstream.useAttributeFor(ConceptNameTag.class, "voided");
-		// in 3.x User no longer extends BaseOpenmrsMetadata and declares its own retired field
+		// since 2.4 User no longer extends BaseOpenmrsMetadata and declares its own retired field
 		xstream.useAttributeFor(User.class, "retired");
 		//xstream.useAttributeFor(ConceptSource.class, "retired");
 
